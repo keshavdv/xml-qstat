@@ -1,0 +1,44 @@
+# git-ls-files --others --exclude-from=.git/info/exclude
+# Lines that start with '#' are comments.
+
+# editor and misc backup files - anywhere
+*~
+.*~
+*.orig
+*.bak
+\#*\#
+
+# CVS recovered versions - anywhere
+.\#*
+
+# objects and archives - anywhere
+*.[oa]
+*.la
+*.so
+*.jar
+
+# except jar files in the main directory
+!/*.jar
+
+# source packages - anywhere
+*.tar.bz2
+*.tar.gz
+*.tgz
+
+# ignore the persistent .build tag in the main directory
+/.build
+
+# ignore cache directories (might be symbolic links)
+/xmlqstat/cache
+/xmlqstat/cache-*
+
+# ignore site-specific config files
+/xmlqstat/config/alarm-threshold.xml
+
+# ignore misc build directories
+/build-*/
+
+# ignore github pages 
+/gh-pages/
+
+# end-of-file

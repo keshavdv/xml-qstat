@@ -38,8 +38,8 @@
       <a id="navigation" name="navigation"></a>
       <div class="hlist">
         <ul>
-          <li id="current"><a href="#">About</a></li>
-          <li><a href="history.html">History</a></li>
+          <li><a href="index.html">About</a></li>
+          <li id="current"><a href="#">History</a></li>
           <li><a href="screenshots.html">Screenshots</a></li>
           <li><a href="demo.html">Demo</a></li>
           <li><a href="requirements.html">Requirements</a></li>
@@ -57,51 +57,52 @@
       <div id="col1">
         <div id="col1_content" class="clearfix">
 
-          <h2>About this software</h2>
+          <h2>History</h2>
           <p>
-            <b>xml-qstat</b> is an attempt to do something useful with the XML
-            status information that Grid Engine produces.
-            <b>xml-qstat</b> consists of a set of files and folders designed to
-            function as a self-contained web application within the
-            <a href="http://cocoon.apache.org/2.1">Apache Cocoon 2.1</a>
-            publishing framework.
-            At its heart, <b>xml-qstat</b> consists of a collection of XSLT
-            stylesheets that can be used with render Grid Engine XML into a
-            variety of output formats (eg, XHTML, RSS). The
-            <a href="http://cocoon.apache.org/2.1"> Apache Cocoon framework</a>
-            supplies the <a href="http://en.wikipedia.org/wiki/XSLT"> XSLT transformation</a>
-            and web publishing engine.
+            This is the 4th rewrite of a project that began in mid-2005.
           </p>
-
-          <h3>Overview &amp; Features</h3>
-            <p>
-              The <a href="screenshots.html">screenshots</a> and
-              <a href="demo.html">demo</a> pages will give a better view
-              of the current capabilities.
-
-              <b>xml-qstat</b> consists of a set of files and folders designed to
-              function as a self-contained web application within the Apache
-              Cocoon XML publishing framework. Most of the work involved in
-              developing this package centers on creating and improving the
-              XSL stylesheets that guide the transformation of Grid Engine
-              XML into various desired output formats. Quite a bit of effort
-              also went into the various JavaScript, CSS stylesheets and
-              other "web design" elements although far more work is required
-              to really make the web interface shine.
-            </p>
-
-          <h3>Some of the built-in features:</h3>
-            <ul>
-            <li>Display data from multiple Grid Engine clusters</li>
-            <li>Can be integrated with the
-            <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration">qlicserver package</a>
-            to allow dynamic display of license/resource utilization.</li>
-            <li><b>Cached Display Mode</b>: XML status data is from Grid Engine is cached to a local file at a user definable interval and used for generating web pages. This mode prevents the SGE 'qmaster' daemon from having to be contacted with a qstat query each time a page is accessed. Most suitable for sites operating very large clusters or systems with many thousands of active jobs. Information about individual jobs is is still fetched dynamically</li>
-            <li><b>Live Display Mode</b>: Grid Engine state and status data is refreshed before every page display by builtin methods that query the SGE qmaster directly. Suitable for sites and clusters where generating a 'qstat' call each time a page is accessed does not present a scaling or performance issue.</li>
-            <li>Primary view can be rendered in "standard" ('show me everything') mode or a special "terse" ('summary') view can be used for very large or very active clusters. This is to handle clusters with thousands of nodes or hundreds of thousands of active grid jobs</li>
-            <li>Per user job sorting. Users can view their own pending/active jobs simply by surfing to a simple URL.</li>
-            <li>Job Detail handling via URL for any active or pending job of any type.</li>
-            </ul>
+          <p>
+            Early versions of this program used
+            <a href="http://xml.apache.org/xalan-c">Xalan-C++</a>,
+            but that package and its dependencies turned out to be difficult
+            to build on various Linux and Apple OS X systems. Since a design
+            goal for this tool was easy installation across different
+            hardware platforms and architectures, alternatives to the C++
+            XSLT engines were investigated.
+          </p>
+          <p>
+            The 2nd generation xml-qstat programs and CGIs used the very
+            nice perl modules <b>XML::LibXML</b> and <b>XML::LibXSLT</b>.
+            Those modules provided perl interfaces to the Gnome Project's
+            excellent <b><a href="http://www.xmlsoft.org">libxml2</a></b> and
+            <b><a href="http://xmlsoft.org/XSLT">libxslt</a></b> code libraries.
+          </p>
+          <p>
+            The 2nd generation code was abandoned when <a href="http://cocoon.apache.org/2.1/">Apache Cocoon</a>
+            was discovered &ndash; the Cocoon framework functions out of the
+            box on just about any Java-enabled system and there are no
+            requirements to download and build various dependent XML
+            libraries and perl modules. The XML-based publishing framework
+            provided by Cocoon provides additional features and capabilities
+            not found in standalone XSLT transformation engines.
+          </p>
+          <p>
+            The 3rd generation of xml-qstat came after Chris Dagdigian
+            effectively abandoned the project and codebase for quite some
+            time as his work took him in different directions. During this
+            period, Mark Olesen made very significant improvements both in
+            cleaning up the XSLT framework as well as adding entirely new
+            features such as support for multiple clusters.
+          </p>
+          <p>
+            Generation 4 of this project is essentially Mark Olesen's fork,
+            uploaded and imported into a new GIT repository hosted at
+            <a href="http://github.com">github</a>.
+            We plan to use the new git repository as the base for the
+            long-delayed 1.0 release. Chris Dagdigian is back as a
+            contributor and the project is seeking new contributors, testers
+            and developers.
+          </p>
 
         </div>
       </div>

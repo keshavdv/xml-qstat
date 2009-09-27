@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>xml-qstat: web-based monitoring for gridengine clusters</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="description" content="xml-qstat web-based monitoring for gridengine clusters" />
+<meta name="language" content="en" />
+
+<link href="css/layout_2col_right_13.css" rel="stylesheet" type="text/css"/>
+<!--[if lte IE 7]>
+<link href="css/patches/patch_2col_left_13.css" rel="stylesheet" type="text/css"/>
+<![endif]-->
+<link href="css/screen/images/xmlqstat.png" rel="shortcut icon" type="image/png"/>
+
+</head>
+<body>
+<div class="page_margins">
+  <div class="page">
+    <div id="header">
+      <div class="subcolumns">
+        <div class="c75l">
+          <img src="css/screen/images/xml-qstat-logoTrans.png"
+              alt="xml-qstat logo" />
+        </div>
+        <div class="c25r">
+        </div>
+      </div>
+
+      Web-based status monitoring of
+      <a href="http://en.wikipedia.org/wiki/Grid_Engine">Grid Engine</a> clusters,
+      provided by the <a href="http://www.bioteam.net">BioTeam</a>
+
+    </div>
+    <!-- begin: main navigation #nav -->
+    <div id="nav">
+      <!-- skiplink anchor: navigation -->
+      <a id="navigation" name="navigation"></a>
+      <div class="hlist">
+        <ul>
+          <li><a href="index.html">About</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="screenshots.html">Screenshots</a></li>
+          <li><a href="demo.html">Demo</a></li>
+          <li><a href="requirements.html">Requirements</a></li>
+          <li id="current"><a href="#">Download</a></li>
+          <li><a href="install.html">Install</a></li>
+          <li><a href="support.html">Support</a></li>
+          <li><a href="thanks.html">Acknowledgments</a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- end: main navigation -->
+    <!-- begin: main content area #main -->
+    <div id="main">
+      <!-- begin: #col1 - first float column -->
+      <div id="col1">
+        <div id="col1_content" class="clearfix">
+
+          <h2>Obtaining the software</h2>
+          <p>
+            Source code is now under GIT version control and is hosted
+            online at github. There are many ways to access, browse, clone
+            or download the codebase, including methods for directly
+            downloading .tar.gz or .zip archives for people who do not wish
+            to install (or can't use) git clients internally.
+          </p>
+
+          <h2>Official Releases</h2>
+          <p>
+            As yet there are no official releases or tags.
+          </p>
+
+          <h3>Starting with git</h3>
+<p>
+Go to a clean starting place (eg, your home directory):
+<pre>
+$ cd $HOME
+</pre>
+
+Clone the repository without checking out anything just yet and we'll also
+specify 'github' as the name of the remote repository that we'll be tracking:
+<pre>
+$ git clone --no-checkout --origin github http://github.com/bioteam/xml-qstat.git
+</pre>
+
+We now change to the newly created directory:
+<pre>
+$ cd xml-qstat/
+</pre>
+
+Since we haven't checked out any files, the only thing in the directory
+will be the <b>.git/</b> hidden directory:
+<pre>
+$ ls -a
+./  ../  .git/
+</pre>
+
+Listing all of the git branches should look like this ('<b>*</b>';
+indicates the currently active branch):
+<pre>
+$ git branch -l -a
+* master
+  github/HEAD
+  github/master
+</pre>
+
+
+Now we are ready to start our own branch, which we'll
+setup <b>without tracking</b> the remote branch.
+<u>This is an important point.</u>
+By creating a non-tracked branch, we can avoid worrying about clobbering any
+of our custom settings with future updates.
+<pre>
+$ git checkout --no-track -b site github/master
+</pre>
+
+For general cleanliness, we'll also remove the tracked branch <em>master</em>,
+but it can always be reinstated later if desired:
+<pre>
+$ git branch -d master
+Deleted branch master.
+</pre>
+
+We can now check that everything is as it should be:
+<pre>
+$ git status
+# On branch site
+nothing to commit (working directory clean)
+</pre>
+
+Since we are on our own branch (<em>site</em>), we can make changes
+independent of the upstream branches (<em>github/master</em>).
+</p>
+
+<p>
+The first thing we'll do is adjust the paths to suit our installation.
+Depending upon your final configuration, you may not need to adjust all
+of the following files:
+<pre>
+  build-xmlqstat-jar.sh
+  init-scripts/cocoon
+  init-scripts/httpi
+  init-scripts/xmlqstat-cacher
+  scripts/jobinfo
+  scripts/xmlqstat-cacher.pl
+</pre>
+
+You should also adjust the <b>xmlqstat/config/config.xml</b> to
+reflect your site (perhaps with your own logo image).
+If you are using the FlexLM integration (qlicserver), you should also
+symlink the cache directories at this time under
+<b>xmlqstat/cache-{clusterName}</b>.
+</p>
+
+<p>
+To preserve these initial editting changes thus far,
+some of the following commands will be useful.
+<dl style="margin-left: 2em">
+  <dt>git status</dt>
+
+  <dd>check the current of things</dd>
+  <dt>git add -u</dt>
+  <dd>stage updated files for the next commit</dd>
+  <dt>git add file1 .. fileN</dt>
+  <dd>stage new files for the next commit</dd>
+  <dt>git commit</dt>
+
+  <dd>commit the changes</dd>
+  <dt>git commit --amend</dt>
+  <dd>amend to the previous commit</dd>
+  <dt>git log</dt>
+  <dd>view the commit log</dd>
+</dl>
+
+At any time we can also fetch the newest version, without affecting our
+working directory whatsoever:
+<dl style="margin-left: 2em">
+  <dt>git fetch github</dt>
+  <dd>fetch the lastest version</dd>
+  <dt>git log --stat --no-merges github/master ^HEAD</dt>
+  <dd>view the changes in github/master but not in our branch</dd>
+</dl>
+
+Provided that our working directory is clean (no uncommitted changes),
+we can merge in any upstream changes:
+<pre>
+$ git merge github/master
+</pre>
+
+This normally merges without problems, except when you have changed exactly
+the same lines as have been changed in the <em>github/master</em>.
+You'll need to resolve such conflicts by hand (git can't really tell who
+should be right in this situation) and commit the finally resolved versions.
+</p>
+
+        </div>
+      </div>
+      <!-- end: #col1 -->
+      <!-- begin: #col3 static column -->
+      <div id="col3">
+        <div id="col3_content" class="clearfix"> <a id="content" name="content"></a>
+          <!-- skiplink anchor: Content -->
+
+          <h4>get the latest source code on GitHub:</h4>
+          <p>
+            <ul>
+            <li>
+              <a href="http://github.com/bioteam/xml-qstat">bioteam/xml-qstat</a>
+              (as <a href="http://github.com/bioteam/xml-qstat/zipball/master">zip</a>
+              or <a href="http://github.com/bioteam/xml-qstat/tarball/master">tar</a>)
+            </li>
+            <li>
+              <a href="http://github.com/olesenm/xml-qstat">olesenm/xml-qstat</a>
+              (as <a href="http://github.com/olesenm/xml-qstat/zipball/master">zip</a>
+              or <a href="http://github.com/olesenm/xml-qstat/tarball/master">tar</a>)
+            </li>
+            </ul>
+          </p>
+
+          <h4>quick links:</h4>
+          <p>
+            <ul>
+            <li>
+              <a href="http://gridengine.sunsource.net">Grid Engine project</a>
+            </li>
+            <li>
+              <a href="http://wiki.gridengine.info/wiki">wiki.gridengine.info/wiki</a>
+            </li>
+            <li>
+              qlicserver
+              <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration">integration</a>
+              / <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Configuration">configuration</a>
+            </li>
+            </ul>
+          </p>
+
+        </div>
+        <div id="ie_clearing">&nbsp;</div>
+        <!-- End: IE Column Clearing -->
+      </div>
+      <!-- end: #col3 -->
+    </div>
+    <!-- end: #main -->
+    <!-- begin: #footer -->
+    <div id="footer">
+        Layout based on <a href="http://www.yaml.de">YAML</a> from Dirk Jesse
+    </div>
+    <!-- end: #footer -->
+  </div>
+</div>
+</body>
+</html>

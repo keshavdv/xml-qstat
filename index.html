@@ -15,6 +15,7 @@
 
 </head>
 <body>
+
 <div class="page_margins">
   <div class="page">
     <div id="header">
@@ -24,7 +25,13 @@
               alt="xml-qstat logo" />
         </div>
         <div class="c25r">
+          <a href="http://github.com/olesenm/xml-qstat">
+            <img style="position: absolute; top: 0; right: 0; border: 0;"
+            src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
+            alt="Fork me on GitHub" />
+          </a>
         </div>
+
       </div>
 
       Web-based status monitoring of
@@ -67,13 +74,13 @@
             publishing framework.
             At its heart, <b>xml-qstat</b> consists of a collection of XSLT
             stylesheets that can be used with render Grid Engine XML into a
-            variety of output formats (eg, XHTML, RSS). The
-            <a href="http://cocoon.apache.org/2.1"> Apache Cocoon framework</a>
-            supplies the <a href="http://en.wikipedia.org/wiki/XSLT"> XSLT transformation</a>
+            variety of output formats (eg, XHTML, RSS). The Apache Cocoon
+            framework supplies the
+            <a href="http://en.wikipedia.org/wiki/XSLT">XSLT transformations</a>
             and web publishing engine.
           </p>
 
-          <h3>Overview &amp; Features</h3>
+          <h3>Overview</h3>
             <p>
               The <a href="screenshots.html">screenshots</a> and
               <a href="demo.html">demo</a> pages will give a better view
@@ -86,21 +93,47 @@
               XSL stylesheets that guide the transformation of Grid Engine
               XML into various desired output formats. Quite a bit of effort
               also went into the various JavaScript, CSS stylesheets and
-              other "web design" elements although far more work is required
-              to really make the web interface shine.
+              other "web design" elements, although more work is still
+              required to really make the web interface shine.
             </p>
 
-          <h3>Some of the built-in features:</h3>
+          <h3>Features</h3>
             <ul>
             <li>Display data from multiple Grid Engine clusters</li>
             <li>Can be integrated with the
-            <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration">qlicserver package</a>
-            to allow dynamic display of license/resource utilization.</li>
-            <li><b>Cached Display Mode</b>: XML status data is from Grid Engine is cached to a local file at a user definable interval and used for generating web pages. This mode prevents the SGE 'qmaster' daemon from having to be contacted with a qstat query each time a page is accessed. Most suitable for sites operating very large clusters or systems with many thousands of active jobs. Information about individual jobs is is still fetched dynamically</li>
-            <li><b>Live Display Mode</b>: Grid Engine state and status data is refreshed before every page display by builtin methods that query the SGE qmaster directly. Suitable for sites and clusters where generating a 'qstat' call each time a page is accessed does not present a scaling or performance issue.</li>
-            <li>Primary view can be rendered in "standard" ('show me everything') mode or a special "terse" ('summary') view can be used for very large or very active clusters. This is to handle clusters with thousands of nodes or hundreds of thousands of active grid jobs</li>
-            <li>Per user job sorting. Users can view their own pending/active jobs simply by surfing to a simple URL.</li>
-            <li>Job Detail handling via URL for any active or pending job of any type.</li>
+              <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration">qlicserver package</a>
+              to allow dynamic display of license/resource utilization.
+            </li>
+            <li><b>Cached Display Mode</b>:
+              XML status data is from Grid Engine is cached to a local file
+              at a user definable interval and used for generating web
+              pages. This mode prevents the SGE 'qmaster' daemon from having
+              to be contacted with a qstat query each time a page is
+              accessed. Most suitable for sites operating very large
+              clusters or systems with many thousands of active jobs.
+              Information about individual jobs is still fetched dynamically
+            </li>
+            <li><b>Live Display Mode</b>:
+              Grid Engine state and status data is refreshed before every
+              page display by builtin methods that query the SGE qmaster
+              directly. Suitable for sites and clusters where generating a
+              'qstat' call each time a page is accessed does not present a
+              scaling or performance issue.
+            </li>
+            <li>
+              Primary view can be rendered in "standard" ('show me
+              everything') mode or a special "terse" ('summary') view can be
+              used for very large or very active clusters. This is to handle
+              clusters with thousands of nodes or hundreds of thousands of
+              active grid jobs
+            </li>
+            <li>
+              Per user job sorting. Users can view their own pending/active
+              jobs simply by surfing to a simple URL.
+            </li>
+            <li>
+              Job Detail handling via URL for any active or pending job.
+            </li>
             </ul>
 
         </div>

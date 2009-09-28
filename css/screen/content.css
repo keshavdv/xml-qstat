@@ -46,7 +46,7 @@
   /* (de) Basis-Layout erhält Standardschriftgröße von 12 Pixeln */
   body {
     font-family:  Arial, Helvetica, sans-serif;
-    font-size: 87.500%;   /* 14px */
+    font-size: 75.00%;
     color: #444;
   }
 

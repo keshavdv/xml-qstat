@@ -183,7 +183,6 @@ drwxrwxr-x   xsl
 </p>
 
 <h3>Installation Overview</h3>
-<p>
 <ol>
 <li>Grid Engine 6.2 should be installed and functioning.
     Earlier versions of Grid Engine produce different XML output and may not be supported well.
@@ -200,7 +199,6 @@ drwxrwxr-x   xsl
 <li>Start caching grid data! If your SGE environment has been set up (you can run 'qstat' via the command line) then starting the perl caching daemon should be as simple as entering the scripts/ folder and issuing the command "./sge-xml-cacher.pl -d". To stop the daemon, issue the command "./sge-xml-cacher.pl -k". To verify that the daemon is working, check the process table to see if it exists and then monitor the timestamps on the cache file. In its default setting, XML data should be updated every 30 seconds.</li>
 <li>The web interface should be ready for testing. Point a web browser at the URL http://(your server name):8888/xmlqstat/qstat.html</li>
 </ol>
-</p>
 
 
 <h3>Installation Details: Apache Cocoon</h3>
@@ -231,7 +229,7 @@ drwxrwxr-x   xsl
   starting the server or can be edited into the cocoon.sh script.
 </p>
 
-<h3/>Advanced Installation: Cocoon behind Apache Proxies</h3>
+<h3>Advanced Installation: Cocoon behind Apache Proxies</h3>
 <p>
   Many Unix servers already have an Apache webserver running on on the
   system. If you have administrative access to this server you can proxy the
@@ -278,7 +276,6 @@ ProxyPassReverse /xmlqstat http://127.0.0.1:8888/xmlqstat
 <li>Copy the resulting build/xml-qstat.jar file into the location specified by the build script output</li>
 <li>Stop and restart Cocoon (if necessary)</li>
 </ol>
-</p>
 
 <h3>Creating mount-table.xml</h3>
 <p>
@@ -315,7 +312,7 @@ drwxrwxr-x    xml-qstat
   prerequisites including the SGE environment variables and the $PATH
   adjustment so that xml-qstat/scripts/qstat.sh can be found.
 </p>
-</div>
+
 <h3>Customizing config/config.xml</h3>
 <p>
   Within the <b>xmlqstat/config/</b> directory there is a file called
@@ -354,7 +351,6 @@ drwxrwxr-x    xml-qstat
           <!-- skiplink anchor: Content -->
 
           <h4>get the latest source code on GitHub:</h4>
-          <p>
             <ul>
             <li>
               <a href="http://github.com/bioteam/xml-qstat">bioteam/xml-qstat</a>
@@ -367,10 +363,8 @@ drwxrwxr-x    xml-qstat
               or <a href="http://github.com/olesenm/xml-qstat/tarball/master">tar</a>)
             </li>
             </ul>
-          </p>
 
           <h4>quick links:</h4>
-          <p>
             <ul>
             <li>
               <a href="http://gridengine.sunsource.net">Grid Engine project</a>
@@ -384,8 +378,6 @@ drwxrwxr-x    xml-qstat
               / <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Configuration">configuration</a>
             </li>
             </ul>
-          </p>
-
 
         </div>
         <div id="ie_clearing">&nbsp;</div>

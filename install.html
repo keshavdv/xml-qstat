@@ -20,7 +20,7 @@
     <div id="header">
       <div class="subcolumns">
         <div class="c75l">
-          <img src="css/screen/images/xml-qstat-logoTrans.png"
+          <img src="css/screen/images/xmlqstat-logo.png"
               alt="xml-qstat logo" />
         </div>
         <div class="c25r">
@@ -96,7 +96,7 @@ drwxrwxr-x    xml-qstat
   The only file touched inside the cocoon folder is a customized
   "mount-table.xml" configuration file that informs
   the application server that the URI-prefix of "/xmlqstat/"
-  should be handled by the "xmlqstat/" folder.
+  should be handled by the <b>xmlqstat/</b> folder.
 </p>
 <p>
   The <b>httpi</b> directory is <em>optional</em> and contains a tiny, fast
@@ -126,7 +126,7 @@ drwxrwxr-x    xmlqstat
   the XML caching scripts.
 </p>
 <p>
-  The <b>scripts</b> folder currently contains 2 perl scripts, a CGI script
+  The <b>scripts/</b> folder currently contains 2 perl scripts, a CGI script
   called 'jobinfo' and a &quot;qstat.sh&quot; shell script that the
   application can use to directly query the Grid Engine qmaster. The
   "sge-xml-cacher.pl" script is a Perl daemon script that runs constantly
@@ -148,32 +148,36 @@ drwxrwxr-x    xmlqstat
 </p>
 
 <p>
-  The <b>xmlqstat</b> folder is where this application lives.
+  The <b>xmlqstat/</b> folder is where this application lives.
   It is organized into the following subfolders:
 </p>
   <pre>
 $ ls -l xmlqstat/
 drwxrwxr-x   config
 drwxrwxr-x   css
-drwxrwxr-x   images
 drwxrwxr-x   javascript
 -rw-rw-r--   sitemap.xmap
 drwxrwxr-x   xml
 drwxrwxr-x   xsl
 </pre>
 <p>
-  The <b>config</b> folder contains XML configuration files for the xml-qstat application.
-  The <b>css</b> folder contains CSS stylesheets used for separation of content from presentation.
-  The <b>image</b> folder contains images, icons and graphic elements.
-  The <b>javascript</b> folder contains javascript used for presentation and display preference formatting.
+  The <b>config/</b> folder contains XML configuration files for the xml-qstat application
+  and the logo image.
+  The <b>css/</b> folder contains CSS stylesheets used for separation of content from presentation.
+  The <b>css/screen/</b> subfolder contains icons and graphic elements.
+  The <b>javascript/</b> folder contains javascript used for presentation and display preference formatting.
   The <b>sitemap.xmap</b> is a Cocoon configuration file that tells the application server how to handle,
   route and process various transformation requests.
-  The <b>xml</b> folder contains the raw XML source for documentation and help files.
-  The <b>xsl</b> folder contains the XSLT stylesheets that guide the transformation of Grid Engine XML into
+  The <b>xml/</b> folder contains the raw XML source for documentation and help files.
+  The <b>xsl/</b> folder contains the XSLT stylesheets that guide the transformation of Grid Engine XML into
   various output forms.
 </p>
 <p>
-  Generally speaking, the only file a user will have to edit are the files in the <strong>config</strong>/ directory.  In some cases, a user may have to edit <b>sitemap.xmap</b> to make minor configuration changes (such as specifying a different default URL and port number for the <em>optional</em> httpi webserver).
+  Generally speaking, the user will only need to edit files in the
+  <strong>config/</strong> directory.
+  In some cases, a user may have to edit <b>sitemap.xmap</b> to make
+  minor configuration changes (such as specifying a different default URL
+  and port number for the <em>optional</em> httpi webserver).
 </p>
 
 <p>
@@ -189,15 +193,57 @@ drwxrwxr-x   xsl
     </li>
 <li>Make sure you have Perl and Java available and that the $JAVA_HOME environment variable is set.</li>
 <li>Create a folder to hold the misc. components (something like xml-qstat/)</li>
-<li>Download <a href="http://cocoon.apache.org/2.1/">Apache Cocoon</a> version 2.1, preferably the latest stable version 2.1.11.<em><strong> Apache Cocoon 2.2 (any version) is not supported at all as Cocoon 2.2 represents a radical change from 2.1</strong></em>. Simply unpacking the distribution into the xml-qstat/ folder and running the "build.sh" script should work fine. The build may take several minutes and when it completes you will have a script called "cocoon.sh" that can be run. In its default form (with 2.1.8 or later) simply running "./cocoon.sh" as a non-privledged user will cause Cocoon to start up its own internal application server that binds to all available network interfaces and listens for incoming connections at port number 8888. To test, simply point your web browser at the http://(your servername):8888/ -- if it works you will see a Cocoon welcome screen. Firewall users should make sure that TCP connections to port 8888 are allowed.</li>
-<li>Checkout or download xml-qstat from github.com, detailed instructions are outlined below. </li>
-<li><em>optional:</em> Download  <a href="http://www.floodgap.com/httpi/">httpi</a> into the xml-qstat/ folder.</li>
+<li>
+  Download <a href="http://cocoon.apache.org/2.1/">Apache Cocoon</a>
+  version 2.1, preferably the latest stable version 2.1.11.
+  <em><strong> Apache Cocoon 2.2 (any version) is not supported at all as Cocoon 2.2 represents a radical change from 2.1</strong></em>.
+  Simply unpacking the distribution into the <b>xml-qstat/</b> folder and
+  running the "build.sh" script should work fine. The build may take several
+  minutes and when it completes you will have a script called "cocoon.sh"
+  that can be run. In its default form (with 2.1.8 or later) simply running
+  "./cocoon.sh" as a non-privledged user will cause Cocoon to start up its
+  own internal application server that binds to all available network
+  interfaces and listens for incoming connections at port number 8888. To
+  test, simply point your web browser at the http://(your servername):8888/
+  -- if it works you will see a Cocoon welcome screen. Firewall users should
+  make sure that TCP connections to port 8888 are allowed.
+</li>
+<li>
+  Checkout or download xml-qstat from github.com, detailed instructions are
+  outlined below.
+</li>
+<li><em>optional:</em>
+  Download <a href="http://www.floodgap.com/httpi/">httpi</a>
+  into the <b>xml-qstat/</b> folder.
+</li>
 <li>Create the <b>mount-table.xml</b> configuration file in the cocoon directory (details are below).</li>
 <li>Build xml-qstat.jar and install it into the proper Cocoon lib/ direcory (details are below)</li>
 <li>Edit the <b>xmlqstat/config/config.xml</b> file to set local configuration parameters (details are below) </li>
-<li>Edit the <b>scripts/sge-xml-cacher.pl</b> script to configure the full Unix file path to where cached SGE status data will be stored. If data is cached to a file named "cached-sge-data.xml" within the xmlqstat/xml/ folder then <b>xmlqstat/sitemap.xmap</b> can be left unchanged. If the cached data is stored elsewhere, the <b>sitemap.xmap</b> file located in xmlqstat/ will have to be edited in several locations to let cocoon know where the raw XML source resides.</li>
-<li>Start caching grid data! If your SGE environment has been set up (you can run 'qstat' via the command line) then starting the perl caching daemon should be as simple as entering the scripts/ folder and issuing the command "./sge-xml-cacher.pl -d". To stop the daemon, issue the command "./sge-xml-cacher.pl -k". To verify that the daemon is working, check the process table to see if it exists and then monitor the timestamps on the cache file. In its default setting, XML data should be updated every 30 seconds.</li>
-<li>The web interface should be ready for testing. Point a web browser at the URL http://(your server name):8888/xmlqstat/qstat.html</li>
+<li>
+  Edit the <b>scripts/sge-xml-cacher.pl</b> script to configure the full
+  Unix file path to where cached SGE status data will be stored.
+  The data should typically be stored within the <b>xmlqstat/cache/</b>
+  folder as "qstatf.xml". For a multi-cluster view,
+  the file should be stored as <b>xmlqstat/cache/qstatf~NAME.xml</b>
+  or as <b>xmlqstat/cache-NAME/qstatf.xml</b>, where <em>NAME</em> is the name
+  given to the cluster. If this convention is followed, the
+  <b>xmlqstat/sitemap.xmap</b> can be left unchanged.
+  If the cached data is stored elsewhere, the <b>xmlqstat/sitemap.xmap</b> file
+  will require severe editing to let cocoon know where the raw XML source
+  resides.
+</li>
+<li>
+  Start caching grid data! If your SGE environment has been set up (you can
+  run 'qstat' via the command line) then starting the perl caching
+  daemon should be as simple as entering the <b>scripts/</b> folder and
+  issuing the command "./xmlqstat-cacher.pl -d". To stop the daemon, issue
+  the command "./xmlqstat-cacher.pl -k". To verify that the daemon is
+  working, check the process table to see if it exists and then monitor the
+  timestamps on the cache file. In its default setting, XML data should be
+  updated every 30 seconds.
+  </li>
+<li>The web interface should be ready for testing. Point a web browser at
+the URL http://{your-server-name}:8888/xmlqstat/</li>
 </ol>
 
 
@@ -215,18 +261,18 @@ drwxrwxr-x   xsl
   following conditions must be met:
 </p>
 <p>
-- The xml-qstat scripts/qstat.sh and scripts/qhost.sh must be in the $PATH
-  before starting the cocoon server so that the server can find and execute
-  them when needed
+- The xml-qstat <b>scripts/qstat.sh</b> and <b>scripts/qhost.sh</b>
+  must be in the $PATH before starting the cocoon server so that the
+  server can find and execute them when needed
 </p>
 <p>
   - The SGE settings and environment variables must be present (source the
-  Grid Engine settings.sh or settings.csh script before starting the cocoon
-  server)
+  Grid Engine <b>settings.sh</b> or <b>settings.csh</b> script before starting
+  the cocoon server)
 </p>
 <p>
   - These path and environment settings can be adjusted manually before
-  starting the server or can be edited into the cocoon.sh script.
+  starting the server or can be edited into the <b>cocoon.sh</b> script.
 </p>
 
 <h3>Advanced Installation: Cocoon behind Apache Proxies</h3>
@@ -313,18 +359,19 @@ drwxrwxr-x    xml-qstat
   adjustment so that xml-qstat/scripts/qstat.sh can be found.
 </p>
 
-<h3>Customizing config/config.xml</h3>
+<h3>Customizing the config/</h3>
 <p>
   Within the <b>xmlqstat/config/</b> directory there is a file called
   <b>config.xml</b> that needs to be edited to reflect the local site installation.
   The file is well documented internally so it should be a simple process to edit.
+  Since the file <b>xmlqstat/config/logo.png</b> is not tracked, this is often
+  a suitable place for logo to be displayed at the top of each page.
 </p>
-
 <h3>Using Cached Grid Engine XML</h3>
 <p>
   To reduce load on the qmaster and avoid calling 'qstat' each time a page
-  is accessed, cached SGE data can be used. A script in the scripts/ folder
-  called &quot;xmlqstat-cacher.pl&quot; can perform this function.
+  is accessed, cached SGE data can be used. A script in the <b>scripts/</b>
+  folder called &quot;xmlqstat-cacher.pl&quot; can perform this function.
 </p>
 <p>
   The cache location is defined by how the cluster is named in config/config.xml.
@@ -336,10 +383,6 @@ drwxrwxr-x    xml-qstat
 <p>
   The xmlqstat-cacher.pl program will create the needed cache files
   &quot;qstat.xml&quot;, &quot;qstatf.xml&quot; and &quot;qhost.xml&quot;.
-  If you run into problems with a web application error mentioning
-  &quot;qlicserver.xml&quot; then copy the dummy qlicserver.xml_dummy file
-  from the config/ folder into the cache directory as
-  &quot;qlicserver.xml&quot;.
 </p>
 
         </div>
@@ -367,9 +410,9 @@ drwxrwxr-x    xml-qstat
           <h4>related projects on GitHub</h4>
             <ul>
             <li>
-              <a href="http://github.com/olesenm/qlicserver">olesenm/qlicserver</a>
-              (as <a href="http://github.com/olesenm/qlicserver/zipball/master">zip</a>
-              or <a href="http://github.com/olesenm/qlicserver/tarball/master">tar</a>)
+              <a href="http://github.com/olesen/flex-grid">olesen/flex-grid</a>
+              (as <a href="http://github.com/olesen/flex-grid/zipball/master">zip</a>
+              or <a href="http://github.com/olesen/flex-grid/tarball/master">tar</a>)
             </li>
             </ul>
 

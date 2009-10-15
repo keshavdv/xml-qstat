@@ -7,7 +7,7 @@
 <meta name="description" content="xml-qstat web-based monitoring for gridengine clusters" />
 <meta name="language" content="en" />
 
-<link href="css/layout_2col_right_13.css" rel="stylesheet" type="text/css"/>
+<link href="css/layout_2col_left_13.css" rel="stylesheet" type="text/css"/>
 <!--[if lte IE 7]>
 <link href="css/patches/patch_2col_left_13.css" rel="stylesheet" type="text/css"/>
 <![endif]-->
@@ -59,69 +59,86 @@
     <!-- end: main navigation -->
     <!-- begin: main content area #main -->
     <div id="main">
-      <!-- begin: #col1 - first float column -->
+      <!-- begin: #col1 static column -->
       <div id="col1">
         <div id="col1_content" class="clearfix">
 
-          <h2>Software Requirements</h2>
-          <p>
-            The functional requirements are very basic. Root level access to
-            a system is not required. Key dependencies include the
-            following:
-          </p>
-          <ul>
-          <li>A recent version of Java</li>
-          <li>A recent version of Perl</li>
-          <li>Apache Cocoon version 2.1 (current stable version 2.1.11 is recommended). <em>The use of Cocoon 2.2.x is not supported as it represents a radical change from Cocoon 2.1</em></li>
-          <li>Grid Engine version 6.2 (older versions of SGE may have buggy or unsupported XML output)</li>
-          <li>Modern, standards-compliant web browser. </li>
-          </ul>
+<h6 class="vlist">Software Requirements</h6>
+<ul class="vlist">
+</ul>
+
+<h6 class="vlist">get latest source code</h6>
+<ul class="vlist">
+  <li><a href="http://github.com/bioteam/xml-qstat">bioteam/xml-qstat</a></li>
+  <li><a href="http://github.com/olesenm/xml-qstat">olesenm/xml-qstat</a></li>
+</ul>
+<h6 class="vlist">related projects</h6>
+<ul class="vlist">
+  <li><a href="http://olesenm.github.com/flex-grid">flex-grid</a>
+</ul>
+<h6 class="vlist">quick links</h6>
+<ul class="vlist">
+  <li><a href="http://gridengine.sunsource.net">Grid Engine project</a></li>
+  <li><a href="http://wiki.gridengine.info/wiki">wiki.gridengine.info/wiki</a></li>
+</ul>
+
 
         </div>
       </div>
       <!-- end: #col1 -->
-      <!-- begin: #col3 static column -->
+      <!-- begin: #col3 - first float column -->
       <div id="col3">
         <div id="col3_content" class="clearfix"> <a id="content" name="content"></a>
           <!-- skiplink anchor: Content -->
 
-          <h4>get the latest source code on GitHub:</h4>
-            <ul>
-            <li>
-              <a href="http://github.com/bioteam/xml-qstat">bioteam/xml-qstat</a>
-              (as <a href="http://github.com/bioteam/xml-qstat/zipball/master">zip</a>
-              or <a href="http://github.com/bioteam/xml-qstat/tarball/master">tar</a>)
-            </li>
-            <li>
-              <a href="http://github.com/olesenm/xml-qstat">olesenm/xml-qstat</a>
-              (as <a href="http://github.com/olesenm/xml-qstat/zipball/master">zip</a>
-              or <a href="http://github.com/olesenm/xml-qstat/tarball/master">tar</a>)
-            </li>
-            </ul>
 
-          <h4>related projects on GitHub</h4>
-            <ul>
-            <li>
-              <a href="http://github.com/olesenm/flex-grid">olesenm/flex-grid</a>
-              (as <a href="http://github.com/olesenm/flex-grid/zipball/master">zip</a>
-              or <a href="http://github.com/olesenm/flex-grid/tarball/master">tar</a>)
-            </li>
-            </ul>
 
-          <h4>quick links:</h4>
-            <ul>
-            <li>
-              <a href="http://gridengine.sunsource.net">Grid Engine project</a>
-            </li>
-            <li>
-              <a href="http://wiki.gridengine.info/wiki">wiki.gridengine.info/wiki</a>
-            </li>
-            <li>
-              qlicserver
-              <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration">integration</a>
-              / <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Configuration">configuration</a>
-            </li>
-            </ul>
+<h3>General Requirements</h3>
+<p>
+  The functional requirements are very basic. Root level access to a system
+  is not required. Key dependencies include the following:
+</p>
+<ul>
+<li>Grid Engine version 6.2 (older versions of SGE may have buggy or unsupported XML output)</li>
+<li>Modern, standards-compliant web browser. </li>
+<li>A fairly recent version of Perl (eg, 5.8.x) </li>
+</ul>
+
+
+<h3>Requirements for server-side XSLT transformations (Cocoon)</h3>
+<p>
+  Server-side XSLT transformations are the traditional rendering form used
+  by xml-qstat. The current generation uses Apache Cocoon 2.1.x.
+  <b><em>Note that Cocoon 2.2.x is not supported as it represents a radical
+  paradigm shift from Cocoon 2.1.x.</em></b>
+</p>
+<ul>
+<li>A recent version of Java</li>
+<li>
+  Apache Cocoon version 2.1 &ndash; current stable <em>version 2.1.11</em>
+  is recommended
+</li>
+</ul>
+<p>The installation size for Apache Cocoon is approximately <em>120MB</em>.</p>
+
+<h3>Requirements for client-side XSLT transformations (HTTPi)</h3>
+<p>
+  Client-side XSLT transformations are slated to be the preferred rendering
+  form in the next generation of <b>xml-qstat</b>.
+  Off-loading the transformations to the browser allows for a very
+  lightweight server application.
+</p>
+<ul>
+<li>A fairly recent version of Perl (see above)</li>
+<li>HTTPi 1.6.1 (use Perl)</li>
+</ul>
+
+<p>
+  The installation size of HTTPi with the xmlqstat modules is less than
+  <em>50kB</em>. No additional webserver is required and it should run on
+  any POSIX system where Perl is installed.
+</p>
+
 
         </div>
         <div id="ie_clearing">&nbsp;</div>

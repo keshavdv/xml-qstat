@@ -2,8 +2,8 @@
 /**
  * "Yet Another Multicolumn Layout" - (X)HTML/CSS Framework
  *
- * (en) central stylesheet - layout example "2col_right_13"
- * (de) Zentrales Stylesheet - Beispiellayout "2col_right_13"
+ * (en) central stylesheet - layout example "2col_left_13"
+ * (de) Zentrales Stylesheet - Beispiellayout "2col_left_13"
  *
  * @copyright       Copyright 2005-2009, Dirk Jesse
  * @license         CC-A 2.0 (http://creativecommons.org/licenses/by/2.0/),
@@ -15,7 +15,6 @@
  * @lastmodified    $Date: 2009-01-19 23:41:32 +0100 (Mo, 19. Jan 2009) $
  */
 
-
 /* import core styles | Basis-Stylesheets einbinden */
 @import url(../yaml/core/base.css);
 
@@ -23,8 +22,8 @@
 @import url(../yaml/navigation/nav_shinybuttons.css);
 @import url(../yaml/navigation/nav_vlist.css);
 @import url(screen/basemod.css);
-@import url(screen/basemod_2col_right_13.css);
+@import url(screen/basemod_2col_left_13.css);
 @import url(screen/content.css);
 
 /* import print layout | Druck-Layout einbinden */
-@import url(../yaml/print/print_100_draft.css);
+@import url(../yaml/print/print_003_draft.css);

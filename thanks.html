@@ -7,7 +7,7 @@
 <meta name="description" content="xml-qstat web-based monitoring for gridengine clusters" />
 <meta name="language" content="en" />
 
-<link href="css/layout_2col_right_13.css" rel="stylesheet" type="text/css"/>
+<link href="css/layout_2col_left_13.css" rel="stylesheet" type="text/css"/>
 <!--[if lte IE 7]>
 <link href="css/patches/patch_2col_left_13.css" rel="stylesheet" type="text/css"/>
 <![endif]-->
@@ -59,83 +59,92 @@
     <!-- end: main navigation -->
     <!-- begin: main content area #main -->
     <div id="main">
-      <!-- begin: #col1 - first float column -->
+      <!-- begin: #col1 static column -->
       <div id="col1">
         <div id="col1_content" class="clearfix">
+          <!-- skiplink anchor: Content -->
 
-          <h2>Thanks, Credits &amp; Acknowledgments</h2>
-            <ul>
-            <li>Mark Olesen for rescuing an orphaned codebase, making many significant improvements and handling the SVN to GIT transition. </li>
-            <li><a href="http://www.bioteam.net">BioTeam Inc.</a> for letting me work on this code (and give it away for free). BioTeam also <a href="http://gallery.bioteam.net/gallery/bioteamBDC">hosts</a> the xml-qstat.org server. </li>
-            <li>The beautiful icons on this website and in the xml-qstat package are from the <a href="http://www.famfamfam.com/lab/icons/silk/">Silk Icon Library</a>.</li>
-            <li>The daemonized perl script used to cache XML status data is a wholesale ripoff of Mark Olesen's <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration">qlicserver</a> code. Used with permission.</li>
-            <li>The xml-qstat distribution contains a redistributed (unaltered) copy of the <a href="http://sourceforge.net/projects/xsltsl/">XSLT Standard Library</a>, this package has a <a href="http://www.gnu.org/licenses/lgpl.html">LGPL license</a> </li>
-            <li>The xml-qstat distribution contains several unaltered <a href="http://www.exslt.org/">EXSLT Template</a> files - Copyright Jeni Tennison, David Pawson, James Fuller and Uche Ogbuji</li>
-            <li>The xml-qstat distribution contains a redistributed (unaltered) copy of <a href="http://www.google.co.uk/search?sourceid=navclient&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=%22Bill+Dortch%22">Bill Dortch's</a> javascript cookie handling library. </li>
-            <li> Grid Engine XML output data is still relatively undocumented. Many thanks to the SGE developers and others who are working on fleshing out the <a href="http://wiki.gridengine.info/wiki/index.php/GridEngine_XML">Grid Engine XML wiki page</a>.</li>
-            <li><a href="http://cscie153.dce.harvard.edu/">CSCI E-153, Web Development Using XML</a> a fantastic course at the Harvard Extension School. </li>
-            </ul>
+<h6 class="vlist">Acknowledgments</h6>
+<ul class="vlist">
+</ul>
 
-          <h3>Additional Resources</h3>
-          <p>
-            The following references were invaluable during the course of
-            initial experiments and the eventual code:
-          </p>
-          <ul>
-            <li><strong>&quot;Learning XSLT&quot; by Michael Fitzgerald, 2nd ed. (2004), O'Reilly</strong></li>
-            <li>&quot;Javascript &amp; DHTML Cookbook&quot; by Danny Goodman, 1st ed (2003), O'Reilly</li>
-            <li>&quot;Javascript Bible&quot; by Danny Goodman with Michael Morrison, 5th ed. (2003), Wiley</li>
-            <li>&quot;Web Designers Reference: An integrated approach to web design with XHTML and CSS&quot; by Craig Grannel, 2005, friendsof</li>
-            <li>&quot;Eric Meyer on CSS: Mastering the language of web design&quot; by Eric Meyer, 2003, New Riders Publishing</li>
-            <li>&quot;More Eric Meyer on CSS&quot;, by Eric Meyer, 2004, New Riders Publishing</li>
-          </ul><p style="margin-bottom: 0;">&nbsp; </p>
+<h6 class="vlist">get latest source code</h6>
+<ul class="vlist">
+  <li><a href="http://github.com/bioteam/xml-qstat">bioteam/xml-qstat</a></li>
+  <li><a href="http://github.com/olesenm/xml-qstat">olesenm/xml-qstat</a></li>
+</ul>
+<h6 class="vlist">related projects</h6>
+<ul class="vlist">
+  <li><a href="http://olesenm.github.com/flex-grid">flex-grid</a>
+</ul>
+<h6 class="vlist">quick links</h6>
+<ul class="vlist">
+  <li><a href="http://gridengine.sunsource.net">Grid Engine project</a></li>
+  <li><a href="http://wiki.gridengine.info/wiki">wiki.gridengine.info/wiki</a></li>
+</ul>
 
 
         </div>
       </div>
       <!-- end: #col1 -->
-      <!-- begin: #col3 static column -->
+      <!-- begin: #col3 - first float column -->
       <div id="col3">
         <div id="col3_content" class="clearfix"> <a id="content" name="content"></a>
           <!-- skiplink anchor: Content -->
 
-          <h4>get the latest source code on GitHub:</h4>
-            <ul>
-            <li>
-              <a href="http://github.com/bioteam/xml-qstat">bioteam/xml-qstat</a>
-              (as <a href="http://github.com/bioteam/xml-qstat/zipball/master">zip</a>
-              or <a href="http://github.com/bioteam/xml-qstat/tarball/master">tar</a>)
-            </li>
-            <li>
-              <a href="http://github.com/olesenm/xml-qstat">olesenm/xml-qstat</a>
-              (as <a href="http://github.com/olesenm/xml-qstat/zipball/master">zip</a>
-              or <a href="http://github.com/olesenm/xml-qstat/tarball/master">tar</a>)
-            </li>
-            </ul>
+<h3>Thanks, Credits &amp; Acknowledgments</h3>
+<ul>
+<li>
+  Mark Olesen for rescuing an orphaned codebase, making many significant
+  improvements and handling the SVN to GIT transition.
+</li>
+<li>
+  <a href="http://www.bioteam.net">BioTeam Inc.</a> for letting me work on
+  this code (and give it away for free).
+  BioTeam also <a href="http://gallery.bioteam.net/gallery/bioteamBDC">hosts</a>
+  the xml-qstat.org server.
+</li>
+<li>
+  The beautiful icons are from the
+  <a href="http://www.famfamfam.com/lab/icons/silk/">Silk Icon Library</a>.
+</li>
+<li>
+  The daemonized perl script used to cache XML status data is a wholesale
+  ripoff of Mark Olesen's
+  <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration">qlicserver</a>
+  code. Used with permission.
+</li>
+<li>
+  the distribution contains several unaltered
+  <a href="http://www.exslt.org/">EXSLT Template</a> files &ndash;
+  Copyright Jeni Tennison, David Pawson, James Fuller and Uche Ogbuji
+</li>
+<li>
+  the distribution contains a redistributed (unaltered) copy of <a href="http://www.google.co.uk/search?sourceid=navclient&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=%22Bill+Dortch%22">Bill Dortch's</a> javascript cookie handling library.
+</li>
+<li>
+  Grid Engine XML output data is still relatively undocumented.
+  Many thanks to the SGE developers and others who are working on fleshing out the <a href="http://wiki.gridengine.info/wiki/index.php/GridEngine_XML">Grid Engine XML wiki page</a>.</li>
+<li>
+  <a href="http://cscie153.dce.harvard.edu/">CSCI E-153, Web Development Using XML</a>
+  a fantastic course at the Harvard Extension School.
+</li>
+</ul>
 
-          <h4>related projects on GitHub</h4>
-            <ul>
-            <li>
-              <a href="http://github.com/olesenm/flex-grid">olesenm/flex-grid</a>
-              (as <a href="http://github.com/olesenm/flex-grid/zipball/master">zip</a>
-              or <a href="http://github.com/olesenm/flex-grid/tarball/master">tar</a>)
-            </li>
-            </ul>
+<h3>Additional Resources</h3>
+<p>
+  The following references were invaluable during the course of
+  initial experiments and the eventual code:
+</p>
+<ul>
+  <li><strong>&quot;Learning XSLT&quot; by Michael Fitzgerald, 2nd ed. (2004), O'Reilly</strong></li>
+  <li>&quot;Javascript &amp; DHTML Cookbook&quot; by Danny Goodman, 1st ed (2003), O'Reilly</li>
+  <li>&quot;Javascript Bible&quot; by Danny Goodman with Michael Morrison, 5th ed. (2003), Wiley</li>
+  <li>&quot;Web Designers Reference: An integrated approach to web design with XHTML and CSS&quot; by Craig Grannel, 2005, friendsof</li>
+  <li>&quot;Eric Meyer on CSS: Mastering the language of web design&quot; by Eric Meyer, 2003, New Riders Publishing</li>
+  <li>&quot;More Eric Meyer on CSS&quot;, by Eric Meyer, 2004, New Riders Publishing</li>
+</ul><p style="margin-bottom: 0;">&nbsp; </p>
 
-          <h4>quick links:</h4>
-            <ul>
-            <li>
-              <a href="http://gridengine.sunsource.net">Grid Engine project</a>
-            </li>
-            <li>
-              <a href="http://wiki.gridengine.info/wiki">wiki.gridengine.info/wiki</a>
-            </li>
-            <li>
-              qlicserver
-              <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration">integration</a>
-              / <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Configuration">configuration</a>
-            </li>
-            </ul>
 
         </div>
         <div id="ie_clearing">&nbsp;</div>

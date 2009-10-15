@@ -7,7 +7,7 @@
 <meta name="description" content="xml-qstat web-based monitoring for gridengine clusters" />
 <meta name="language" content="en" />
 
-<link href="css/layout_2col_right_13.css" rel="stylesheet" type="text/css"/>
+<link href="css/layout_2col_left_13.css" rel="stylesheet" type="text/css"/>
 <!--[if lte IE 7]>
 <link href="css/patches/patch_2col_left_13.css" rel="stylesheet" type="text/css"/>
 <![endif]-->
@@ -59,102 +59,85 @@
     <!-- end: main navigation -->
     <!-- begin: main content area #main -->
     <div id="main">
-      <!-- begin: #col1 - first float column -->
+      <!-- begin: #col1 static column -->
       <div id="col1">
         <div id="col1_content" class="clearfix">
 
-          <h2>History</h2>
-          <p>
-            This is the 4th rewrite of a project that began in mid-2005.
-          </p>
-          <p>
-            Early versions of this program used
-            <a href="http://xml.apache.org/xalan-c">Xalan-C++</a>,
-            but that package and its dependencies turned out to be difficult
-            to build on various Linux and Apple OS X systems. Since a design
-            goal for this tool was easy installation across different
-            hardware platforms and architectures, alternatives to the C++
-            XSLT engines were investigated.
-          </p>
-          <p>
-            The 2nd generation xml-qstat programs and CGIs used the very
-            nice Perl modules <b>XML::LibXML</b> and <b>XML::LibXSLT</b>.
-            Those modules provided Perl interfaces to the Gnome Project's
-            excellent <b><a href="http://www.xmlsoft.org">libxml2</a></b> and
-            <b><a href="http://xmlsoft.org/XSLT">libxslt</a></b> code libraries.
-          </p>
-          <p>
-            The 2nd generation code was abandoned when <a href="http://cocoon.apache.org/2.1/">Apache Cocoon</a>
-            was discovered &ndash; the Cocoon framework functions out of the
-            box on just about any Java-enabled system and there are no
-            requirements to download and build various dependent XML
-            libraries and Perl modules. The XML-based publishing framework
-            provided by Cocoon provides additional features and capabilities
-            not found in standalone XSLT transformation engines.
-          </p>
-          <p>
-            The 3rd generation of xml-qstat came after Chris Dagdigian
-            effectively abandoned the project and codebase for quite some
-            time as his work took him in different directions. During this
-            period, Mark Olesen made very significant improvements both in
-            cleaning up the XSLT framework as well as adding entirely new
-            features such as support for multiple clusters.
-          </p>
-          <p>
-            Generation 4 of this project is essentially Mark Olesen's fork,
-            uploaded and imported into a new GIT repository hosted at
-            <a href="http://github.com">github</a>.
-            We plan to use the new git repository as the base for the
-            long-delayed 1.0 release. Chris Dagdigian is back as a
-            contributor and the project is seeking new contributors, testers
-            and developers.
-          </p>
+<h6 class="vlist">History</h6>
+<ul class="vlist">
+</ul>
+
+<h6 class="vlist">get latest source code</h6>
+<ul class="vlist">
+  <li><a href="http://github.com/bioteam/xml-qstat">bioteam/xml-qstat</a></li>
+  <li><a href="http://github.com/olesenm/xml-qstat">olesenm/xml-qstat</a></li>
+</ul>
+<h6 class="vlist">related projects</h6>
+<ul class="vlist">
+  <li><a href="http://olesenm.github.com/flex-grid">flex-grid</a>
+</ul>
+<h6 class="vlist">quick links</h6>
+<ul class="vlist">
+  <li><a href="http://gridengine.sunsource.net">Grid Engine project</a></li>
+  <li><a href="http://wiki.gridengine.info/wiki">wiki.gridengine.info/wiki</a></li>
+</ul>
+
 
         </div>
       </div>
       <!-- end: #col1 -->
-      <!-- begin: #col3 static column -->
+      <!-- begin: #col3 - first float column -->
       <div id="col3">
         <div id="col3_content" class="clearfix"> <a id="content" name="content"></a>
           <!-- skiplink anchor: Content -->
 
-          <h4>get the latest source code on GitHub:</h4>
-            <ul>
-            <li>
-              <a href="http://github.com/bioteam/xml-qstat">bioteam/xml-qstat</a>
-              (as <a href="http://github.com/bioteam/xml-qstat/zipball/master">zip</a>
-              or <a href="http://github.com/bioteam/xml-qstat/tarball/master">tar</a>)
-            </li>
-            <li>
-              <a href="http://github.com/olesenm/xml-qstat">olesenm/xml-qstat</a>
-              (as <a href="http://github.com/olesenm/xml-qstat/zipball/master">zip</a>
-              or <a href="http://github.com/olesenm/xml-qstat/tarball/master">tar</a>)
-            </li>
-            </ul>
 
-          <h4>related projects on GitHub</h4>
-            <ul>
-            <li>
-              <a href="http://github.com/olesenm/flex-grid">olesenm/flex-grid</a>
-              (as <a href="http://github.com/olesenm/flex-grid/zipball/master">zip</a>
-              or <a href="http://github.com/olesenm/flex-grid/tarball/master">tar</a>)
-            </li>
-            </ul>
-
-          <h4>quick links:</h4>
-            <ul>
-            <li>
-              <a href="http://gridengine.sunsource.net">Grid Engine project</a>
-            </li>
-            <li>
-              <a href="http://wiki.gridengine.info/wiki">wiki.gridengine.info/wiki</a>
-            </li>
-            <li>
-              qlicserver
-              <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration">integration</a>
-              / <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Configuration">configuration</a>
-            </li>
-            </ul>
+<h3>History</h3>
+<p>
+  This is the 4th rewrite of a project that began in mid-2005.
+</p>
+<p>
+  Early versions of this program used
+  <a href="http://xml.apache.org/xalan-c">Xalan-C++</a>,
+  but that package and its dependencies turned out to be difficult
+  to build on various Linux and Apple OS X systems. Since a design
+  goal for this tool was easy installation across different
+  hardware platforms and architectures, alternatives to the C++
+  XSLT engines were investigated.
+</p>
+<p>
+  The 2nd generation xml-qstat programs and CGIs used the very
+  nice Perl modules <b>XML::LibXML</b> and <b>XML::LibXSLT</b>.
+  Those modules provided Perl interfaces to the Gnome Project's
+  excellent <b><a href="http://www.xmlsoft.org">libxml2</a></b> and
+  <b><a href="http://xmlsoft.org/XSLT">libxslt</a></b> code libraries.
+</p>
+<p>
+  The 2nd generation code was abandoned when <a href="http://cocoon.apache.org/2.1/">Apache Cocoon</a>
+  was discovered &ndash; the Cocoon framework functions out of the
+  box on just about any Java-enabled system and there are no
+  requirements to download and build various dependent XML
+  libraries and Perl modules. The XML-based publishing framework
+  provided by Cocoon provides additional features and capabilities
+  not found in standalone XSLT transformation engines.
+</p>
+<p>
+  The 3rd generation of xml-qstat came after Chris Dagdigian
+  effectively abandoned the project and codebase for quite some
+  time as his work took him in different directions. During this
+  period, Mark Olesen made very significant improvements both in
+  cleaning up the XSLT framework as well as adding entirely new
+  features such as support for multiple clusters.
+</p>
+<p>
+  Generation 4 of this project is essentially Mark Olesen's fork,
+  uploaded and imported into a new GIT repository hosted at
+  <a href="http://github.com">github</a>.
+  We plan to use the new git repository as the base for the
+  long-delayed 1.0 release. Chris Dagdigian is back as a
+  contributor and the project is seeking new contributors, testers
+  and developers.
+</p>
 
         </div>
         <div id="ie_clearing">&nbsp;</div>

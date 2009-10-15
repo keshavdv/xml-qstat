@@ -46,10 +46,10 @@
           <li><a href="index.html">About</a></li>
           <li><a href="history.html">History</a></li>
           <li><a href="screenshots.html">Screenshots</a></li>
-          <li id="current"><a href="#">Demo</a></li>
+          <li><a href="demo.html">Demo</a></li>
           <li><a href="requirements.html">Requirements</a></li>
           <li><a href="license.html">License</a></li>
-          <li><a href="download.html">Download</a></li>
+          <li id="current"><a href="download.html">Download</a></li>
           <li><a href="install.html">Install</a></li>
           <li><a href="support.html">Support</a></li>
           <li><a href="thanks.html">Acknowledgments</a></li>
@@ -63,8 +63,11 @@
       <div id="col1">
         <div id="col1_content" class="clearfix">
 
-<h6 class="vlist">Demo</h6>
+<h6 class="vlist">Download</h6>
 <ul class="vlist">
+  <li><a href="download.html">Obtaining the Software</a></li>
+  <li class="active"><strong>Third Party Resources</strong></li>
+  <li><a href="use-git.html">Starting with git</a></li>
 </ul>
 
 <h6 class="vlist">get latest source code</h6>
@@ -92,21 +95,28 @@
           <!-- skiplink anchor: Content -->
 
 
-<h3>Demo Sites</h3>
+<h3>Third Party Resources</h3>
 <p>
-  This list will grow and shrink over time. Some versions of Grid
-  Engine 6.x produce invalid XML in response to cluster job error
-  states. This invalid XML will will break the XML transformation
-  resulting in an ugly Cocoon Application error being displayed.
-  These bugs have all been fixed in the current Grid Engine
-  codebase.
+  At the moment, xml-qstat can be run with the Apache Cocoon for server-side
+  XSLT transformations, or with the HTTPi tiny web-server for client-side
+  XSLT transformations. It only necessary to download one of them.
 </p>
-<h3>Local Demo</h3>
-<p>
-  This site will be running off the GitHub repository so it should
-  reflect the latest features, bug fixes and capabilities:<br/>
-  <a href="http://xml-qstat.org/xmlqstat/">http://xml-qstat.org/xmlqstat/</a>
-</p>
+
+<ul>
+<li>
+  The <a href="http://cocoon.apache.org/2.1/">Apache Cocoon (2.1)</a>
+  framework &ndash; server-side XSLT
+</li>
+<li>
+  The <a href="http://www.floodgap.com/httpi/">HTTPi webserver</a> &ndash;
+  client-side XSLT
+</li>
+<li>
+  Any of the <a href="http://www.famfamfam.com/lab/icons/silk/">silk icons</a>
+  used in the XSLT transformations are included in the distribution.
+</li>
+</ul>
+
 
 
         </div>

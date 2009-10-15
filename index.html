@@ -7,7 +7,7 @@
 <meta name="description" content="xml-qstat web-based monitoring for gridengine clusters" />
 <meta name="language" content="en" />
 
-<link href="css/layout_2col_right_13.css" rel="stylesheet" type="text/css"/>
+<link href="css/layout_2col_left_13.css" rel="stylesheet" type="text/css"/>
 <!--[if lte IE 7]>
 <link href="css/patches/patch_2col_left_13.css" rel="stylesheet" type="text/css"/>
 <![endif]-->
@@ -15,7 +15,6 @@
 
 </head>
 <body>
-
 <div class="page_margins">
   <div class="page">
     <div id="header">
@@ -31,7 +30,6 @@
             alt="Fork me on GitHub" />
           </a>
         </div>
-
       </div>
 
       Web-based status monitoring of
@@ -61,127 +59,126 @@
     <!-- end: main navigation -->
     <!-- begin: main content area #main -->
     <div id="main">
-      <!-- begin: #col1 - first float column -->
+      <!-- begin: #col1 static column -->
       <div id="col1">
         <div id="col1_content" class="clearfix">
+          <!-- skiplink anchor: Content -->
 
-          <h2>About this software</h2>
-          <p>
-            <b>xml-qstat</b> is an attempt to do something useful with the XML
-            status information that Grid Engine produces.
-            <b>xml-qstat</b> consists of a set of files and folders designed to
-            function as a self-contained web application within the
-            <a href="http://cocoon.apache.org/2.1">Apache Cocoon 2.1</a>
-            publishing framework.
-            At its heart, <b>xml-qstat</b> consists of a collection of XSLT
-            stylesheets that can be used with render Grid Engine XML into a
-            variety of output formats (eg, XHTML, RSS). The Apache Cocoon
-            framework supplies the
-            <a href="http://en.wikipedia.org/wiki/XSLT">XSLT transformations</a>
-            and web publishing engine.
-          </p>
 
-          <h3>Overview</h3>
-            <p>
-              The <a href="screenshots.html">screenshots</a> and
-              <a href="demo.html">demo</a> pages will give a better view
-              of the current capabilities.
+<h6 class="vlist">About</h6>
+<ul class="vlist">
+</ul>
 
-              <b>xml-qstat</b> consists of a set of files and folders designed to
-              function as a self-contained web application within the Apache
-              Cocoon XML publishing framework. Most of the work involved in
-              developing this package centers on creating and improving the
-              XSL stylesheets that guide the transformation of Grid Engine
-              XML into various desired output formats. Quite a bit of effort
-              also went into the various JavaScript, CSS stylesheets and
-              other "web design" elements, although more work is still
-              required to really make the web interface shine.
-            </p>
+<h6 class="vlist">get latest source code</h6>
+<ul class="vlist">
+  <li><a href="http://github.com/bioteam/xml-qstat">bioteam/xml-qstat</a></li>
+  <li><a href="http://github.com/olesenm/xml-qstat">olesenm/xml-qstat</a></li>
+</ul>
+<h6 class="vlist">related projects</h6>
+<ul class="vlist">
+  <li><a href="http://olesenm.github.com/flex-grid">flex-grid</a>
+</ul>
+<h6 class="vlist">quick links</h6>
+<ul class="vlist">
+  <li><a href="http://gridengine.sunsource.net">Grid Engine project</a></li>
+  <li><a href="http://wiki.gridengine.info/wiki">wiki.gridengine.info/wiki</a></li>
+</ul>
 
-          <h3>Features</h3>
-            <ul>
-            <li>Display data from multiple Grid Engine clusters</li>
-            <li>Can be integrated with the
-              <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration">qlicserver package</a>
-              to allow dynamic display of license/resource utilization.
-            </li>
-            <li><b>Cached Display Mode</b>:
-              XML status data is from Grid Engine is cached to a local file
-              at a user definable interval and used for generating web
-              pages. This mode prevents the SGE 'qmaster' daemon from having
-              to be contacted with a qstat query each time a page is
-              accessed. Most suitable for sites operating very large
-              clusters or systems with many thousands of active jobs.
-              Information about individual jobs is still fetched dynamically
-            </li>
-            <li><b>Live Display Mode</b>:
-              Grid Engine state and status data is refreshed before every
-              page display by builtin methods that query the SGE qmaster
-              directly. Suitable for sites and clusters where generating a
-              'qstat' call each time a page is accessed does not present a
-              scaling or performance issue.
-            </li>
-            <li>
-              Primary view can be rendered in "standard" ('show me
-              everything') mode or a special "terse" ('summary') view can be
-              used for very large or very active clusters. This is to handle
-              clusters with thousands of nodes or hundreds of thousands of
-              active grid jobs
-            </li>
-            <li>
-              Per user job sorting. Users can view their own pending/active
-              jobs simply by surfing to a simple URL.
-            </li>
-            <li>
-              Job Detail handling via URL for any active or pending job.
-            </li>
-            </ul>
 
         </div>
       </div>
       <!-- end: #col1 -->
-      <!-- begin: #col3 static column -->
+      <!-- begin: #col3 - first float column -->
       <div id="col3">
         <div id="col3_content" class="clearfix"> <a id="content" name="content"></a>
-          <!-- skiplink anchor: Content -->
 
-          <h4>get the latest source code on GitHub:</h4>
-            <ul>
-            <li>
-              <a href="http://github.com/bioteam/xml-qstat">bioteam/xml-qstat</a>
-              (as <a href="http://github.com/bioteam/xml-qstat/zipball/master">zip</a>
-              or <a href="http://github.com/bioteam/xml-qstat/tarball/master">tar</a>)
-            </li>
-            <li>
-              <a href="http://github.com/olesenm/xml-qstat">olesenm/xml-qstat</a>
-              (as <a href="http://github.com/olesenm/xml-qstat/zipball/master">zip</a>
-              or <a href="http://github.com/olesenm/xml-qstat/tarball/master">tar</a>)
-            </li>
-            </ul>
+<h3>About this software</h3>
+<p>
+  <b>xml-qstat</b> is an attempt to do something useful with the XML status
+  information that <a href="http://en.wikipedia.org/wiki/Grid_Engine">Grid Engine</a> produces.
+  At its heart, it comprises a collection of XSLT stylesheets that can be
+  used with render Grid Engine XML into a variety of output formats (eg,
+  XHTML, RSS).
+</p>
+<p>
+  The current development efforts have be applied to reducing the
+  installation size and to improving the flexiblity. The goal is to have an
+  application that can be readily installed and run on even the weakest
+  cluster headnodes.
+</p>
 
-          <h4>related projects on GitHub</h4>
-            <ul>
-            <li>
-              <a href="http://github.com/olesenm/flex-grid">olesenm/flex-grid</a>
-              (as <a href="http://github.com/olesenm/flex-grid/zipball/master">zip</a>
-              or <a href="http://github.com/olesenm/flex-grid/tarball/master">tar</a>)
-            </li>
-            </ul>
+<h3>Overview</h3>
+<p>
+  The <a href="screenshots.html">screenshots</a> and
+  <a href="demo.html">demo</a> pages will give a better view
+  of the current capabilities.
 
-          <h4>quick links:</h4>
-            <ul>
-            <li>
-              <a href="http://gridengine.sunsource.net">Grid Engine project</a>
-            </li>
-            <li>
-              <a href="http://wiki.gridengine.info/wiki">wiki.gridengine.info/wiki</a>
-            </li>
-            <li>
-              qlicserver
-              <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration">integration</a>
-              / <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Configuration">configuration</a>
-            </li>
-            </ul>
+  Whether as as server-side XSLT transformations, <b>xml-qstat</b> contains a set of
+  files and folders designed to function as a self-contained web application within the
+  <a href="http://cocoon.apache.org/2.1">Apache Cocoon 2.1</a>
+  XML publishing framework.
+  For client-side XSLT transformations, <b>xml-qstat</b> uses modules added
+  into the <a href="http://www.floodgap.com/httpi/">HTTPi webserver</a>
+  to deliver appropriate xml+xsl to the client browser.
+
+  Most of the work involved in developing this package centers on creating
+  and improving the XSL stylesheets that guide the transformation of Grid
+  Engine XML into various desired output formats. Quite a bit of effort has
+  also gone into the various JavaScript, CSS stylesheets and other "web design"
+  elements (although more work can always done).
+</p>
+
+<h3>Features</h3>
+<ul>
+<li>
+  <b>Multi-cluster support</b> &ndash;
+  Display data from multiple Grid Engine clusters
+</li>
+<li>
+  <b>flex-grid (qlicserver) integration</b> &ndash;
+  allow dynamic display of license/resource utilization
+  in combination with the
+  <a href="http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration">flex-grid
+  qlicserver package</a>
+</li>
+<li>
+  <b>Cached Display Mode</b> &ndash;
+  XML status data is from Grid Engine is cached to a local file at a user
+  definable interval and used for generating web pages. This mode prevents
+  the SGE 'qmaster' daemon from having to be contacted with a qstat query
+  each time a page is accessed. Most suitable for sites operating very large
+  clusters or systems with many thousands of active jobs. Information about
+  individual jobs is still fetched dynamically
+</li>
+<li><b>Live Display Mode</b> &ndash;
+  Grid Engine state and status data is refreshed before every page display
+  by builtin methods that query the SGE qmaster directly. Suitable for sites
+  and clusters where generating a 'qstat' call each time a page is accessed
+  does not present scaling or performance issues
+</li>
+<li>
+  <b>Client-side XSLT transformations</b> &ndash;
+  using the HTTPi webserver
+</li>
+<li>
+  <b>Server-side XSLT transformations</b> &ndash;
+  using Apache Cocoon 2.1
+</li>
+<li>
+  <b>Per user job sorting</b> &ndash; users can view their own
+  pending/active jobs simply by surfing to a simple URL.
+</li>
+<li>
+  Job Detail handling via URL for any active or pending job.
+</li>
+<li>
+  Primary view can be rendered in "standard" ('show me everything') mode or
+  a special "terse" ('summary') view can be used for very large or very
+  active clusters. This is to handle clusters with thousands of nodes or
+  hundreds of thousands of active grid jobs
+</li>
+</ul>
+
 
         </div>
         <div id="ie_clearing">&nbsp;</div>

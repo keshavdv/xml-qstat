@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>xml-qstat: web-based monitoring for gridengine clusters</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="description" content="xml-qstat web-based monitoring for gridengine clusters" />
+<meta name="language" content="en" />
+
+<link href="css/layout_2col_left_13.css" rel="stylesheet" type="text/css"/>
+<!--[if lte IE 7]>
+<link href="css/patches/patch_2col_left_13.css" rel="stylesheet" type="text/css"/>
+<![endif]-->
+<link href="css/screen/images/xmlqstat.png" rel="shortcut icon" type="image/png"/>
+
+</head>
+<body>
+<div class="page_margins">
+  <div class="page">
+    <div id="header">
+      <div class="subcolumns">
+        <div class="c75l">
+          <img src="css/screen/images/xmlqstat-logo.png"
+              alt="xml-qstat logo" />
+        </div>
+        <div class="c25r">
+          <a href="http://github.com/olesenm/xml-qstat">
+            <img style="position: absolute; top: 0; right: 0; border: 0;"
+            src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
+            alt="Fork me on GitHub" />
+          </a>
+        </div>
+      </div>
+
+      Web-based status monitoring of
+      <a href="http://en.wikipedia.org/wiki/Grid_Engine">Grid Engine</a> clusters,
+      provided by the <a href="http://www.bioteam.net">BioTeam</a>
+
+    </div>
+    <!-- begin: main navigation #nav -->
+    <div id="nav">
+      <!-- skiplink anchor: navigation -->
+      <a id="navigation" name="navigation"></a>
+      <div class="hlist">
+        <ul>
+          <li><a href="index.html">About</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="screenshots.html">Screenshots</a></li>
+          <li><a href="demo.html">Demo</a></li>
+          <li><a href="requirements.html">Requirements</a></li>
+          <li><a href="license.html">License</a></li>
+          <li><a href="download.html">Download</a></li>
+          <li id="current"><a href="install.html">Install</a></li>
+          <li><a href="support.html">Support</a></li>
+          <li><a href="thanks.html">Acknowledgments</a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- end: main navigation -->
+    <!-- begin: main content area #main -->
+    <div id="main">
+      <!-- begin: #col1 static column -->
+      <div id="col1">
+        <div id="col1_content" class="clearfix">
+
+<h6 class="vlist">Installation</h6>
+<ul class="vlist">
+  <li><a href="install.html">General</a></li>
+  <li><a href="cocoon.html">Cocoon</a></li>
+  <li class="active"><strong>HTTPi</strong></li>
+</ul>
+
+<h6 class="vlist">get latest source code</h6>
+<ul class="vlist">
+  <li><a href="http://github.com/bioteam/xml-qstat">bioteam/xml-qstat</a></li>
+  <li><a href="http://github.com/olesenm/xml-qstat">olesenm/xml-qstat</a></li>
+</ul>
+<h6 class="vlist">related projects</h6>
+<ul class="vlist">
+  <li><a href="http://olesenm.github.com/flex-grid">flex-grid</a>
+</ul>
+<h6 class="vlist">quick links</h6>
+<ul class="vlist">
+  <li><a href="http://gridengine.sunsource.net">Grid Engine project</a></li>
+  <li><a href="http://wiki.gridengine.info/wiki">wiki.gridengine.info/wiki</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <!-- end: #col1 -->
+      <!-- begin: #col3 - first float column -->
+      <div id="col3">
+        <div id="col3_content" class="clearfix"> <a id="content" name="content"></a>
+          <!-- skiplink anchor: Content -->
+
+
+<h3>Apologies</h3>
+<p>
+  The installation procedure for using a modified HTTPi is more than a bit
+  rough at the moment, but please bear with us while we improve it.
+</p>
+
+<h3>Preamble</h3>
+<p>
+  The freely available
+  <b><a href="http://www.floodgap.com/httpi/">HTTPi webserver</a></b>
+  is a tiny (12kB), fast and secure pure-Perl webserver.
+
+  Since &quot;<cite><a href="http://www.floodgap.com/httpi/program.html">HTTPi
+  was designed first and foremost to be a hacker's webserver that was easily
+  understood, easily patched and trivially maintainable</a></cite>&quot;,
+  it is an ideal candidate for creating a small custom webserver
+  specifically for <b>xml-qstat</b>. The implementation in Perl makes it
+  highly portable, permits complex logic and rapid program development
+  &ndash; all very good reasons to persue it as a platform.
+</p>
+
+<h3>HTTPi Installation (for client-side XSLT)</h3>
+<p>
+  HTTPi can be configured to run in several different operational modes: as
+  a daemon, "on-demand" via xinetd or from launchd. The <b>xml-qstat</b>
+  modules were developed using the daemonic mode, but should work fine in
+  any of the modes. The daemon-mode requires no root-level privileges for
+  running it. Please follow the
+  <a href="http://www.floodgap.com/httpi/install.html">HTTPi installation instructions</a>
+  and create a standard HTTPi webserver for your system.
+  The configuration procedure of HTTPi will interactively ask a number of
+  questions and when it is done will save transcript. For example,
+  <em>transcript.0.configure.demonic</em> after configuring for the daemonic
+  mode. These transcripts can be used to supply answers next time you
+  rebuild HTTPi. After starting HTTPi, test it by
+  pointing your web browser at the http://&lt;host&gt;:8080/ (assuming it
+  was configured to use port 8080).
+  If all goes well, you should see an error message from HTTPi complaining
+  that it can't find the resource:
+  <blockquote>
+  <pre>
+     File Not Found
+     The resource / was not found on this system.
+     --------------------------------------------
+     httpi/1.6.1 (Demonic/Linux) by Cameron Kaiser
+  </pre>
+  </blockquote>
+</p>
+
+
+<h3>HTTPi-xmlqstat Installation</h3>
+<p>
+  Now that we've been successful in build HTTPi, we can do the same thing, but
+  as a customized <b>xml-qstat</b> version this time.
+
+  As previously described, the <b>xml-qstat/httpi-modules/</b>
+  folder contains customized modules for HTTPi.
+
+<pre>
+$ cd xml-qstat/
+$ ls -l httpi-modules/
+-rw-r--r-- settings-daemonic.EXAMPLE
+-rw-r--r-- httpi.in
+-rw-r--r-- modules.in
+-rw-r--r-- userfunc.in
+-rw-r--r-- uservar.in
+</pre>
+
+The file <b>settings-daemonic.EXAMPLE</b> is simply an example transcript
+file that can be used when rebuilding HTTPi, or reuse one of your own.
+The various <b>*.in</b> files are our pieces for assembling an HTTPi-xmlqstat
+webserver.
+</p>
+
+<p>
+The only hand editing that might be required is in the
+<b>uservar.in</b> file &ndash; to set the installed location of
+<b>xml-qstat</b>:
+<pre>
+############################################
+############################################
+# CUSTOMIZE THIS TO MATCH YOUR REQUIREMENTS:
+#
+
+# the base location of the xmlqstat distribution
+my $resourceRoot = "$ENV{HOME}/xml-qstat";
+
+# timeout (seconds) for system command like qstat -j etc.
+my $shellCmdTimeout = 10;
+
+#
+# END OF CUSTOMIZE SETTINGS
+############################################
+############################################
+</pre>
+</blockquote>
+
+
+<h3>HTTPi-xmlqstat Build Procedure</h3>
+<p>
+  <blockquote>
+    <b>This are provisional instructions and should be replaced with
+    a more streamlined procedure soon.</b>
+  </blockquote>
+
+In the main <b>xml-qstat/</b> directory, we will prepare things as follows:
+<pre>
+$ tar -xvzf <em>pathToFile/</em>httpi-1.6.1.tar.gz
+$ mv httpi-1.6.1  build-httpi
+$ cd build-httpi
+</pre>
+
+We will now prepare our set of standard HTTPi configuration answers, either
+by using the transcript from a previous build or (for the sake of an
+example) by using the example file provided:
+
+<pre>
+$ rsync -aP ../httpi-modules/settings-daemonic.EXAMPLE .
+</pre>
+
+Now get our customized pieces:
+<pre>
+$ rsync -aP ../httpi-modules/*.in .
+</pre>
+
+And rebuilt it:
+<pre>
+$ perl configure.demonic -d settings-daemonic.EXAMPLE
+</pre>
+
+
+Using <b>init-scripts/httpi stop</b> seems to be the easiest way of finding
+and killing the HTTPi processes.
+
+The web interface should be ready for testing.
+</p>
+
+
+<h3>HTTPi-xmlqstat security</h3>
+<p>
+  Although HTTPi will be running as a non-privileged user, the module
+  has imposed extra restrictions on which Grid Engine commands can be
+  executed and with which arguments.
+
+  Additionally, the Grid Engine commands will only be executed when they
+  are located in the <b>$SGE_ROOT/bin/$SGE_ARCH/</b>
+  directory, where the value of <b>$SGE_ARCH</b> is determined internally by
+  the program. The <b>PATH</b> will <em>not</em> be searched.
+</p>
+
+
+        </div>
+        <div id="ie_clearing">&nbsp;</div>
+        <!-- End: IE Column Clearing -->
+      </div>
+      <!-- end: #col3 -->
+    </div>
+    <!-- end: #main -->
+    <!-- begin: #footer -->
+    <div id="footer">
+        Layout based on <a href="http://www.yaml.de/en/">YAML</a> from Dirk Jesse
+    </div>
+    <!-- end: #footer -->
+  </div>
+</div>
+</body>
+</html>

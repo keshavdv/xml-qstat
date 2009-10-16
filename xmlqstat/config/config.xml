@@ -57,9 +57,9 @@
 
 <!--
     define a logo for all of the pages and the link location
-    <topLogo src="config/xmlqstat-logo.png" href="http://www.xml-qstat.org" height="29" />
+    <topLogo src="config/.png" href="http://www.xml-qstat.org" height="29" />
 -->
-<topLogo src="config/logo.png" href="http://olesenm.github.com/xml-qstat/" height="29"/>
+<topLogo src="config/xmlqstat-logo.png" href="http://olesenm.github.com/xml-qstat/" height="29"/>
 
 <!-- define cluster settings and if a default cluster is allowed -->
 <clusters>

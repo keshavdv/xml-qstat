@@ -1,0 +1,370 @@
+/* text/css */
+
+html {
+    background: #dee7ec;
+}
+
+body {
+    margin: 10px 20px 0px;
+    font-family: Geneva, Arial, Helvetica, sans-serif;
+}
+
+blockquote {
+    margin-left:  20px;
+    margin-right: 20px;
+}
+
+acronym {
+    cursor: help;
+    border-bottom: 1px dotted;
+    font-variant: normal;
+}
+
+a:link,
+a:visited {
+    color: #00C;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #00F;
+    text-decoration: underline;
+}
+
+/* a:active { text-decoration: none; } */
+
+
+.dividerBarAbove,
+.dividerBarBelow {
+    margin:  2px;
+    padding: 2px;
+    font-size:    10px;
+    font-weight:  normal;
+    font-variant: normal;
+    text-align:   right;
+}
+
+.dividerBarAbove {
+    border-top: 1px dashed #AAA;
+}
+
+.dividerBarBelow {
+    border-bottom: 1px dashed #AAA;
+}
+
+
+p,
+h1,
+pre {
+    margin: 0px 10px 10px 10px;
+}
+
+pre {
+    font-size: small;
+}
+
+h1 {
+    font-size:   14px;
+    padding-top: 10px;
+}
+
+#main {
+    border: 1px solid #000;
+    background:  #fff;
+    margin-top:  1px;
+    padding-top: 1px;
+}
+
+#menu {
+    background: #dee7ec url(screen/menu_bg.png) repeat-x center right;
+    border-top:    1px solid #AAA;
+    border-bottom: 1px solid #888;
+    margin-left:   1px;
+    margin-right:  1px;
+    min-height:    18px;
+    font-size:     12px;
+    padding-bottom: 1px;
+    text-align:     left;
+}
+
+#menu img {
+    border:  0px;
+    padding: 0px;
+    margin-top: 1px;
+    vertical-align: middle;
+}
+
+/* small extra spacing to the left/right (eg, in the menu) */
+.leftSpace   { margin-left:  8px; }
+.rightSpace  { margin-right: 8px; }
+
+
+.ResourceDetailLayer {
+    border: thin inset #000;
+    border-spacing: 2px 2px;
+    padding: 4px;
+    margin-top: 10px;
+    position: absolute;
+    text-align: justify;
+    width: auto;
+    height: 30%;
+    overflow: auto;
+    z-index: 3;
+    visibility: visible;
+    background: #fff;
+}
+
+.DebugDetailLayer {
+    border-width: thin 2px 3px thin;
+    border-spacing: 2px 2px;
+    border-style: solid;
+    border-color: #000;
+    padding: 4px 4px 4px 4px;
+    margin: 10px 4px 4px 4px;
+    position: absolute;
+    text-align: justify;
+    font-family: monospace;
+    width: 70%;
+    height: 25%;
+    overflow: auto;
+    z-index: 3;
+    visibility: hidden;
+    display: none;
+    background: #fff;
+}
+
+.topLogo {
+    margin: 1px;
+    border-style: none;
+    font-size:   12px;
+    text-align:  left;
+    padding: 1px 1px 0px;
+}
+
+code {
+    font-family: monospace;
+}
+
+.boldCode {
+    font-size:    small;
+    font-variant: normal;
+    font-weight:  normal;
+    color: #000;
+}
+
+/* combined code and boldCode */
+.outputCode {
+    font-family: monospace;
+    font-size:   small;
+    font-weight: normal;
+    font-variant: normal;
+    color: #000;
+}
+
+
+.emphasisCode {
+    font-family: monospace;
+    font-size:   small;
+    font-style:  italic;
+    font-weight: bold;
+    color: #666;
+}
+
+
+.infoHeading {
+    font-size:   1em;
+}
+
+.infoSectionHead {
+    font-size:   0.8em;
+}
+
+.infoPara {
+    font-size:   0.7em;
+    margin-top:  1em;
+}
+
+.skipTableFormat {
+    font-size:   14px;
+    vertical-align: middle;
+}
+
+/* set padding about toggleVisibility */
+.toggleVisibility {
+    font-size:   small;
+    text-align:  right;
+    margin-left: 0px;
+    border-style: hidden;
+}
+
+.toggleVisibility img {
+    border:  0px;
+    padding: 0px;
+}
+
+
+/* simulate a table caption within a table */
+.tableCaption {
+    font-size:   small;
+    text-align:  left;
+    vertical-align: top;
+    margin-right: 0px;
+    float: left;
+    border-style: hidden;
+}
+
+/* a table of listings */
+
+table.listing {
+    background-color: #ffffff;
+    border: thin inset #8cacbb;
+    border-spacing: 2px 2px;
+    border-collapse: collapse;
+    font-size:    small;
+    font-weight:  normal;
+    font-variant: normal;
+    width: 100%;
+}
+
+table.listing th {
+    background-color: #dee7ec;
+    border: 1px inset #8cacbb;
+    padding: 2px 4px;
+    font-size:    small;
+    font-variant: normal;
+    font-weight:  normal;
+}
+
+
+/* vertical tables get a fixed-width header */
+table.fixedTH th {
+    width: 20%;
+}
+
+table.listing tbody {
+    background: #f6f6f6;
+    border-color: #ccc;
+    color: #333;
+}
+
+table.listing tr:hover {
+    background: #eed;
+    color: #000;
+}
+
+table.listing td {
+    border: 1px inset #8cacbb;
+    padding: 1px 3px;
+    margin-right: 3px;
+    margin-left:  3px;
+    font-size:    small;
+    font-variant: normal;
+    font-weight:  normal;
+}
+
+
+/* embedded table */
+table.embedded {
+    border-style: none;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.embedded th,
+table.embedded td {
+    border-style: none;
+    border-collapse: collapse;
+    padding: 0px;
+}
+
+.bottomBox {
+    font-size:   small;
+    font-style:  normal;
+    line-height: 50px;
+    height: 50px;
+    vertical-align: middle;
+    border: 2px none;
+}
+
+.progbarOuter {
+    width: 90%;
+    background: #e7ffff;
+    border: 1px solid #7f7f7f;
+    vertical-align: top;
+    margin-left: 5px;
+    margin-top:  1px;
+    margin-bottom: 1px;
+    margin-right: 5px;
+    font-size:   9px;
+    text-align:  center;
+    text-indent: 2px;
+}
+
+.progbarInner {
+    height: 10px;
+    width:  100%;
+    left:   0px;
+    margin: 0px;
+    padding: 0px;
+    text-indent: 2px;
+    background-repeat:   repeat-x;
+    background-position: center left;
+}
+
+
+/* progress bar backgrounds for various states */
+
+.normalBar,
+.progbarInner {
+    background-color:  #abb7d6;
+    background-image:  url(screen/progress_normal.png);
+}
+
+.alarmBar {
+    background-color:  #ff7f7f;
+    background-image:  url(screen/progress_alarm.png);
+}
+
+.warnBar {
+    background-color:  #e6e699;
+    background-image:  url(screen/progress_warn.png);
+}
+
+
+/* background colors for various states */
+.alarmState   { background-color: #ffbbbb; }
+.errorState   { background-color: #ffbbbb; font-style: italic; }
+.warnState    { background-color: #e6e699; }
+.disableState { background-color: #dee7ec; }
+.suspendState { background-color: #dee7ec; }
+
+
+#summaryGraph {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+/* default visibility for activeJobTable, pendingJobTable */
+#activeJobTable,
+#pendingJobTable {
+    visibility: visible;
+    display:    inline;
+}
+
+#main .listing .odd  { background: #f6f6f6; border-color: #ccc; color: #333; }
+#main .listing .even { background: #e7ffff; border-color: #cee; color: #099; }
+
+#queueStatusTable img {
+    padding-right: 1px;
+    vertical-align: text-top;
+}
+
+#main ul {
+    list-style: square outside url(screen/list_bullet.png);
+}
+
+dt {
+    font-weight: bold;
+}
+
+/* end-of-file */

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xslt-param name="timestamp" value="2009-10-16 02:21:11"?>
+<?xslt-param name="server-info" value="HTTPi/1.6.1 (Demonic/Linux)"?>
+<?xml-stylesheet type="text/xml" href="xsl/index-xhtml.xsl"?>
+<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0">
+<dir:directory name="cache">
+<dir:file name="qstatf~demo.xml"/>
+</dir:directory>
+</dir:directory>

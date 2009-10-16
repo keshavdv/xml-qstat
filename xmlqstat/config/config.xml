@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+<!-- XML-QSTAT configuration file -->
+<!--
+    Change this value to reflect your local timezone relative to UTC.
+    This offset is used when constructing RFC-3339 validated timestamps that
+    look like this:
+
+        1990-12-31T23:59:60Z
+    	1996-12-19T16:39:57-08:00
+
+    The cocoon server will report proper local date time information,
+    but we need to insert the UTC correction info for the RSS feed
+
+    Setting "Z" means no correction (UTC time matches)
+
+    CET (Central European Time) is 1 hour ahead of UTC, thus "+01:00"
+    EST (East coast USA) is 5 hours behind UTC, thus "-05:00"
+
+    Change the following param accordingly to your UTC offset.
+-->
+<UTC_TZ_offset>+01:00</UTC_TZ_offset>
+
+<!--
+    Set this to 'yes' if you wish to view the resource allocation
+    reported by the qlicserver program
+-->
+<qlicserver>NO</qlicserver>
+
+<!--
+    specify an external program for querying the jobinfo
+    - the jobId, etc. are passed via the queryString
+-->
+<programs>
+  <!--
+      specify an external program for obtaining the qstat -j information
+      - leave empty if you don't have such a program, or if you wish
+        to use the CommandGenerator
+  -->
+  <jobinfo></jobinfo>
+
+  <!--
+      specify an external program for viewing the stdout files
+      (jobId, filenames, etc. are passed via the queryString)
+      - leave empty if you don't have such a program
+  -->
+  <viewfile></viewfile>
+
+  <!--
+      specify an external program for finding and viewing the log files
+      (jobId, filenames, etc. are passed via the queryString)
+      - leave empty if you don't have such a program
+  -->
+  <viewlog></viewlog>
+
+</programs>
+
+<!--
+    define a logo for all of the pages and the link location
+    <topLogo src="config/xmlqstat-logo.png" href="http://www.xml-qstat.org" height="29" />
+-->
+<topLogo src="config/logo.png" href="http://olesenm.github.com/xml-qstat/" height="29"/>
+
+<!-- define cluster settings and if a default cluster is allowed -->
+<clusters>
+  <cluster name="demo" root="/opt/grid" cell="default" />
+  <default>no</default>
+</clusters>
+
+</config>
+<!-- end-of-file -->

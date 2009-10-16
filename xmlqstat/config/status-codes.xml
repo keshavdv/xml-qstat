@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  SGE 6.0u7 and later use raw bitmasked status codes in XML output
+  rather than translating them into the status codes shown in normal
+  non-xml status output.
+  We need this config file to translate the raw number bitmasks back
+  into the familiar SGE status codes...
+
+  For more info see this URL:
+
+  http://gridengine.info/articles/2005/11/03/gridengine-xml-translating-jat_state-values-into-useful-information
+
+-->
+<statusCodes>
+
+  <status bitmask="128" state="r">
+    <desc>running</desc>
+    <long>This task is running</long>
+  </status>
+
+  <status bitmask="2112" state="qw">
+    <desc>queued/waiting</desc>
+    <long>This task is pending in queued/waiting state</long>
+  </status>
+
+</statusCodes>

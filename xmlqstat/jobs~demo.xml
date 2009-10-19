@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xslt-param name="menuMode" value="qstatf"?>
 <?xslt-param name="clusterName" value="demo"?>
-<?xslt-param name="timestamp" value="2009-10-16 02:22:27"?>
-<?xslt-param name="renderMode" value="full"?>
+<?xslt-param name="timestamp" value="2009-10-19 11:30:00"?>
+<?xslt-param name="urlExt" value=".xml"?>
 <?xml-stylesheet type="text/xml" href="xsl/qstatf-xhtml.xsl"?>
 <job_info  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <queue_info>

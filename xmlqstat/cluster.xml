@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xslt-param name="timestamp" value="2009-10-16 02:21:11"?>
-<?xslt-param name="server-info" value="HTTPi/1.6.1 (Demonic/Linux)"?>
+<?xslt-param name="timestamp" value="2009-10-19 11:30:00"?>
+<?xslt-param name="server-info" value="static output"?>
+<?xslt-param name="urlExt" value=".xml"?>
 <?xml-stylesheet type="text/xml" href="xsl/index-xhtml.xsl"?>
 <dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0">
 <dir:directory name="cache">

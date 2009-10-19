@@ -15,9 +15,10 @@
 
 <!-- ======================== Passed Parameters =========================== -->
 <xsl:param name="clusterName"/>
-<xsl:param name="redirect"/>
 <xsl:param name="request"/>
 <xsl:param name="mode"/>
+<xsl:param name="resource" />
+<xsl:param name="baseURL" />
 
 <!-- ======================= Internal Parameters ========================== -->
 <!-- configuration parameters -->
@@ -30,6 +31,11 @@
 <xsl:variable
     name="clusterNode"
     select="$configFile/clusters/cluster[@name=$clusterName]"/>
+
+<xsl:variable name="redirect">
+  <xsl:value-of select="$baseURL" />
+  <xsl:value-of select="$resource" />
+</xsl:variable>
 
 <!-- ======================= Output Declaration =========================== -->
 <xsl:output method="xml" version="1.0" encoding="UTF-8"/>

@@ -22,10 +22,11 @@
 <UTC_TZ_offset>+01:00</UTC_TZ_offset>
 
 <!--
-    Set this to 'yes' if you wish to view the resource allocation
-    reported by the qlicserver program
+    Set this to 'no' if you wish to disable viewing of the
+    resource allocation reported by the qlicserver program.
+    Other values (or a missing entry) are interpreted as 'yes'.
 -->
-<qlicserver>NO</qlicserver>
+<qlicserver>no</qlicserver>
 
 <!--
     specify an external program for querying the jobinfo

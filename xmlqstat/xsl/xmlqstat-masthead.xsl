@@ -1,17 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE stylesheet [
 <!ENTITY  newline "<xsl:text>&#x0a;</xsl:text>">
 <!ENTITY  space   "<xsl:text> </xsl:text>">
 <!ENTITY  nbsp    "&#xa0;">
 ]>
-
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns="http://www.w3.org/1999/xhtml"
 >
-
 <!--
    | Logo and uniform naviation buttons that can be customized as required
--->
+   -->
 
 <!-- ======================= Internal Parameters ========================== -->
 
@@ -92,11 +91,11 @@
 
   <xsl:variable name="qlicserverAllowed">
     <xsl:choose>
-    <xsl:when test="document('../config/config.xml')/config/qlicserver
-      and document('../config/config.xml')/config/qlicserver != 'no'
-      ">yes</xsl:when>
+    <xsl:when test="document('../config/config.xml')/config/qlicserver/@enabled = 'false'">
+      <xsl:text>false</xsl:text>
+    </xsl:when>
     <xsl:otherwise>
-      <xsl:text>yes</xsl:text>
+      <xsl:text>true</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -173,7 +172,7 @@
       />
     </xsl:element>
 
-  <xsl:if test="$qlicserverAllowed = 'yes'">
+  <xsl:if test="$qlicserverAllowed = 'true'">
     <!-- resources -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
@@ -234,15 +233,14 @@
 
   <xsl:variable name="qlicserverAllowed">
     <xsl:choose>
-    <xsl:when test="document('../config/config.xml')/config/qlicserver
-      and document('../config/config.xml')/config/qlicserver != 'no'
-      ">yes</xsl:when>
+    <xsl:when test="document('../config/config.xml')/config/qlicserver/@enabled = 'false'">
+      <xsl:text>false</xsl:text>
+    </xsl:when>
     <xsl:otherwise>
-      <xsl:text>yes</xsl:text>
+      <xsl:text>true</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-
 
   <div id="menu">
     <xsl:element name="a">
@@ -292,7 +290,7 @@
       />
     </xsl:element>
 
-  <xsl:if test="$qlicserverAllowed = 'yes'">
+  <xsl:if test="$qlicserverAllowed = 'true'">
     <!-- resources -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
@@ -367,7 +365,8 @@
         <xsl:text>Rendered</xsl:text>
       </xsl:element>
       <xsl:text>: </xsl:text>
-      <xsl:value-of select="$timestamp"/>
+      <!-- replace 'T' in dateTime for easier reading -->
+      <xsl:value-of select="translate($timestamp, 'T', '_')"/>
     </div>
     &newline;
   </xsl:if>

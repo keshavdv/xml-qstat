@@ -153,22 +153,26 @@ the URL http://&lt;host&gt;:8888/xmlqstat/</li>
   the &quot;Welcome to Apache Cocoon&quot; message.
 </p>
 <p>
-  When starting cocoon.sh to service the xml-qstat web application, the
-  following conditions must be met:
+  When starting <b>cocoon.sh</b> to service the <b>xml-qstat</b>
+  web application, the following conditions must be met:
 </p>
 <p>
 - The xml-qstat <b>scripts/qstat.sh</b> and <b>scripts/qhost.sh</b>
-  must be in the $PATH before starting the cocoon server so that the
+  must be in the <tt>$PATH</tt> before starting the cocoon server so that the
   server can find and execute them when needed
 </p>
 <p>
-  - The SGE settings and environment variables must be present (source the
-  Grid Engine <b>settings.sh</b> or <b>settings.csh</b> script before starting
-  the cocoon server)
+- Under some circumstances, it may be desirable to have the SGE settings and
+  environment variables present before starting the cocoon server &ndash;
+  e.g., by sourcing the Grid Engine <b>settings.sh</b> or <b>settings.csh</b>
+  script. However, the <b>xml-qstat</b> application should normally work
+  without these environment settings. The SGE_ROOT and SGE_CELL settings
+  are normally taken from the <b>config/config.xml</b> directly.
 </p>
 <p>
-  - These path and environment settings can be adjusted manually before
-  starting the server or can be edited into the <b>cocoon.sh</b> script.
+- These path and environment settings can be adjusted manually before
+  starting the server. Usually by edited the <b>init-scripts/cocoon</b>
+  file.
 </p>
 
 <h3>Advanced Installation: Cocoon behind Apache Proxies</h3>
@@ -242,9 +246,10 @@ drwxr-xr-x    xml-qstat/
   After creating this file, it will be necessary to stop and restart Cocoon
   if it was running previously. Once cocoon is restarted, the application
   server will know how to find the xmlqstat/ application files when web
-  clients request the URI-prefix of "/xmlqstat". Remember the other
-  prerequisites including the SGE environment variables and the $PATH
-  adjustment so that <b>xml-qstat/scripts/qstat.sh</b> can be found.
+  clients request the URI-prefix of <b>"/xmlqstat"</b>. Remember that
+  the <b>$PATH</b> must be adjusted to allow <b>xml-qstat/scripts/qstat.sh</b>
+  to be found, and possibly adjusting other SGE environment variables
+  (depending on your installation).
 </p>
 
 

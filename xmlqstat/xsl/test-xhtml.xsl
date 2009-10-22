@@ -8,7 +8,6 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >
-
 <!--
    | misc browser/javascript tests
    |
@@ -21,18 +20,11 @@
    -->
 
 <!-- ======================= Imports / Includes =========================== -->
-<!-- Include our masthead and templates -->
-<xsl:include href="xmlqstat-masthead.xsl"/>
+<!-- Include our templates -->
 <xsl:include href="xmlqstat-templates.xsl"/>
-<!-- Include processor-instruction parsing -->
-<xsl:include href="pi-param.xsl"/>
 
 <!-- ======================== Passed Parameters =========================== -->
-<xsl:param name="timestamp">
-  <xsl:call-template name="pi-param">
-    <xsl:with-param  name="name"    select="'timestamp'"/>
-  </xsl:call-template>
-</xsl:param>
+<!-- NONE -->
 
 
 <!-- ======================= Internal Parameters ========================== -->
@@ -81,7 +73,9 @@
 <div id="main">
 <!-- Topomost Logo Div -->
 <blockquote>
-  <b>If you see this text, the xslt transform has been applied.</b>
+  <b>
+     If you see this text, the xslt transform has been applied.
+  </b>
   <div id="javascript"/>
   <noscript>
     <div>javascript is not active</div>
@@ -89,16 +83,10 @@
 </blockquote>
 <!-- Top Menu Bar -->
 <div id="menu">
-  <a href="./" title="home" class="leftSpace"><img
-      src="css/screen/icons/house.png"
-      alt="[home]"
-  /></a>
-
-  <img alt=" | " src="css/screen/icon_divider.png" />
-  <a href="" title="reload"><img
-      src="css/screen/icons/arrow_refresh_small.png"
-      alt="[reload]"
-  /></a>
+  <div class="leftSpace">
+  This is a simple test page.
+  Without javascript, the -/+ buttons do not work as expected (or at all).
+  </div>
 </div>
 &newline;
 
@@ -138,6 +126,7 @@
 
       document.getElementById('javascript').innerHTML = text;
 
+      // hide elements based on cookie values
       hideDivFromCookie('activeJobTable');
       hideDivFromCookie('pendingJobTable');
   }
@@ -196,13 +185,11 @@
 
   <div>
      The table below should normally have 3 rows.
-     <ul>
-     <li>
-       The table caption, with -/+ buttons (if javascript is enabled)
-     </li>
+     <ol>
+     <li>The table caption (with -/+ buttons)</li>
      <li>The table headings</li>
      <li>The table contents</li>
-     </ul>
+     </ol>
      If only the table caption is visible, try toggling the visibility
      with the -/+ buttons.
      If only the table caption is visible and there are no buttons,
@@ -216,7 +203,7 @@
       <div class="tableCaption">
         test <xsl:value-of select="$name"/> display
       </div>
-      <!-- show/hide activeJobTable via javascript -->
+      <!-- add buttons for show/hide table (javascript) -->
       <xsl:call-template name="toggleElementVisibility">
         <xsl:with-param name="name"  select="$name"/>
       </xsl:call-template>
@@ -229,17 +216,13 @@
     <xsl:attribute name="id"><xsl:value-of select="$name"/></xsl:attribute>
     <table class="listing">
     <tr>
-      <th>table name</th>
-      <th>head2</th>
-      <th>head3</th>
-      <th>head4</th>
+      <th>name of table</th>
+      <th>name of toggle</th>
     </tr>
     &newline;
     <tr>
       <td><xsl:value-of select="$name"/></td>
-      <td><xsl:value-of select="$name"/></td>
-      <td><xsl:value-of select="$name"/></td>
-      <td><xsl:value-of select="$name"/></td>
+      <td>#<xsl:value-of select="$name"/>Toggle</td>
     </tr>
     </table>
   </div>

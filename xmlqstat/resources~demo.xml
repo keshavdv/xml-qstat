@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xslt-param name="clusterName" value="demo"?>
+<?xslt-param name="timestamp" value="2009-10-19T11:30:00"?>
+<?xslt-param name="menuMode" value="qstatf"?>
+<?xslt-param name="urlExt" value=".xml"?>
+<?xml-stylesheet type="text/xml" href="xsl/qlic-xhtml.xsl"?>
+<?qlicserver date="2009-10-22T08:09:23"?>
+<qlicserver releaseDate="2009-10-12">
+<!-- adjustment:
+     qconf -mattr exechost complex_values NONE global
+-->
+ <query>
+  <cluster name="demo" root="/opt/grid" cell="default"/>
+  <host>demohost</host>
+  <user>sgeadmin</user>
+  <time epoch="1256191763">2009-10-22T08:09:23</time>
+ </query>
+ <parameters>
+  <env name="SGE_ROOT">/opt/grid</env>
+  <env name="SGE_CELL">default</env>
+  <env name="SGE_ARCH">lx26-x86</env>
+  <env name="SGE_BINARY_PATH">/opt/grid/bin/lx26-x86</env>
+  <env name="SGE_qmaster">demohost.domain.name</env>
+  <env name="LM_LICENSE_FILE">@lic1:@lic2</env>
+  <param name="dir">/opt/grid/default/site/cache</param>
+  <param name="output">qlicserver.xml</param>
+ </parameters>
+ <resources>
+  <resource name="trackedLicense" served="FooFeature" total="5" extern="3" type="track">
+   <user name="demouser1" host="demohost1" type="extern">1</user>
+   <user name="demouser2" host="demohost2" type="extern">1</user>
+   <user name="demouser3" host="demohost3" type="extern">1</user>
+  </resource>
+  <resource name="sharedLicense" served="BarFeature" total="8" limit="4" extern="1" free="4">
+   <user name="demouser5" host="demohost5" type="extern">1</user>
+  </resource>
+ </resources>
+</qlicserver>

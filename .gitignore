@@ -38,6 +38,9 @@
 # ignore misc build directories
 /build-*/
 
+# ignore jekyll-generated directory
+/_site/
+
 # ignore github pages 
 /gh-pages/
 

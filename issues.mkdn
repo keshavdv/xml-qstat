@@ -1,0 +1,23 @@
+---
+layout:  default
+navname: Issues
+sidenav:
+  - head: Known Issues
+---
+
+### Issues in Cocoon-based system
+
+- The current sitemap system only works with cocoon-2.1.x and can probably
+  considered as *end-of-life*. The changes required for the cocoon-2.2.x
+  framework provided the incentive to shift to client-side transformations.
+- Getting `qstat -j *` to work correctly still seems to be an issue --
+  be it shell escaping or whatever.
+  The `jobinfo` cgi script can be used as a workaround, but requires a
+  second webserver.
+
+### Issues in HTTPi-based system
+
+- Since all of the XSLT transforms are client-side, there is not simple
+  mechanism to create RSS feeds (not that the existing one is so great
+  anyhow).
+

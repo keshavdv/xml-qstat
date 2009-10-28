@@ -1,0 +1,127 @@
+---
+layout:  default
+navname: Install
+sidenav:
+  - head: Installation
+  - text: General
+    href: install.html
+  - text: Cocoon
+    href: install-cocoon.html
+    active: true
+  - text: HTTPi
+    href: install-httpi.html
+  - text: Advanced
+    href: install-advanced.html
+---
+
+<em><strong>
+Apache Cocoon 2.2 (any version) is not supported at all as Cocoon 2.2
+represents a radical change from 2.1
+</strong></em>
+
+### Preamble
+
+Within the standard **cocoon** installation directory, the only file touched
+is a customized "mount-table.xml" configuration file that informs the
+application server that the URI-prefix of **/xmlqstat/** should be handled
+by the **xmlqstat/** folder. If you are upgrading from an older version of
+cocoon, or if you have relocated the **xml-qstat** directory, you will need
+to adjust the "mount-table.xml" accordingly. It may help to be familiar with
+the contents of the **sitemap.xmap** that is distributed with **xml-qstat**
+since this is the single Cocoon configuration file that controls which XSLT
+transformations occur when a particular URL path is seen.
+
+### Cocoon Installation (for server-side XSLT)
+
+1. Make sure you have Java available and that the $JAVA_HOME environment
+   variable is set.
+2. Download [Apache Cocoon version 2.1.x](http://cocoon.apache.org/2.1/),
+   preferably the latest stable version 2.1.11.
+   Simply unpacking the distribution into the **cocoon/** folder and
+   running the "build.sh" script should work fine. The build may take several
+   minutes and when it completes you will have a script called "cocoon.sh"
+   that can be run. In its default form (with 2.1.8 or later) simply running
+   "./cocoon.sh" as a non-privledged user will cause Cocoon to start up its
+   own internal application server that binds to all available network
+   interfaces and listens for incoming connections at port number 8888. To
+   test, simply point your web browser at the *http://{host}:8888/xmlqstat/*
+   -- if it works you will see a Cocoon welcome screen. Firewall users should
+   make sure that TCP connections to port 8888 are allowed.
+3. Create the **mount-table.xml** configuration file in the cocoon directory
+   (details are below).
+4. Build xml-qstat.jar and install it into the proper Cocoon lib/ directory
+   (details are below)
+5. The web interface should be ready for testing.
+   Point a web browser at the URL *http://{host}:8888/xmlqstat/*
+
+
+### Installation Details: Apache Cocoon
+
+With **$JAVA_HOME** set, the application should build itself via the
+"build.sh" script. After it is built the "cocoon.sh" script will launch the
+application server. Successful operation can be verified by pointing a web
+browser at *http://{host}:8888/* and seeing the "Welcome to Apache Cocoon"
+message. When starting **cocoon.sh** to service the **xml-qstat** web
+application, the following conditions must be met:
+
+- The xml-qstat **scripts/qstat.sh** and **scripts/qhost.sh**
+  must be in the **$PATH** before starting the cocoon server so that the
+  server can find and execute them when needed
+- Under some circumstances, it may be desirable to have the SGE settings and
+  environment variables present before starting the cocoon server &ndash;
+  e.g., by sourcing the Grid Engine **settings.sh** or **settings.csh**
+  script. However, the **xml-qstat** application should normally work
+  without these environment settings. The SGE_ROOT and SGE_CELL settings
+  are normally taken from the **config/config.xml** directly.
+- These path and environment settings can be adjusted manually before
+  starting the server. Usually by edited the **init-scripts/cocoon**
+  file.
+
+### Building xml-qstat.jar and installing it into Cocoon
+
+When operating with live (non-cached) data, the web application needs a
+method of calling SGE programs such as 'qstat' in order to fetch XML data.
+This is done with a Java-based helper class that must be built into a .jar
+file and installed in a place where the Cocoon application server can
+access it. At the top level of the xml-qstat checkout will be a shell
+script called "make-xmlqstat-jar.sh".
+To build and install the Jar file:
+
+1. Edit make-xmlqstat-jar.sh to set the cocoonBase directory
+2. Make sure Java and 'javac' are in your path
+3. Run the script
+4. Copy the resulting build/xml-qstat.jar file into the location specified by
+   the build script output
+5. Stop and restart Cocoon (if necessary)
+
+### Creating mount-table.xml
+
+Within the **cocoon/** directory it is possible to create a file called
+**mount-table.xml**.
+The purpose of this file is to allow webapp folders to exist elsewhere on
+the system rather than forcing them to be installed inside the **cocoon/**
+folder itself. If your file layout matches the example:
+
+        $ ls -l /opt/xml-qstat/
+        drwxr-xr-x    cocoon-2.1.11/
+        drwxr-xr-x    httpi-1.6.1/
+        drwxr-xr-x    xml-qstat/
+
+Then you would simply create a file called **cocoon-2.1.11/mount-table.xml**
+with contents that looked like this (yes the relative uri-prefix
+**"../../../xml-qstat/xmlqstat/"** path is correct for the directory layout
+shown above) :
+
+        <mount-table>
+            <!-- Map the browser URI "/xmlqstat" to our webapp folder -->
+            <mount uri-prefix="xmlqstat/" src="../../../xml-qstat/xmlqstat/"/>
+        </mount-table>
+
+After creating this file, it will be necessary to stop and restart Cocoon if
+it was running previously. Once cocoon is restarted, the application server
+will know how to find the xmlqstat/ application files when web clients
+request the URI-prefix of **"/xmlqstat"**. Remember that the **$PATH** must
+be adjusted to allow **xml-qstat/scripts/qstat.sh** to be found, and
+possibly adjusting other SGE environment variables (depending on your
+installation).
+

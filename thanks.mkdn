@@ -1,0 +1,51 @@
+---
+layout:  default
+navname: Acknowledgments
+sidenav:
+  - head: Acknowledgments
+---
+
+### Thanks, Credits &amp; Acknowledgments
+
+- Mark Olesen for rescuing an orphaned codebase, making many significant
+  improvements and handling the SVN to GIT transition.
+- [BioTeam Inc.](http://www.bioteam.net) for letting me work on this code
+  (and give it away for free).
+  BioTeam also [hosts](http://gallery.bioteam.net/gallery/bioteamBDC)
+  the xml-qstat.org server.
+- Cameron Kaiser for creating the
+  [HTTPi webserver](http://www.floodgap.com/httpi/), which
+  provided the development basis for stepping away from server-side XSLT.
+- Mark James for the beautiful
+  [Silk Icon Library](http://www.famfamfam.com/lab/icons/silk/)
+- The daemonized perl script used to cache XML status data is a wholesale
+  ripoff of Mark Olesen's [qlicserver](http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration)
+  code. Used with permission.
+- the distribution contains several unaltered
+  [EXSLT Template](http://www.exslt.org/) files --
+  Copyright Jeni Tennison, David Pawson, James Fuller and Uche Ogbuji
+- the distribution contains a redistributed (unaltered) copy of
+  [Bill Dortch's](http://www.google.co.uk/search?sourceid=navclient&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=%22Bill+Dortch%22") javascript cookie handling.
+- Grid Engine XML output data is still relatively undocumented.
+  Many thanks to the SGE developers and others who are working on fleshing out
+  the [Grid Engine XML wiki page](http://wiki.gridengine.info/wiki/index.php/GridEngine_XML)
+- [CSCI E-153, Web Development Using XML](http://cscie153.dce.harvard.edu/)
+  a fantastic course at the Harvard Extension School.
+- The layout of the project pages is based on
+  [YAML](http://www.yaml.de/en/)
+  Content generation is managed by [Jekyll](http://jekyllrb.com/)
+
+### Additional Resources
+
+The following references were invaluable during the course of
+initial experiments and the eventual code:
+
+- "Learning XSLT" by Michael Fitzgerald, 2nd ed. (2004), O'Reilly
+- "Javascript &amp; DHTML Cookbook" by Danny Goodman, 1st ed (2003), O'Reilly
+- "Javascript Bible" by Danny Goodman with Michael Morrison, 5th ed. (2003), Wiley
+- "Web Designers Reference: An integrated approach to web design with XHTML and CSS"
+   by Craig Grannel, 2005, friendsof
+- "Eric Meyer on CSS: Mastering the language of web design" by Eric Meyer, 2003,
+   New Riders Publishing
+- "More Eric Meyer on CSS", by Eric Meyer, 2004, New Riders Publishing
+

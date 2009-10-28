@@ -1,0 +1,152 @@
+---
+layout:  default
+navname: Install
+sidenav:
+  - head: Installation
+  - text: General
+    href: install.html
+  - text: Cocoon
+    href: install-cocoon.html
+  - text: HTTPi
+    href: install-httpi.html
+    active: true
+  - text: Advanced
+    href: install-advanced.html
+---
+
+### Apologies
+
+The installation procedure for using a modified HTTPi is more than a bit
+rough at the moment, but please bear with us while we improve it.
+
+### Preamble
+
+The freely available **[HTTPi webserver](http://www.floodgap.com/httpi/)**
+is a tiny (12kB), fast and secure pure-Perl webserver.
+
+Since &quot;<cite><a href="http://www.floodgap.com/httpi/program.html">HTTPi
+was designed first and foremost to be a hacker's webserver that was easily
+understood, easily patched and trivially maintainable</a></cite>&quot;,
+it is an ideal candidate for creating a small custom webserver
+specifically for **xml-qstat**. The implementation in Perl makes it
+highly portable, permits complex logic and rapid program development
+&ndash; all very good reasons to persue it as a platform.
+
+
+### HTTPi Installation (for client-side XSLT)
+
+HTTPi can be configured to run in several different operational modes: as a
+daemon, "on-demand" via xinetd or from launchd. The **xml-qstat** modules
+were developed using the daemonic mode, but should work fine in any of the
+modes. The daemon-mode requires no root-level privileges for running it.
+Please follow the
+
+[HTTPi installation instructions](http://www.floodgap.com/httpi/install.html)
+and create a standard HTTPi webserver for your system.
+The configuration procedure of HTTPi will interactively ask a number of
+questions and when it is done will save transcript. For example,
+**transcript.0.configure.demonic** after configuring for the daemonic
+mode. These transcripts can be used to supply answers next time you
+rebuild HTTPi. After starting HTTPi, test it by
+pointing your web browser at the *http://{host}:8080/* (assuming it
+was configured to use port 8080).
+If all goes well, you should see an error message from HTTPi complaining
+that it can't find the resource:
+
+        File Not Found
+        The resource / was not found on this system.
+        --------------------------------------------
+        httpi/1.6.1 (Demonic/Linux) by Cameron Kaiser
+
+
+### HTTPi-xmlqstat Installation
+
+Now that we've been successful in build HTTPi, we can do the same thing, but
+as a customized **xml-qstat** version this time.
+
+As previously described, the **xml-qstat/httpi-modules/**
+folder contains customized modules for HTTPi.
+
+        $ cd xml-qstat/
+        $ ls -l httpi-modules/
+        -rw-r--r-- settings-daemonic.EXAMPLE
+        -rw-r--r-- httpi.in
+        -rw-r--r-- modules.in
+        -rw-r--r-- userfunc.in
+        -rw-r--r-- uservar.in
+
+The file **settings-daemonic.EXAMPLE** is simply an example transcript
+file that can be used when rebuilding HTTPi, or reuse one of your own.
+The various **\*.in** files are our pieces for assembling an HTTPi-xmlqstat
+webserver.
+
+
+
+The only hand editing that might be required is in the
+**uservar.in** file &ndash; to set the installed location of
+**xml-qstat**:
+
+        ############################################
+        ############################################
+        # CUSTOMIZE THIS TO MATCH YOUR REQUIREMENTS:
+        #
+
+        # the base location of the xmlqstat distribution
+        my $resourceRoot = "$ENV{HOME}/xml-qstat";
+
+        # timeout (seconds) for system command like qstat -j etc.
+        my $shellCmdTimeout = 10;
+
+        #
+        # END OF CUSTOMIZE SETTINGS
+        ############################################
+        ############################################
+
+
+### HTTPi-xmlqstat Build Procedure
+
+  <blockquote>
+    <b>This are provisional instructions and should be replaced with
+    a more streamlined procedure soon.</b>
+  </blockquote>
+
+In the main **xml-qstat/** directory, we will prepare things as follows:
+
+        $ wget http://www.floodgap.com/httpi/httpi-1.6.1.tar.gz
+        $ tar -xvzf httpi-1.6.1.tar.gz
+        $ mv httpi-1.6.1  build-httpi
+        $ cd build-httpi
+
+We will now prepare our set of standard HTTPi configuration answers, either
+by using the transcript from a previous build or (for the sake of an
+example) by using the example file provided:
+
+        $ rsync -aP ../httpi-modules/settings-daemonic.EXAMPLE .
+
+Now get our customized pieces:
+
+        $ rsync -aP ../httpi-modules/*.in .
+
+And rebuilt it:
+
+        $ perl configure.demonic -d settings-daemonic.EXAMPLE
+
+
+Using **init-scripts/httpi stop** seems to be the easiest way of finding and
+killing the HTTPi processes.
+
+The web interface should be ready for testing.
+
+
+
+### HTTPi-xmlqstat Security
+
+Although HTTPi will be running as a non-privileged user, the module
+has imposed extra restrictions on which Grid Engine commands can be
+executed and with which arguments.
+
+Additionally, the Grid Engine commands will only be executed when they
+are located in the **$SGE_ROOT/bin/$SGE_ARCH/**
+directory, where the value of **$SGE_ARCH** is determined internally by
+the program. The **PATH** will **not** be searched.
+

@@ -1,0 +1,27 @@
+---
+layout:  default
+navname: Download
+sidenav:
+  - head: Download
+  - text: Obtaining the Software
+    href: download.html
+    active: true
+  - text: Third Party Resources
+    href: third-party.html
+  - text: Starting with git
+    href: use-git.html
+---
+
+### Official Releases
+
+As yet there are no official releases or tags, but the git repository can be
+considered to be more or less the official version.
+
+### Obtaining the software
+
+Source code is now under GIT version control and is hosted online at
+[github](http://github.com).
+There are many ways to access, browse, clone or download the codebase,
+including methods for directly downloading .tar.gz or .zip archives for
+people who do not wish to install (or can't use) git clients internally.
+

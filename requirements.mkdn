@@ -1,0 +1,48 @@
+---
+layout:  default
+navname: Requirements
+sidenav:
+  - head: Software Requirements
+---
+
+### General Requirements
+
+The functional requirements are very basic. Root level access to a system
+is not required. Key dependencies include the following:
+
+- Grid Engine version 6.2 (older versions of SGE may have buggy or
+  unsupported XML output)
+- Modern, standards-compliant web browser.
+- A fairly recent version of Perl (eg, 5.8.x)
+
+
+### Requirements for server-side XSLT transformations (Cocoon)
+
+Server-side XSLT transformations are the traditional rendering form used by
+xml-qstat. The current generation uses Apache Cocoon 2.1.x.
+<b><em>
+  Note that Cocoon 2.2.x is not supported as it represents a radical paradigm
+  shift from Cocoon 2.1.x.
+</em></b>
+
+- A recent version of Java
+- Apache Cocoon version 2.1 -- current stable <em>version 2.1.11</em>
+  is recommended
+
+The installation size for Apache Cocoon is approximately <em>120MB</em>.</p>
+
+### Requirements for client-side XSLT transformations (HTTPi)
+
+Client-side XSLT transformations are slated to be the preferred rendering
+form in the next generation of **xml-qstat**. Off-loading the
+transformations to the browser allows for a very lightweight server
+application.
+
+- A fairly recent version of Perl (see above)
+- HTTPi 1.6.1 (uses Perl only)
+
+The installation size of HTTPi with the xmlqstat modules is less than
+*50kB*. No additional webserver is required and it should run on any POSIX
+system where Perl is installed.
+
+

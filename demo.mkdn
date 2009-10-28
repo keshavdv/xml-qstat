@@ -1,0 +1,39 @@
+---
+layout:  default
+navname: Demo
+sidenav:
+  - head: Demo
+  - text: client-side xslt
+  - text: cluster.xml
+    href: xmlqstat/cluster.xml
+  - text: server-side xslt
+  - text: http://xml-qstat.org/xmlqstat/
+    href: http://xml-qstat.org/xmlqstat/
+---
+
+### Demo Sites
+
+This list will grow and shrink over time. Some versions of Grid
+Engine 6.x produce invalid XML in response to cluster job error
+states. This invalid XML will will break the XML transformation
+resulting in an ugly Cocoon Application error being displayed.
+These bugs have all been fixed in the current Grid Engine
+codebase.
+
+### Server-Side Rendering Demo
+
+This site will be running off the GitHub repository so it should
+reflect the latest features, bug fixes and capabilities:<br/>
+[http://xml-qstat.org/xmlqstat/](http://xml-qstat.org/xmlqstat/)
+
+### Client-Side Rendering Demo
+
+With client-side XSLT transformations, the webserver process becomes
+trivial. Here is an example with serving cached files from
+**[this website](xmlqstat/cluster.xml)**.
+Note that obviously not all the features are available since the file
+contents being serverd are actually static.
+
+The **[test page](xmlqstat/test.xml)** can help you
+determine if your browser handles XSLT properly, with or without JavaScript.
+

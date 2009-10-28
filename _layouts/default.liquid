@@ -3,8 +3,6 @@
 topnav:
   - text: About
     href: index.html
-  - text: History
-    href: history.html
   - text: Screenshots
     href: screenshots.html
   - text: Demo
@@ -17,6 +15,8 @@ topnav:
     href: download.html
   - text: Install
     href: install.html
+  - text: Issues
+    href: issues.html
   - text: Support
     href: support.html
   - text: Acknowledgments
@@ -52,6 +52,7 @@ topnav:
         {% unless forloop.first %}</ul>{% endunless %}{% comment %}finish prev list{% endcomment %}
         <h6 class="vlist">{{ navitem.head }}</h6>
         <ul class="vlist">
+        {% if forloop.length == 1 %}<li><!-- no items --></li>{% endif %}
         {% elsif navitem.active %}
         <li class="active"><strong>{{ navitem.text }}</strong></li>
         {% elsif navitem.href %}

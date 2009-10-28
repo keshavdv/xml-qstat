@@ -1,0 +1,31 @@
+---
+layout:  default
+navname: Install
+sidenav:
+  - head: Installation
+  - text: General
+    href: install.html
+  - text: Cocoon
+    href: install-cocoon.html
+  - text: HTTPi
+    href: install-httpi.html
+  - text: Advanced
+    href: install-advanced.html
+    active: true
+---
+
+### Advanced Installation: Cocoon or HTTPi behind Apache Proxies
+
+Many Unix servers already have an Apache webserver running on the system. If
+you have administrative access to this server, you can proxy the
+**xml-qstat** application server behind Apache. The primary benefit is
+removing the browser requirement to connect to TCP port 8080 or 8888. The
+URL changes (for example) from http://{host}:8888/xmlqstat/ to
+http://{host}/xmlqstat/. This also allows firewall administrators to seal
+port 8888 closed against all connections not coming from the Apache server.
+The Apache configuration directives to do this would be:
+
+        ## Let Apache proxy connections to port 8888 forward and reverse...
+        ProxyPass /xmlqstat http://127.0.0.1:8888/xmlqstat
+        ProxyPassReverse /xmlqstat http://127.0.0.1:8888/xmlqstat
+

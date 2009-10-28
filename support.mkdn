@@ -1,0 +1,31 @@
+---
+layout:  default
+navname: Support
+sidenav:
+  - head: Support
+---
+
+### Email Discussion List
+
+Although an independent
+[mailing list](http://mail.bioteam.net/mailman/listinfo/xml-qstat-d)
+for general discussions of this software has been set up, it is quite
+acceptable to discuss **xml-qstat** on the Grid Engine
+*users* list:
+[http://gridengine.sunsource.net/maillist.html](http://gridengine.sunsource.net/maillist.html)
+
+
+### Additional Resources
+
+- The [xml-qstat website](http://xml-qstat.org/)
+- [FlexLM Integration](http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration)
+  and its [Configuration](http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Configuration)
+- Some documentation about the
+  [GridEngine XML](http://wiki.gridengine.info/wiki/index.php/GridEngine_XML)
+- A roundup of
+  [git tutorials](http://www.rubyinside.com/git-and-ruby-git-tutorials-articles-and-links-for-rubyists-860.html)
+- [saxon](http://saxon.sourceforge.net) XSLT and XQuery processor
+- Compiling the
+  [java CommandGenerator](http://wiki.gridengine.info/wiki/index.php/Xml-qstat-1.0)
+  *(Apache Cocoon only)*
+

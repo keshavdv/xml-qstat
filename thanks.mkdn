@@ -7,8 +7,6 @@ sidenav:
 
 ### Thanks, Credits &amp; Acknowledgments
 
-- Mark Olesen for rescuing an orphaned codebase, making many significant
-  improvements and handling the SVN to GIT transition.
 - [BioTeam Inc.](http://www.bioteam.net) for letting me work on this code
   (and give it away for free).
   BioTeam also [hosts](http://gallery.bioteam.net/gallery/bioteamBDC)

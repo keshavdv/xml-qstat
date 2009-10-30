@@ -23,9 +23,26 @@ removing the browser requirement to connect to TCP port 8080 or 8888. The
 URL changes (for example) from http://{host}:8888/xmlqstat/ to
 http://{host}/xmlqstat/. This also allows firewall administrators to seal
 port 8888 closed against all connections not coming from the Apache server.
-The Apache configuration directives to do this would be:
 
-        ## Let Apache proxy connections to port 8888 forward and reverse...
-        ProxyPass /xmlqstat http://127.0.0.1:8888/xmlqstat
-        ProxyPassReverse /xmlqstat http://127.0.0.1:8888/xmlqstat
+For the proxying to work, we need both `mod_proxy` and `proxy_http`. On some
+systems you can query what is configured with the `a2enmod -l` command and
+if necessary, load them (NB: the load order is important):
+
+        $ a2enmod mod_proxy
+        $ a2enmod proxy_http
+
+On other systems you may need the `LoadModule` directive in your apache
+configuration.
+
+The Apache configuration directives for enabling the proxy:
+
+        <IfModule mod_proxy.c>
+            # proxy connections to port 8888 forward and reverse...
+            ProxyPass  /xmlqstat  http://127.0.0.1:8888/xmlqstat
+            ProxyPassReverse  /xmlqstat  http://127.0.0.1:8888/xmlqstat
+        </IfModule>
+
+And finally restart or reload Apache. For example,
+
+        $ rcapache2 reload
 

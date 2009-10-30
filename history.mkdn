@@ -1,6 +1,6 @@
 ---
 layout:  default
-navname: History
+navname: About
 sidenav:
   - head: About
   - text: Overview

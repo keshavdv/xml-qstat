@@ -19,9 +19,9 @@ considered to be more or less the official version.
 
 ### Obtaining the software
 
-Source code is now under GIT version control and is hosted online at
-[github](http://github.com).
-There are many ways to access, browse, clone or download the codebase,
-including methods for directly downloading .tar.gz or .zip archives for
-people who do not wish to install (or can't use) git clients internally.
+Source code is now under [git version control](http://git-scm.org) and is
+hosted online at [github](http://github.com). There are many ways to access,
+browse, clone or download the codebase, including methods for directly
+downloading .tar.gz or .zip archives for people who do not wish to install
+(or can't use) git clients.
 

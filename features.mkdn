@@ -1,0 +1,46 @@
+---
+layout:  default
+navname: About
+sidenav:
+  - head: About
+  - text: Overview
+  - text: Features
+    href: features.html
+    active: true
+  - text: History
+    href: history.html
+---
+
+### Features
+
+- **Multi-cluster support** --
+  Display data from multiple Grid Engine clusters
+- **flex-grid (qlicserver) integration** --
+  allow dynamic display of license/resource utilization
+  in combination with the
+  [flex-grid/qlicserver](http://olesenm.github.com/flex-grid) package
+- **Cached Display Mode** --
+  XML status data is from Grid Engine is cached to a local file at a user
+  definable interval and used for generating web pages. This mode prevents
+  the SGE 'qmaster' daemon from having to be contacted with a qstat query
+  each time a page is accessed. Most suitable for sites operating very large
+  clusters or systems with many thousands of active jobs. Information about
+  individual jobs is still fetched dynamically
+- **Live Display Mode** --
+  Grid Engine state and status data is refreshed before every page display
+  by builtin methods that query the SGE qmaster directly. Suitable for sites
+  and clusters where generating a 'qstat' call each time a page is accessed
+  does not present scaling or performance issues
+- **Client-side XSLT transformations** --
+  using the HTTPi webserver
+- **Server-side XSLT transformations** --
+  using Apache Cocoon 2.1
+- **Per user job sorting** --
+  users can view their own pending/active jobs simply by surfing to a simple
+  URL.
+- Job Detail handling via URL for any active or pending job.
+- Primary view can be rendered in "standard" ('show me everything') mode or
+  a special "terse" ('summary') view can be used for very large or very
+  active clusters. This is to handle clusters with thousands of nodes or
+  hundreds of thousands of active grid jobs
+

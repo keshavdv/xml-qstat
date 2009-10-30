@@ -18,18 +18,17 @@ is not required. Key dependencies include the following:
 
 ### Requirements for server-side XSLT transformations (Cocoon)
 
+> Note that Cocoon 2.2.x is not supported as it represents a radical
+> paradigm shift from Cocoon 2.1.x.
+
 Server-side XSLT transformations are the traditional rendering form used by
 xml-qstat. The current generation uses Apache Cocoon 2.1.x.
-<b><em>
-  Note that Cocoon 2.2.x is not supported as it represents a radical paradigm
-  shift from Cocoon 2.1.x.
-</em></b>
 
 - A recent version of Java
-- Apache Cocoon version 2.1 -- current stable <em>version 2.1.11</em>
+- Apache Cocoon version 2.1 -- current stable **version 2.1.11**
   is recommended
 
-The installation size for Apache Cocoon is approximately <em>120MB</em>.</p>
+The installation size for Apache Cocoon is approximately **120MB**.
 
 ### Requirements for client-side XSLT transformations (HTTPi)
 
@@ -42,7 +41,6 @@ application.
 - HTTPi 1.6.1 (uses Perl only)
 
 The installation size of HTTPi with the xmlqstat modules is less than
-*50kB*. No additional webserver is required and it should run on any POSIX
+**50kB**. No additional webserver is required and it should run on any POSIX
 system where Perl is installed.
-
 

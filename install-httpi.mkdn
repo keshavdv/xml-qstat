@@ -30,16 +30,16 @@ understood, easily patched and trivially maintainable</a></cite>&quot;,
 it is an ideal candidate for creating a small custom webserver
 specifically for **xml-qstat**. The implementation in Perl makes it
 highly portable, permits complex logic and rapid program development
-&ndash; all very good reasons to persue it as a platform.
+&ndash; all very good reasons to pursue it as a platform.
 
 
 ### HTTPi Installation (for client-side XSLT)
 
 HTTPi can be configured to run in several different operational modes: as a
 daemon, "on-demand" via xinetd or from launchd. The **xml-qstat** modules
-were developed using the daemonic mode, but should work fine in any of the
+were developed using the daemonic mode, but should likely work in the other
 modes. The daemon-mode requires no root-level privileges for running it.
-Please follow the
+
 
 [HTTPi installation instructions](http://www.floodgap.com/httpi/install.html)
 and create a standard HTTPi webserver for your system.
@@ -136,7 +136,6 @@ Using **init-scripts/httpi stop** seems to be the easiest way of finding and
 killing the HTTPi processes.
 
 The web interface should be ready for testing.
-
 
 
 ### HTTPi-xmlqstat Security

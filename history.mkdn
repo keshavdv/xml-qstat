@@ -5,6 +5,8 @@ sidenav:
   - head: About
   - text: Overview
     href: index.html
+  - text: Features
+    href: features.html
   - text: History
     href: history.html
     active: true

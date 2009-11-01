@@ -11,7 +11,6 @@ Manual for a clue.
 ~
 ~
 
-%content_types =
 ~check MFALSE
 
 Be sure to read the manual on this, but in a nutshell:
@@ -24,10 +23,9 @@ adding/overriding MIME types. However, old uservar.in files will still work;
 they'll just override all the types they'll define with the same MIME type.
 ~
 ~
-	("html" => "text/html",
-	 "htm" => "text/html",
-	 "xsl" => "text/xsl",    ##<xmlqstat/>## - missing type for xsl
-         );
+%content_types =
+	("xsl" => "text/xml");    ##<xmlqstat/>## - missing type for xsl
+
 ~check MFALSE
 
 *** The restrictions matrix is documented in the manual. The keys are the
@@ -97,10 +95,10 @@ Demonic feature only; xinetd/inetd/etc. need not apply.
 #
 
 # the base location of the xmlqstat distribution
-my $resourceRoot = "$ENV{HOME}/xml-qstat";
+my $resourceRoot = "DEF_XMLQSTAT_ROOT";
 
 # timeout (seconds) for system command like qstat -j etc.
-my $shellCmdTimeout = 10;
+my $shellCmdTimeout = DEF_XMLQSTAT_TIMEOUT;
 
 #
 # END OF CUSTOMIZE SETTINGS

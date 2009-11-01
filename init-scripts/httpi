@@ -89,7 +89,7 @@ start)
 stop)
     echo -n "Stopping $desc: "
     # get pid
-    pid=`ps aux | awk '{if (/httpi:/ && !/awk/) print $2}'`
+    pid=$(ps aux | awk '{if (/dhttpi:/ && !/awk/) print $2}')
     if [ -z "$pid" ]
     then
         echo "process not found"

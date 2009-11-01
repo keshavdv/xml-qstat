@@ -17,15 +17,12 @@ acceptable to discuss **xml-qstat** on the Grid Engine
 
 ### Additional Resources
 
-- The [xml-qstat website](http://xml-qstat.org/)
-- [FlexLM Integration](http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration)
-  and its [Configuration](http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Configuration)
+- The old [xml-qstat website](http://xml-qstat.org/)
+- [FlexLM integration](http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration)
+  and [configuration](http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Configuration)
 - Some documentation about the
   [GridEngine XML](http://wiki.gridengine.info/wiki/index.php/GridEngine_XML)
-- A roundup of
+- [learn git](http://learn.github.com/) and a roundup of
   [git tutorials](http://www.rubyinside.com/git-and-ruby-git-tutorials-articles-and-links-for-rubyists-860.html)
 - [saxon](http://saxon.sourceforge.net) XSLT and XQuery processor
-- Compiling the
-  [java CommandGenerator](http://wiki.gridengine.info/wiki/index.php/Xml-qstat-1.0)
-  *(Apache Cocoon only)*
 

@@ -1,0 +1,21 @@
+---
+layout:  default
+navname: Changes
+sidenav:
+  - head: Changes
+---
+
+<b><em>
+  For more details, consult the git history.
+</em></b>
+
+
+---------------
+### Release Candidate (2009-11-01)
+
+- Use HTTPi-1.6.2 (unreleased) which allows a custom hook in the
+  configuration process
+
+- Added make-httpi.sh script
+
+---------------

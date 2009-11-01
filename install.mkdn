@@ -6,10 +6,10 @@ sidenav:
   - text: General
     href: install.html
     active: true
-  - text: Cocoon
-    href: install-cocoon.html
   - text: HTTPi
     href: install-httpi.html
+  - text: Cocoon
+    href: install-cocoon.html
   - text: Advanced
     href: install-advanced.html
 ---
@@ -52,19 +52,19 @@ Inside **xml-qstat**/
         drwxr-xr-x    scripts/
         drwxr-xr-x    xmlqstat/
 
-- The **httpi-modules/** folder contains customized modules
+- The **httpi-modules/** directory contains customized modules
   for HTTPi. Only needed for the HTTPi client-side installation.
-- The **icons/** folder contains various icons that are not currently
+- The **icons/** directory contains various icons that are not currently
   used in the rendered views. They are split off to permit a more compact
   final installation if required.
-- The **init-scripts/** folder contains helper scripts for automatically
+- The **init-scripts/** directory contains helper scripts for automatically
   running or daemonizing programs such as the application servers (cocoon
   and/or HTTPi) and the XML caching scripts.
-- The **java/** folder contains the CommandGenerator used in the
+- The **java/** directory contains the CommandGenerator used in the
   Cocoon server-side installation.
 - The **make-xmlqstat-jar.sh** script for compiling the CommandGenerator
   used in the Cocoon server-side installation.
-- The **scripts/** folder currently contains 2 perl scripts, a CGI script
+- The **scripts/** directory currently contains 2 perl scripts, a CGI script
   called 'jobinfo' and a "qstat.sh"; shell script that the
   application can use to directly query the Grid Engine qmaster. The
   "sge-xml-cacher.pl" script is a Perl daemon script that runs constantly
@@ -83,8 +83,8 @@ Inside **xml-qstat**/
   customized graphical "load ratio" reports within the web interface.
   The **'jobinfo'** script can be used as a CGI under Apache or HTTPi if
   an external URL-based source for SGE XML status data is desired.
-- The **xmlqstat/** folder is where this application lives.
-  It is organized into the following subfolders:
+- The **xmlqstat/** directory is where this application lives.
+  It is organized into the following sub-directories:
 
         $ ls -l xmlqstat/
         drwxr-xr-x   config/
@@ -94,19 +94,19 @@ Inside **xml-qstat**/
         drwxr-xr-x   xml/
         drwxr-xr-x   xsl/
 
-- The **config/** folder contains XML configuration files for the
+- The **config/** directory contains XML configuration files for the
   xml-qstat application and the logo image.
-- The **css/** folder contains CSS stylesheets used for separation
+- The **css/** directory contains CSS stylesheets used for separation
   of content from presentation.
-- The **css/screen/** subfolder contains icons and graphic elements.
-  The **javascript/** folder contains javascript used for presentation
+- The **css/screen/** sub-directory contains icons and graphic elements.
+  The **javascript/** directory contains javascript used for presentation
   and display preference formatting.
 - The **sitemap.xmap** is a Cocoon configuration file that tells the
   application server how to handle, route and process various transformation
   requests.
-- The **xml/** folder contains the raw XML source for documentation
+- The **xml/** directory contains the raw XML source for documentation
   and help files.
-- The **xsl/** folder contains the XSLT stylesheets that guide the
+- The **xsl/** directory contains the XSLT stylesheets that guide the
   transformation of Grid Engine XML into various output forms.
   Generally speaking, the user will only need to edit files in the
   **config/** directory.
@@ -118,7 +118,7 @@ Inside **xml-qstat**/
 1. Grid Engine 6.2 should be installed and functioning. Earlier versions of
    Grid Engine produce different XML output and may not be supported well.
 2. Make sure you have Perl available
-3. Create a folder to hold the misc. components (something like xml-qstat/)
+3. Create a directory to hold the misc. components (something like xml-qstat/)
 4. Download and build Apache Cocoon or HTTPi, depending on the type of
    webserver you wish.
 5. Checkout or download xml-qstat from github.com
@@ -126,7 +126,7 @@ Inside **xml-qstat**/
    parameters (details are below)
 7. Edit the **scripts/sge-xml-cacher.pl** script to configure the full Unix
    file path to where cached SGE status data will be stored. The data should
-   typically be stored within the **xmlqstat/cache/** folder as
+   typically be stored within the **xmlqstat/cache/** directory as
    "qstatf.xml". For a multi-cluster view, the file should be stored as
    **xmlqstat/cache/qstatf~NAME.xml** or as
    **xmlqstat/cache-NAME/qstatf.xml**, where *NAME* is the name given
@@ -136,7 +136,7 @@ Inside **xml-qstat**/
    cache its data for reuse here. Otherwise, start caching grid data! If
    your SGE environment has been set up (you can run 'qstat' via the command
    line) then starting the perl caching daemon should be as simple as
-   entering the **scripts/** folder and issuing the command
+   entering the **scripts/** directory and issuing the command
    "./xmlqstat-cacher.pl -d". To stop the daemon, issue the command
    "./xmlqstat-cacher.pl -k". To verify that the daemon is working, check
    the process table to see if it exists and then monitor the timestamps on
@@ -160,12 +160,12 @@ used to define a logo to be displayed at the top of each page.
 ### Using Cached Grid Engine XML
 
 To reduce load on the qmaster and avoid calling 'qstat' each time a page is
-accessed, cached SGE data can be used. A script in the **scripts/** folder
+accessed, cached SGE data can be used. A script in the **scripts/** directory
 called "xmlqstat-cacher.pl" can perform this function. The cache location is
 defined by how the cluster is named in **config/config.xml**.
 
 Create a directory with "**cache-**" prepended to the cluster name within
-the **xmlqstat** folder (at the same level as where the sitemap.xmap file
+the **xmlqstat** directory (at the same level as where the sitemap.xmap file
 exists). The application will automatically detect the presence of the cache
 directory if this naming and location convention is followed.
 

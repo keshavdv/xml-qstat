@@ -10,11 +10,13 @@ sidenav:
   - text: History
     href: history.html
     active: true
+  - text: Known Issues
+    href: issues.html
 ---
 
 ### History
 
-This is the 4th rewrite of a project that began in mid-2005.
+This is the 5th rewrite of a project that began in mid-2005.
 
 Early versions of this program used
 [Xalan-C++](http://xml.apache.org/xalan-c),
@@ -48,4 +50,9 @@ imported into a new GIT repository hosted at [github](http://github.com). We
 plan to use the new git repository as the base for the long-delayed 1.0
 release. Chris Dagdigian is back as a contributor and the project is seeking
 new contributors, testers and developers.
+
+Generation 5 of this project now includes **HTTPi-xmlqstat** for client-side
+XSLT transformations. This webserver application is very small, has very few
+dependencies (Perl + GridEngine) which enables it be installed on any
+cluster node without any extra infrastructure.
 

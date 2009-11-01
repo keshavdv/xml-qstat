@@ -5,11 +5,11 @@ sidenav:
   - head: Installation
   - text: General
     href: install.html
+  - text: HTTPi
+    href: install-httpi.html
   - text: Cocoon
     href: install-cocoon.html
     active: true
-  - text: HTTPi
-    href: install-httpi.html
   - text: Advanced
     href: install-advanced.html
 ---
@@ -24,7 +24,7 @@ represents a radical change from 2.1
 Within the standard **cocoon** installation directory, the only file touched
 is a customized "mount-table.xml" configuration file that informs the
 application server that the URI-prefix of **/xmlqstat/** should be handled
-by the **xmlqstat/** folder. If you are upgrading from an older version of
+by the **xmlqstat/** directory. If you are upgrading from an older version of
 cocoon, or if you have relocated the **xml-qstat** directory, you will need
 to adjust the "mount-table.xml" accordingly. It may help to be familiar with
 the contents of the **sitemap.xmap** that is distributed with **xml-qstat**
@@ -37,7 +37,7 @@ transformations occur when a particular URL path is seen.
    variable is set.
 2. Download [Apache Cocoon version 2.1.x](http://cocoon.apache.org/2.1/),
    preferably the latest stable version 2.1.11.
-   Simply unpacking the distribution into the **cocoon/** folder and
+   Simply unpacking the distribution into the **cocoon/** directory and
    running the "build.sh" script should work fine. The build may take several
    minutes and when it completes you will have a script called "cocoon.sh"
    that can be run. In its default form (with 2.1.8 or later) simply running
@@ -98,9 +98,9 @@ To build and install the Jar file:
 
 Within the **cocoon/** directory it is possible to create a file called
 **mount-table.xml**.
-The purpose of this file is to allow webapp folders to exist elsewhere on
-the system rather than forcing them to be installed inside the **cocoon/**
-folder itself. If your file layout matches the example:
+The purpose of this file is to allow webapp directories to exist elsewhere
+on the system rather than forcing them to be installed inside the
+**cocoon/** directory itself. If your file layout matches the example:
 
         $ ls -l /opt/xml-qstat/
         drwxr-xr-x    cocoon-2.1.11/
@@ -113,7 +113,7 @@ with contents that looked like this (yes the relative uri-prefix
 shown above) :
 
         <mount-table>
-            <!-- Map the browser URI "/xmlqstat" to our webapp folder -->
+            <!-- Map the browser URI "/xmlqstat" to our webapp directory -->
             <mount uri-prefix="xmlqstat/" src="../../../xml-qstat/xmlqstat/"/>
         </mount-table>
 

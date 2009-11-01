@@ -4,11 +4,14 @@ navname: About
 sidenav:
   - head: About
   - text: Overview
+    href: index.html
   - text: Features
     href: features.html
     active: true
   - text: History
     href: history.html
+  - text: Known Issues
+    href: issues.html
 ---
 
 ### Features
@@ -32,15 +35,15 @@ sidenav:
   and clusters where generating a 'qstat' call each time a page is accessed
   does not present scaling or performance issues
 - **Client-side XSLT transformations** --
-  using the HTTPi webserver
+  using the HTTPi webserver or Apache Cocoon 2.1
 - **Server-side XSLT transformations** --
-  using Apache Cocoon 2.1
+  using Apache Cocoon 2.1 only
 - **Per user job sorting** --
   users can view their own pending/active jobs simply by surfing to a simple
   URL.
 - Job Detail handling via URL for any active or pending job.
 - Primary view can be rendered in "standard" ('show me everything') mode or
-  a special "terse" ('summary') view can be used for very large or very
+  a special "terse" ('summary') view that can be used for very large or very
   active clusters. This is to handle clusters with thousands of nodes or
   hundreds of thousands of active grid jobs
 

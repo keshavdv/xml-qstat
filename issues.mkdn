@@ -1,9 +1,24 @@
 ---
 layout:  default
-navname: Issues
+navname: About
 sidenav:
-  - head: Known Issues
+  - head: About
+  - text: Overview
+    href: index.html
+  - text: Features
+    href: features.html
+  - text: History
+    href: history.html
+  - text: Known Issues
+    href: issues.html
+    active: true
 ---
+
+### Issues in HTTPi-based system
+
+- Since all of the XSLT transforms are client-side, there is not simple
+  mechanism to create RSS feeds (not that the existing one is so great
+  anyhow).
 
 ### Issues in Cocoon-based system
 
@@ -14,10 +29,4 @@ sidenav:
   be it shell escaping or whatever.
   The `jobinfo` cgi script can be used as a workaround, but requires a
   second webserver.
-
-### Issues in HTTPi-based system
-
-- Since all of the XSLT transforms are client-side, there is not simple
-  mechanism to create RSS feeds (not that the existing one is so great
-  anyhow).
 

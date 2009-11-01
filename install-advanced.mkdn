@@ -5,10 +5,10 @@ sidenav:
   - head: Installation
   - text: General
     href: install.html
-  - text: Cocoon
-    href: install-cocoon.html
   - text: HTTPi
     href: install-httpi.html
+  - text: Cocoon
+    href: install-cocoon.html
   - text: Advanced
     href: install-advanced.html
     active: true

@@ -1,2 +1,2 @@
-Project Pages for xml-qstat
-Content generation is managed by Jekyll.
+- Project Pages for xml-qstat http://olesenm.github/xml-qstat/
+- Content generation is managed by Jekyll

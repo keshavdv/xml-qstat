@@ -12,6 +12,8 @@ sidenav:
     active: true
 ---
 
+> Some of this information may not be up to date.
+
 ### Starting with git
 
 Go to a clean starting place (eg, your home directory):
@@ -21,7 +23,7 @@ Go to a clean starting place (eg, your home directory):
 Clone the repository without checking out anything just yet and we'll also
 specify 'github' as the name of the remote repository that we'll be tracking:
 
-        $ git clone --no-checkout --origin github http://github.com/bioteam/xml-qstat.git
+        $ git clone --no-checkout --origin github http://github.com/olesenm/xml-qstat.git
 
 We now change to the newly created directory:
 
@@ -40,6 +42,7 @@ Listing all of the git branches should look like this
         * master
           github/HEAD
           github/master
+          github/gh-pages
 
 Now we are ready to start our own branch, which we'll
 setup **without tracking** the remote branch.

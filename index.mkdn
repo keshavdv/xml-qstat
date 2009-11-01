@@ -9,6 +9,8 @@ sidenav:
     href: features.html
   - text: History
     href: history.html
+  - text: Known Issues
+    href: issues.html
 ---
 
 ### About this software
@@ -30,7 +32,7 @@ The [screenshots](screenshots.html) and [demo pages](demo.html) will give a
 better view of the current capabilities.
 
 When used for server-side XSLT transformations, **xml-qstat** contains a
-set of files and folders designed to function as a self-contained web
+set of files and directories designed to function as a self-contained web
 application within the [Apache Cocoon 2.1](http://cocoon.apache.org/2.1)
 XML publishing framework.
 For client-side XSLT transformations, **xml-qstat** uses modules added

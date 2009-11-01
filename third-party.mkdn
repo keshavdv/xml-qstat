@@ -18,9 +18,12 @@ At the moment, xml-qstat can be run with the Apache Cocoon for server-side
 XSLT transformations, or with the HTTPi tiny web-server for client-side
 XSLT transformations. It only necessary to download one of them.
 
-- Server-side XSLT -- the [Apache Cocoon (2.1)](http://cocoon.apache.org/2.1/)
-  framework
 - Client-side XSLT -- The [HTTPi webserver](http://www.floodgap.com/httpi/)
+  is downloaded as part of the make process.
+- Server-side XSLT -- the [Apache Cocoon (2.1)](http://cocoon.apache.org/2.1/)
+  framework. You must download and install this yourself if you wish to
+  have server-side XSLT.
 - Any of the [silk icons](http://www.famfamfam.com/lab/icons/silk/)
-  used in the XSLT transformations are included in the distribution.
+  that used in the XSLT transformations are already included in the
+  distribution.
 

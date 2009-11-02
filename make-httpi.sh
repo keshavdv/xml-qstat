@@ -8,8 +8,7 @@
 # Mark Olesen
 # -----------------------------------------------------------------------------
 packageDir=httpi-1.6.2
-tarFile=$packageDir.tar.gz
-url="http://www.floodgap.com/httpi/$tarFile"
+urlBase=http://www.floodgap.com/httpi/
 
 buildDir=build-httpi
 downloadDir=build-download
@@ -17,23 +16,6 @@ configType="configure.demonic"
 #
 # NO FURTHER EDITING BELOW THIS LINE
 #
-# -----------------------------------------------------------------------------
-#
-# download file $1 from url $2 into download/ directory
-#
-downloadFile()
-{
-    file="$1"
-    url="$2"
-
-    if [ ! -e "$downloadDir/$file" ]
-    then
-        mkdir -p "$downloadDir"
-        echo "downloading $tarFile from $url"
-        ( cd "$downloadDir" && wget --no-check-certificate "$url" )
-    fi
-}
-
 # -----------------------------------------------------------------------------
 Script=${0##*/}
 
@@ -48,8 +30,8 @@ options:
   -version VERSION   specify an alternative version (current value: $packageDir)
   -help
 
-Small helper script for getting/building HTTPi for xmlqstat
-Currently only supports build for daemon-type.
+Small helper script for getting/building HTTPi for xmlqstat.
+Currently only supports building the daemon-type.
 
 USAGE
     exit 1
@@ -81,8 +63,6 @@ do
     -version)
         [ "$#" -ge 2 ] || usage "'$1' option requires an argument"
         packageDir="$2"
-        tarFile="$packageDir.tar.gz"
-        url="http://www.floodgap.com/httpi/$tarFile"
         shift 2
         ;;
     *)
@@ -91,16 +71,18 @@ do
     esac
 done
 
-
 # -----------------------------------------------------------------------------
 
+#
 # check plausibility of HTTPi installation
+#
 checkSource()
 {
     dirName=$1
+    shift
     unset bad
 
-    for i in conquests.pl consubs.pl sockcons.c sockcons.pl $configType
+    for i in conquests.pl consubs.pl sockcons.c sockcons.pl $configType $@
     do
         [ -f "$dirName/$i" ] || bad="$bad $i"
     done
@@ -115,7 +97,25 @@ checkSource()
     }
 }
 
+#
+# download file $1 from url $2 into download/ directory
+#
+downloadFile()
+{
+    file="$1"
+    url="$2"
 
+    if [ ! -e "$downloadDir/$file" ]
+    then
+        mkdir -p "$downloadDir"
+        echo "downloading $file from $url$file"
+        ( cd "$downloadDir" && wget --no-check-certificate "$url/$file" )
+    fi
+}
+
+
+
+# -----------------------------------------------------------------------------
 # create build directory if required
 mkdir -p "$buildDir"
 
@@ -124,7 +124,8 @@ echo fetch/unpack HTTPi $packageDir source
 echo ========================================
 if [ ! -d "build-httpi/$packageDir" ]
 then
-    downloadFile $tarFile $url
+    tarFile=$packageDir.tar.gz
+    downloadFile $tarFile $urlBase
 
     if [ -e "$downloadDir/$tarFile" ]
     then
@@ -140,16 +141,21 @@ echo
 echo synchronize HTTPi source
 echo ========================================
 # plausibility check:
-checkSource $buildDir/$packageDir
-/bin/ls $buildDir/$packageDir/*.{c,pl} $buildDir/$packageDir/configure.*
+checkSource $buildDir/$packageDir httpi.in
+/bin/ls \
+    $buildDir/$packageDir/*.{c,pl} \
+    $buildDir/$packageDir/httpi.in \
+    $buildDir/$packageDir/configure.*
 echo "    -> $buildDir"
 echo
-(
-    cd $buildDir && rsync -a $packageDir/*.{c,pl} $packageDir/configure.* .
-)
+/bin/cp -f -p \
+    $buildDir/$packageDir/*.{c,pl} \
+    $buildDir/$packageDir/httpi.in \
+    $buildDir/$packageDir/configure.* \
+    $buildDir
 
-# plausibility check:
-checkSource $buildDir
+# plausibility check (again):
+checkSource $buildDir httpi.in
 
 
 echo
@@ -158,7 +164,7 @@ echo ========================================
 /bin/ls httpi-modules/*.{in,pl}
 echo "    -> $buildDir"
 echo
-rsync -a httpi-modules/*.{in,pl} $buildDir
+/bin/cp -f -p httpi-modules/*.{in,pl} $buildDir
 
 if [ -n "$settings" ]
 then

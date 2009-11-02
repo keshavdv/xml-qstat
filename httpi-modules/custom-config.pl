@@ -26,7 +26,7 @@ EOF
       )
     {
         print <<"EOF";
-Okay. Seems to have the correct directory structure
+Okay. Seems to have the correct xml-qstat directory structure
 
 EOF
     }
@@ -44,7 +44,7 @@ $DEF_XMLQSTAT_TIMEOUT = &prompt(<<"EOF", '10', 1);
 
 ------------------------
 xml-qstat customization:
-Define the maximum timeout when executing GridEngine commands
+Define the maximum timeout (seconds) when executing GridEngine commands
 EOF
 
 

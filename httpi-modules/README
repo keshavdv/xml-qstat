@@ -1,7 +1,6 @@
-xmlqstat modules for HTTPi/1.6.1
+xmlqstat modules for HTTPi/1.6.2
 
--- get the original HTTPi from  http://httpi.floodgap.com/
-
+-- get the original HTTPi from http://httpi.floodgap.com/
 
 The modifications/customizations for xml-qstat are marked with
 
@@ -10,19 +9,10 @@ The modifications/customizations for xml-qstat are marked with
 
     ##<xmlqstat/>##   single-line changes
 
-
 --
 uservar.in  - inserted at the top of the code for general declarations
 modules.in  - inserted in 'sub master {...}' for execution within the loop
 userfunc.in - inserted below at file scope
 
-
-The file "settings-daemonic.EXAMPLE" is an example of configuration
-settings that could be used when configuring httpi in daemonic mode.
-
-
-It is currently necessary to edit uservar.in and adjust
-the base location of the xmlqstat distribution:
-
-   my $resourceRoot = "/export/home/mark/xml-qstat";
-
+If you wish, you can edit uservar.in yourself to adjust the settings, but it
+is more flexible just to answer the questions in make-httpi.sh

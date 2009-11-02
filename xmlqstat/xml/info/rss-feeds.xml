@@ -1,8 +1,7 @@
-<?xml version='1.0'?>
+<?xml version="1.0"?>
 <content>
 <title>Syndicated XML (RSS) Feeds</title>
 <heading>Syndicated XML (RSS) Feeds</heading>
-
 
 <section>
 <sectionHead>Available Feeds</sectionHead>
@@ -16,6 +15,10 @@ concentrate around Atom 1.0 compliance.  Per-user feeds are the next item on
 the "to-do" list.
 </para>
 <para>
+Note: Feed generation is currently not supported when client-side XSLT
+transformations are being used (eg, the HTTPi version).
+</para>
+<para>
 <![CDATA[
   <a href="../feed/overview">
   <img border="0" align="top" src="../css/screen/icons/rss_add.png" alt="Atom 1.0 Feed"/></a> &ndash; <a href="../feed/overview">Overview Feed</a> (beta)
@@ -25,4 +28,3 @@ the "to-do" list.
 </section>
 
 </content>
-

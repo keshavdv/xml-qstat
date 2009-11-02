@@ -214,6 +214,13 @@
     </xsl:choose>
 
     <img alt=" | " src="css/screen/icon_divider.png" />
+    <a href="http://olesenm.github.com/xml-qstat/index.html"
+        title="about"><img
+        src="css/screen/icons/information.png"
+        alt="[about]"
+    /></a>
+
+    <img alt=" | " src="css/screen/icon_divider.png" />
     <a href="" title="reload"><img
         src="css/screen/icons/arrow_refresh_small.png"
         alt="[reload]"
@@ -333,6 +340,13 @@
       </xsl:element>
     </xsl:otherwise>
     </xsl:choose>
+
+    <img alt=" | " src="css/screen/icon_divider.png" />
+    <a href="http://olesenm.github.com/xml-qstat/index.html"
+        title="about"><img
+        src="css/screen/icons/information.png"
+        alt="[about]"
+    /></a>
 
     <img alt=" | " src="css/screen/icon_divider.png" />
     <a href="" title="reload"><img

@@ -25,7 +25,7 @@ understood, easily patched and trivially maintainable</a></cite>&quot;,
 it is an ideal candidate for creating a small custom webserver
 specifically for **xml-qstat**. The implementation in Perl makes it
 highly portable, permits complex logic and rapid program development
-&ndash; all very good reasons to pursue it as a platform.
+-- all very good reasons to pursue it as a platform.
 
 
 ### HTTPi Installation (for client-side XSLT)
@@ -53,7 +53,7 @@ values can be useful:
 - TCP port number = 8080
 
 However, the only really important one is the TCP port number. We select a
-value about 1024, since we wish to run the webserver without requiring
+value above 1024, since we wish to run the webserver without requiring
 root-level permissions.
 
 After starting HTTPi, test it by directing your web browser to
@@ -78,12 +78,12 @@ The transcripts are thus *incompatible* with the normal HTTPi build!!
 
 As previously described, the **xml-qstat/httpi-modules/** directory contains
 customized modules for HTTPi. The build procedure simply involves merging
-the relevant configuration bits from **HTTPi** and the **httpi-modules**
-from **xml-qstat** before interactively configuring and installing the final
-**HTTPi-xmlqstat** webapp.
+the relevant bits from **HTTPi** with those from **xml-qstat** (in the
+**httpi-modules** directory) before interactively configuring and installing
+the final **HTTPi-xmlqstat** webapp.
 
-The `make-httpi.sh` script is included in distribution to help simplify the
-entire procedure:
+The `make-httpi.sh` script is included in distribution to simplify the
+procedure:
 
         usage: make-httpi.sh [OPTION]
         options:
@@ -92,14 +92,11 @@ entire procedure:
           -version VERSION   specify an alternative version
           -help
 
+The script relies on the presence of these system utilities: `tar`, `wget`.
 
-The script relies on the presence of these system utilities:
-`rsync`, `tar`, `wget`
-
-
-Note that after you have built **HTTPi-xmlqstat** once, you should consider
-retaining the relevant transcripts so that you can easily reconfigure
-the webserver later. For example, with the supplied script:
+Note that after you have built **HTTPi-xmlqstat** once, you should retain
+the relevant transcripts so that you can easily reconfigure the webserver
+later. For example, with the supplied script:
 
         $ ./make-httpi.sh -rebuild myHTTPI-xmlqstat-setttings
 
@@ -110,7 +107,10 @@ or just directly:
 
 
 Using **init-scripts/httpi stop** provides the easiest way of finding and
-killing any running HTTPi processes.
+killing any running HTTPi processes on your system. The script can be
+started with an alternative HTTPi. For example,
+
+        init-scripts/httpi restart /some/path/httpi-xmlqstat
 
 The web interface should be ready for testing.
 

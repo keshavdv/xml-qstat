@@ -131,21 +131,15 @@
   /></a>
 
   <img alt=" | " src="css/screen/icon_divider.png" />
-  <a href="http://olesenm.github.com/xml-qstat/index.html"
-      title="about"><img
-      src="css/screen/icons/information.png"
-      alt="[about]"
-  /></a>
-
-  <img alt=" | " src="css/screen/icon_divider.png" />
   <a href="info/rss-feeds.html" title="RSS feeds (under development)"><img border="0"
       src="css/screen/icons/feed.png" alt="[rss feeds]"
   /></a>
 
   <img alt=" | " src="css/screen/icon_divider.png" />
-  <a href="http://github.com/bioteam/xml-qstat/tree/master"
-      title="github repo"><img border="0"
-      src="css/screen/git-icon.png" alt="[git]"
+  <a href="http://olesenm.github.com/xml-qstat/index.html"
+      title="about"><img
+      src="css/screen/icons/information.png"
+      alt="[about]"
   /></a>
 
   <img alt=" | " src="css/screen/icon_divider.png" />

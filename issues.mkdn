@@ -12,6 +12,8 @@ sidenav:
   - text: Known Issues
     href: issues.html
     active: true
+  - text: Disclaimer
+    href: disclaimer.html
 ---
 
 ### Issues in HTTPi-based system

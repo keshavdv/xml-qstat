@@ -12,6 +12,8 @@ sidenav:
     href: history.html
   - text: Known Issues
     href: issues.html
+  - text: Disclaimer
+    href: disclaimer.html
 ---
 
 ### Features

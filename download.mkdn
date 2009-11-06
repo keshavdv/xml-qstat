@@ -22,6 +22,7 @@ considered to be more or less the official version.
 Source code is now under [git version control](http://git-scm.org) and is
 hosted online at [github](http://github.com). There are many ways to access,
 browse, clone or download the codebase, including methods for directly
-downloading .tar.gz or .zip archives for people who do not wish to install
-(or can't use) git clients.
+downloading the [latest GitHub tar.gz](http://github.com/olesenm/xml-qstat/tarball/master)
+or the [latest GitHub zip](http://github.com/olesenm/xml-qstat/zipball/master)
+archives for people who do not wish to install (or can't use) git clients.
 

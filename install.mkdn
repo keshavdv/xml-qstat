@@ -3,6 +3,8 @@ layout:  default
 navname: Install
 sidenav:
   - head: Installation
+  - text: Package Overview
+    href: package-overview.html
   - text: General
     href: install.html
     active: true
@@ -22,140 +24,30 @@ a typical cluster admin), people who want to see what the new github hosted
 code can do, as well as for people who are interested in becoming developers
 or contributors.
 
-### Housekeeping
+### Installation Steps
 
-The choice of installation directory is up to you, we recommend organizing
-the independent components parallel to each other in the following manner:
-
-        $ ls -l /opt/xml-qstat/
-        drwxr-xr-x    cocoon-2.1.11/   # for server-side xslt
-        drwxr-xr-x    httpi-1.6.1/     # for client-side xslt
-        drwxr-xr-x    xml-qstat/       # our application
-
-The **cocoon/** directory is a standard Apache Cocoon installation. It is
-only required when *server-side* XSLT transformations are desired.
-The **httpi/** directory contains a tiny, fast and secure pure-Perl
-webserver known as [HTTPi](http://www.floodgap.com/httpi/). It is
-only required when *client-side* XSLT transformations are desired or
-when other customized data sources (XML or otherwise) may be desired.
-
-### Package Overview
-
-Inside **xml-qstat**/
-
-        $ ls -l xml-qstat/
-        drwxr-xr-x    httpi-modules/
-        drwxr-xr-x    icons/
-        drwxr-xr-x    init-scripts/
-        drwxr-xr-x    java/
-        -rw-r--r--    make-xmlqstat-jar.sh
-        drwxr-xr-x    scripts/
-        drwxr-xr-x    xmlqstat/
-
-- The **httpi-modules/** directory contains customized modules
-  for HTTPi. Only needed for the HTTPi client-side installation.
-- The **icons/** directory contains various icons that are not currently
-  used in the rendered views. They are split off to permit a more compact
-  final installation if required.
-- The **init-scripts/** directory contains helper scripts for automatically
-  running or daemonizing programs such as the application servers (cocoon
-  and/or HTTPi) and the XML caching scripts.
-- The **java/** directory contains the CommandGenerator used in the
-  Cocoon server-side installation.
-- The **make-xmlqstat-jar.sh** script for compiling the CommandGenerator
-  used in the Cocoon server-side installation.
-- The **scripts/** directory currently contains 2 perl scripts, a CGI script
-  called 'jobinfo' and a "qstat.sh"; shell script that the
-  application can use to directly query the Grid Engine qmaster. The
-  "sge-xml-cacher.pl" script is a Perl daemon script that runs constantly
-  and periodically refreshes the cached Grid Engine XML status data. This
-  cached data is what the XSLT uses to generate various views and interfaces.
-  The default setting for this daemon is to refresh Grid Data every 30
-  seconds (this value is user configurable). The Perl daemon is used so that
-  the webserver does not call "qstat -f -xml" every time a user hits the web page.
-  The caching mechanism greatly reduces the load on the SGE qmaster and the
-  webserver.
-  The second Perl script, "**create-threshold-config.pl**" is *optional*
-  and is a helper script that can query Grid Engine to learn the configured load
-  alarm thresholds for each queue. Since Grid Engine only reports current load
-  values (and not the configured alarm thresholds) this helper script can
-  create a secondary configuration file that is used in the XSLT to generate
-  customized graphical "load ratio" reports within the web interface.
-  The **'jobinfo'** script can be used as a CGI under Apache or HTTPi if
-  an external URL-based source for SGE XML status data is desired.
-- The **xmlqstat/** directory is where this application lives.
-  It is organized into the following sub-directories:
-
-        $ ls -l xmlqstat/
-        drwxr-xr-x   config/
-        drwxr-xr-x   css/
-        drwxr-xr-x   javascript/
-        -rw-r--r--   sitemap.xmap
-        drwxr-xr-x   xml/
-        drwxr-xr-x   xsl/
-
-- The **config/** directory contains XML configuration files for the
-  xml-qstat application and the logo image.
-- The **css/** directory contains CSS stylesheets used for separation
-  of content from presentation.
-- The **css/screen/** sub-directory contains icons and graphic elements.
-  The **javascript/** directory contains javascript used for presentation
-  and display preference formatting.
-- The **sitemap.xmap** is a Cocoon configuration file that tells the
-  application server how to handle, route and process various transformation
-  requests.
-- The **xml/** directory contains the raw XML source for documentation
-  and help files.
-- The **xsl/** directory contains the XSLT stylesheets that guide the
-  transformation of Grid Engine XML into various output forms.
-  Generally speaking, the user will only need to edit files in the
-  **config/** directory.
-  In very rare cases the user may need to edit **sitemap.xmap** to make
-  configuration changes for Cocoon.
-
-### Installation Overview
-
-1. Grid Engine 6.2 should be installed and functioning. Earlier versions of
+1. Make sure you have Perl available
+2. Grid Engine 6.2 should be installed and functioning. Earlier versions of
    Grid Engine produce different XML output and may not be supported well.
-2. Make sure you have Perl available
 3. Create a directory to hold the misc. components (something like xml-qstat/)
-4. Download and build Apache Cocoon or HTTPi, depending on the type of
-   webserver you wish.
-5. Checkout or download xml-qstat from github.com
+4. Checkout or download xml-qstat from github.com
+5. Download and build Apache Cocoon, if you will be using the server-side
+   XSLT transformations.
+6. If you will only using HTTPi, the download is part of the corresponding
+   make script, which you execute now.
 6. Edit the **xmlqstat/config/config.xml** file to set local configuration
    parameters (details are below)
-7. Edit the **scripts/sge-xml-cacher.pl** script to configure the full Unix
-   file path to where cached SGE status data will be stored. The data should
-   typically be stored within the **xmlqstat/cache/** directory as
-   "qstatf.xml". For a multi-cluster view, the file should be stored as
-   **xmlqstat/cache/qstatf~NAME.xml** or as
-   **xmlqstat/cache-NAME/qstatf.xml**, where *NAME* is the name given
-   to the cluster. This convention should be followed, otherwise severe
-   editing of the sitemap.xmap and/or the custom HTTPi will be required.
-8. If you are running the qlicserver on your system, you can instruct it to
-   cache its data for reuse here. Otherwise, start caching grid data! If
-   your SGE environment has been set up (you can run 'qstat' via the command
-   line) then starting the perl caching daemon should be as simple as
-   entering the **scripts/** directory and issuing the command
-   "./xmlqstat-cacher.pl -d". To stop the daemon, issue the command
-   "./xmlqstat-cacher.pl -k". To verify that the daemon is working, check
-   the process table to see if it exists and then monitor the timestamps on
-   the cache file. In its default setting, XML data should be updated every
-   30 seconds.
-9. The web interface should be ready for testing. Point a web browser at the
-   URL *http://{host}:8080/xmlqstat/* or
-   *http://{host}:8888/xmlqstat/*, the host and port number depending on
-   your configuration.
-
+7. The web interface should be ready for testing. Point a web browser at the
+   URL *http://{host}:8080/xmlqstat/* or *http://{host}:8888/xmlqstat/*,
+   the host and port number depending on your configuration.
 
 ### Customizing the config/
 
-Within the **xmlqstat/config/** directory there is a file called
-**config.xml** that needs to be edited to reflect the local site
-installation. The file is well documented internally so it should be a
-simple process to edit.
-The file **xmlqstat/config/logo.png** is not tracked in git and can be
-used to define a logo to be displayed at the top of each page.
+Within the **xmlqstat/config/** directory there is a **config.xml** file
+that needs to be edited to reflect the local site installation. The file is
+well documented internally so it should be a simple process to edit. The
+file **xmlqstat/config/logo.png** is not tracked in git and can be used to
+define a logo to be displayed at the top of each page.
 
 ### Using Cached Grid Engine XML
 
@@ -173,4 +65,29 @@ directory if this naming and location convention is followed.
   "qstat.xml", "qstatf.xml" and "qhost.xml".
 - The qlicserver program can be instructed to create the needed cache files
   "qhost.xml", "qstat.xml" and "qlicserver.xml".
+
+#### Caching qstat -f output
+
+Edit the **scripts/sge-xml-cacher.pl** script to configure the full Unix
+file path to where cached SGE status data will be stored. The data should
+typically be stored within the **xmlqstat/cache/** directory as
+"qstatf.xml". For a multi-cluster view, the file should be stored as
+**xmlqstat/cache/qstatf~NAME.xml** or as **xmlqstat/cache-NAME/qstatf.xml**,
+where *NAME* is the name given to the cluster. This convention should be
+followed, otherwise severe editing of the sitemap.xmap and/or the custom
+HTTPi will be required.
+
+
+#### Using cached data from qlicserver
+
+If you are running the qlicserver on your system, you can instruct it to
+cache its data for reuse here. Otherwise, start caching grid data! If your
+SGE environment has been set up (you can run 'qstat' via the command line)
+then starting the perl caching daemon should be as simple as entering the
+**scripts/** directory and issuing the command "./xmlqstat-cacher.pl -d". To
+stop the daemon, issue the command "./xmlqstat-cacher.pl -k". To verify that
+the daemon is working, check the process table to see if it exists and then
+monitor the timestamps on the cache file. In its default setting, XML data
+should be updated every 30 seconds.
+
 

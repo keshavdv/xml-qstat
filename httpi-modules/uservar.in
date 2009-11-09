@@ -23,8 +23,7 @@ adding/overriding MIME types. However, old uservar.in files will still work;
 they'll just override all the types they'll define with the same MIME type.
 ~
 ~
-%content_types =
-	("xsl" => "text/xml");    ##<xmlqstat/>## - missing type for xsl
+%content_types = ();    ##<xmlqstat/>## - nothing to add
 
 ~check MFALSE
 
@@ -100,38 +99,16 @@ my $resourceRoot = "DEF_XMLQSTAT_ROOT";
 # timeout (seconds) for system command like qstat -j etc.
 my $shellCmdTimeout = DEF_XMLQSTAT_TIMEOUT;
 
+# name of the GridEngine architecture
+my $sgeArch = "DEF_SGE_ARCH";
+
+# name of the system library environment,
+# for systems where runpath won't work
+my $sgeLibEnv = "DEF_LIBENV";
+
 #
 # END OF CUSTOMIZE SETTINGS
 ################################################################################
 ################################################################################
-
-#
-# something like what the GridEngine util/arch script returns
-# But we only deal with OS's where we can skip setting LD_LIBRARY_PATH
-# (which limits it to Linux and Solaris) and further limit it to architectures
-# that I have for testing (which limits it to Linux).
-
-# use an array, since we might need fallback values
-my @sge_arch;
-if ( exists $ENV{SGE_ARCH} and defined $ENV{SGE_ARCH} ) {
-    @sge_arch = $ENV{SGE_ARCH};
-}
-else {
-    use POSIX (); # in case it wasn't already used
-    my ( $sysname, undef, $release, undef, $machine ) = POSIX::uname();
-    if ( $sysname =~ /Linux/ ) {
-        $machine =~ s{^i.*86$}{x86} or $machine =~ s{^x86_64$}{amd64};
-
-        my @a;
-        if ( $release =~ m{^2\.6} ) {
-            @a = qw( lx26 lx24 );
-        }
-        elsif ( $release =~ m{^2\.4} ) {
-            @a = qw( lx24 );
-        }
-
-        @sge_arch = map { "$_-$machine" } @a;
-    }
-}
 
 ##</xmlqstat>##

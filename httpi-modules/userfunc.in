@@ -499,28 +499,14 @@ CONTENT
         #
         # resolve cmd in the <sge_root>/bin/<sge_arch>/ directory
         #
-        my $cmdPath;
-        if ( -d $root ) {
-            for (@sge_arch) {
-                my $x = "$root/bin/$_/$cmd";
-                if ( -f $x and -x $x ) {
-                    $cmdPath = $x;
-                    last;
-                }
-            }
-        }
+        my $cmdPath = "$root/bin/$sgeArch/$cmd";
 
         # not found? error!
-        unless ( defined $cmdPath ) {
-            my $bindirs = "bin/";
-            if ( @sge_arch > 1 ) {
-                $bindirs .= "{" . join( "," => @sge_arch ) . "}";
-            }
-
+        unless ( -d $root and -f $cmdPath and -x $cmdPath ) {
             &customError404(<<"CONTENT");
 Resource <b>$::address</b> &ndash; for cluster <em>$cluster</em>
 (<tt>SGE_ROOT=$root</tt>)<br/>
-Could not resolve command in <tt>$root/$bindirs</tt>
+Could not resolve command in <tt>$root/bin/$sgeArch</tt>
 <blockquote><pre>$cmd @cmdArgs<pre></blockquote>
 CONTENT
         }
@@ -540,6 +526,16 @@ CONTENT
         local *ENV;
         $ENV{SGE_ROOT} = $root;
         $ENV{SGE_CELL} = $cell;
+
+        my $libDir = "$root/lib/$sgeArch";
+        if ( $sgeLibEnv and -d $libDir ) {
+            if ( exists $ENV{$sgeLibEnv} ) {
+                $ENV{$sgeLibEnv} = "$libDir:$ENV{$sgeLibEnv}";
+            }
+            else {
+                $ENV{$sgeLibEnv} = $libDir;
+            }
+        }
 
         # first argument is a currently just a dummy (OO-remnant)
         shellCmd( "gridEngineCmd", $cmdPath, @cmdArgs );

@@ -128,7 +128,7 @@ downloadFile()
 
         case "$fetchCmd" in
         curl)
-            ( cd "$downloadDir" && curl -k -o "$file" "$url$file" )
+            ( cd "$downloadDir" && curl -k -O "$url$file" )
             ;;
         wget)
             ( cd "$downloadDir" && wget --no-check-certificate "$url$file" )

@@ -100,6 +100,9 @@ checkSource()
 #
 # download file $1 from url $2 into download/ directory
 #
+# use curl or wget
+#
+unset fetchCmd
 downloadFile()
 {
     file="$1"
@@ -109,7 +112,35 @@ downloadFile()
     then
         mkdir -p "$downloadDir"
         echo "downloading $file from $url$file"
-        ( cd "$downloadDir" && wget --no-check-certificate "$url/$file" )
+
+        if [ -z "$fetchCmd" ]
+        then
+            fetchCmd="curl wget"
+            for i in $fetchCmd
+            do
+                if type $i >/dev/null 2>&1
+                then
+                    fetchCmd=$i
+                    break
+                fi
+            done
+        fi
+
+        case "$fetchCmd" in
+        curl)
+            ( cd "$downloadDir" && curl -k -o "$file" "$url$file" )
+            ;;
+        wget)
+            ( cd "$downloadDir" && wget --no-check-certificate "$url$file" )
+            ;;
+        *)
+            echo
+            echo "FATAL:"
+            echo "    no '$fetchCmd' available"
+            echo
+            exit 1
+            ;;
+        esac
     fi
 }
 

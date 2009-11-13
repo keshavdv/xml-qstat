@@ -20,40 +20,49 @@ Go to a clean starting place (eg, your home directory):
 
         $ cd $HOME
 
-Clone the repository without checking out anything just yet and we'll also
-specify 'github' as the name of the remote repository that we'll be tracking:
+Clone the repository, we'll also specify 'github' as the name of the remote
+repository that we'll be tracking:
 
-        $ git clone --no-checkout --origin github http://github.com/olesenm/xml-qstat.git
+        $ git clone --origin github git://github.com/olesenm/xml-qstat.git
+or
+        $ git clone --origin github http://github.com/olesenm/xml-qstat.git
 
 We now change to the newly created directory:
 
         $ cd xml-qstat/
 
-Since we haven't checked out any files, the only thing in the directory
-will be the **.git/** hidden directory:
-
-        $ ls -a
-        ./  ../  .git/
-
-Listing all of the git branches should look like this
-(\* indicates the currently active branch):
+All of our normal files should be there, as well as the **.gitignore**
+hidden file and the **.git/** hidden directory.  Listing all of the git
+branches should look like this (\* indicates the currently active branch):
 
         $ git branch -l -a
         * master
           github/HEAD
-          github/master
           github/gh-pages
+          github/master
 
-Now we are ready to start our own branch, which we'll
-setup **without tracking** the remote branch.
-_This is an important point._
-By creating a non-tracked branch, we can avoid worrying about clobbering any
-of our custom settings with future updates.
+Now we have a good starting point, we'll immediately start our own branch.
+***This is an important point.***
+By creating our own branch, we can avoid worrying about clobbering any
+of our custom settings with future updates. We can pick any convenient name
+for our branch, but we should avoid *master* and *gh-pages*, since they
+already exist on the github repository and that causes confusion.
+For the sake of an example, we'll just call it *personal* and create if
+from the current location:
 
-        $ git checkout --no-track -b site github/master
+        $ git checkout -b personal HEAD
 
-For general cleanliness, we'll also remove the tracked branch *master*,
-but it can always be reinstated later if desired:
+If we check again, we'll see that we have indeed switched branches:
+
+        $ git branch -l -a
+          master
+        * personal
+          github/HEAD
+          github/gh-pages
+          github/master
+
+For cleanliness, we'll remove the tracked branch *master*, but it can always
+be reinstated later if desired:
 
         $ git branch -d master
         Deleted branch master.
@@ -61,10 +70,10 @@ but it can always be reinstated later if desired:
 We can now check that everything is as it should be:
 
         $ git status
-        # On branch site
+        # On branch personal
         nothing to commit (working directory clean)
 
-Since we are on our own branch (*site*), we can make changes
+Since we are on our own branch (*personal*), we can make changes
 independent of the upstream branches (*github/master*).
 
 The first thing we'll do is adjust the paths to suit our installation.
@@ -84,34 +93,39 @@ If you are using the FlexLM integration (qlicserver), you should also
 symlink the cache directories at this time under
 **xmlqstat/cache-{clusterName}**.
 
-To preserve these initial editing changes thus far,
-some of the following commands will be useful.
+To preserve these initial editing changes thus far, some of the following
+commands will be useful.
 
-<dl style="margin-left: 2em">
-  <dt>git status</dt>
+git status
+: check the current of things
 
-  <dd>check the current of things</dd>
-  <dt>git add -u</dt>
-  <dd>stage updated files for the next commit</dd>
-  <dt>git add file1 .. fileN</dt>
-  <dd>stage new files for the next commit</dd>
-  <dt>git commit</dt>
+git add -u
+: stage updated files for the next commit
 
-  <dd>commit the changes</dd>
-  <dt>git commit --amend</dt>
-  <dd>amend to the previous commit</dd>
-  <dt>git log</dt>
-  <dd>view the commit log</dd>
-</dl>
+git add file1 .. fileN
+: stage new files for the next commit
+
+git commit
+: commit the changes
+
+git commit --amend
+: amend to the previous commit
+
+git log
+: view the commit log
+
 
 At any time we can also fetch the newest version, without affecting our
 working directory whatsoever:
-<dl style="margin-left: 2em">
-  <dt>git fetch github</dt>
-  <dd>fetch the lastest version</dd>
-  <dt>git log --stat --no-merges github/master ^HEAD</dt>
-  <dd>view the changes in github/master but not in our branch</dd>
-</dl>
+
+git fetch github
+: fetch the lastest version
+
+git log --stat --no-merges github/master ^HEAD
+: view the changes in github/master but not in our branch
+
+git whatchanged github/master
+: to see what changed
 
 Provided that our working directory is clean (no uncommitted changes), we
 can merge in any upstream changes:

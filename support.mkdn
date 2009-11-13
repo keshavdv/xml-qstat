@@ -3,23 +3,30 @@ layout:  default
 navname: Support
 sidenav:
   - head: Support
+  - text: Issue tracker
+    href: http://github.com/olesenm/xml-qstat/issues
 ---
 
 ### Email Discussion List
 
-Although an independent
-[mailing list](http://mail.bioteam.net/mailman/listinfo/xml-qstat-d)
-for general discussions of this software has been set up, it is quite
-acceptable to discuss **xml-qstat** on the Grid Engine
-*users* list:
-[http://gridengine.sunsource.net/maillist.html](http://gridengine.sunsource.net/maillist.html)
+It is quite reasonable to discuss **xml-qstat** on the **[Grid Engine users'
+mailing list](http://gridengine.sunsource.net/maillist.html)**, and will
+probably give you the best overall response too. A specialized [xml-qstat
+mailing list](http://mail.bioteam.net/mailman/listinfo/xml-qstat-d) also
+exists, but is very low volume.
+
+
+### Issue Tracker
+
+The github issue tracker can used both for noting issues and for recording
+feature requests. But by all means, please discuss them on the GridEngine
+users' mailing list too.
 
 
 ### Additional Resources
 
 - The old [xml-qstat website](http://xml-qstat.org/)
 - [FlexLM integration](http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Integration)
-  and [configuration](http://wiki.gridengine.info/wiki/index.php/Olesen-FLEXlm-Configuration)
 - Some documentation about the
   [GridEngine XML](http://wiki.gridengine.info/wiki/index.php/GridEngine_XML)
 - [learn git](http://learn.github.com/) and a roundup of

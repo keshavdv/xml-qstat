@@ -5,7 +5,6 @@ sidenav:
   - head: License
   - text: Creative Commons
     href: http://creativecommons.org/licenses/by-nc-sa/3.0/
-
 ---
 
 ### License
@@ -25,6 +24,5 @@ Under the following conditions:
   may distribute the resulting work only under the same or similar license
   to this one.
 
-You are thus allowed to use it in a commercial environment, but not to sell
-it.
+You are thus allowed to use it in a commercial environment, but not to sell it.
 

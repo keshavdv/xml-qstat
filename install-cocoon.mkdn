@@ -3,6 +3,8 @@ layout:  default
 navname: Install
 sidenav:
   - head: Installation
+  - text: Package Overview
+    href: package-overview.html
   - text: General
     href: install.html
   - text: HTTPi

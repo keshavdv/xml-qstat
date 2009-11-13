@@ -5,6 +5,7 @@
 # get GridEngine arch/lib information
 print "GridEngine configuration\n";
 print "Trying to determine the architecture and library requirements\n";
+print "... checking what '$archScript' reports\n";
 
 ( $DEF_SGE_ARCH, $DEF_LIBENV ) = ( '', '' );
 
@@ -12,7 +13,6 @@ if ( $ENV{SGE_ROOT} and -d $ENV{SGE_ROOT} ) {
     my $archScript = "$ENV{SGE_ROOT}/util/arch";
     # use 'arch' script if possible
 
-    print "checking what '$archScript' reports...\n";
     chomp( $DEF_SGE_ARCH = qx{$archScript 2>/dev/null} );
     if ($DEF_SGE_ARCH)
     {
@@ -31,11 +31,11 @@ if ($DEF_SGE_ARCH) {
 else {
     print
 "Couldn't get GridEngine architecture automatically, need to do it ourselves\n";
-
     $DEF_SGE_ARCH = "undef";
+}
 
-    while (1) {
-        $DEF_SGE_ARCH = &prompt( <<"EOF", $DEF_SGE_ARCH, 1 );
+while (1) {
+    $DEF_SGE_ARCH = &prompt( <<"EOF", $DEF_SGE_ARCH, 1 );
 
 Define the architecture used for the GridEngine commands.
 This should correspond to the value emitted by the \$SGE_ROOT/util/arch
@@ -47,16 +47,15 @@ Hint: the 'arch' value here should allow us to find
 Which value should be used for the GridEngine architecture?
 EOF
 
-        if ( $DEF_SGE_ARCH eq "undef" or not $DEF_SGE_ARCH ) {
-            print <<"EOF";
+    if ( $DEF_SGE_ARCH eq "undef" or not $DEF_SGE_ARCH ) {
+        print <<"EOF";
 The GridEngine architecture value '$DEF_SGE_ARCH' looks implausible
 Please try again ...
 
 EOF
-        }
-        else {
-            last;
-        }
+    }
+    else {
+        last;
     }
 }
 

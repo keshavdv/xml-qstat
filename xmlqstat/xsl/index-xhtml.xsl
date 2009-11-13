@@ -544,16 +544,16 @@
       />
     </xsl:element>
 
-    <!-- summary: using qstat -f output (cached or direct) -->
+    <!-- report: using qstat -f output (cached or direct) -->
     &space;
     <xsl:element name="a">
-      <xsl:attribute name="title">cluster summary</xsl:attribute>
-      <xsl:attribute name="href">summary~<xsl:value-of select="$name"/>
+      <xsl:attribute name="title">cluster report</xsl:attribute>
+      <xsl:attribute name="href">report~<xsl:value-of select="$name"/>
         <xsl:value-of select="$urlExt"/>
       </xsl:attribute>
       <img border="0"
-          src="css/screen/icons/sum.png"
-          alt="[cluster summary]"
+          src="css/screen/icons/report.png"
+          alt="[cluster report]"
       />
     </xsl:element>
 

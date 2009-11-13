@@ -1,12 +1,12 @@
 ---
-title: summary.xml
+title: report.xml
 layout: nil
 ---
 <?xml version="1.0" encoding="utf-8"?>
 <?xslt-param name="menuMode" value="qstatf"?>
 <?xslt-param name="clusterName" value="demo"?>
 <?xslt-param name="timestamp" value="2009-10-19T11:30:00"?>
-<?xslt-param name="renderMode" value="summary"?>
+<?xslt-param name="renderMode" value="report"?>
 <?xslt-param name="urlExt" value=".xml"?>
 <?xml-stylesheet type="text/xml" href="xsl/qstatf-xhtml.xsl"?>
 {% include qstatf.xml %}

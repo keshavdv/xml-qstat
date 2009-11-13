@@ -461,18 +461,18 @@
         <xsl:if
             test="queuevalue[@name='state_string'] = '' and
             (queuevalue[@name='slots'] - queuevalue[@name='slots_used']) != 0">
-          true
+          <xsl:text>true</xsl:text>
         </xsl:if>
       </xsl:for-each>
     </xsl:when>
     <xsl:when test="$renderMode='warn'">
       <xsl:if test="queue/queuevalue[@name='state_string'][
           contains(., 'a') or contains(., 'd') or contains(., 'E')]">
-        true
+        <xsl:text>true</xsl:text>
       </xsl:if>
     </xsl:when>
     <xsl:otherwise>
-      true
+      <xsl:text>true</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>

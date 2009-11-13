@@ -1,4 +1,9 @@
-<xsl:stylesheet version="2.0"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE stylesheet [
+<!ENTITY  newline "<xsl:text>&#x0a;</xsl:text>">
+<!ENTITY  space   "<xsl:text> </xsl:text>">
+]>
+<xsl:stylesheet version="1.0"
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >
@@ -44,12 +49,14 @@
         <xsl:text>type="text/xml" href="</xsl:text>
         <xsl:value-of select="$stylesheet"/><xsl:text>"</xsl:text>
       </xsl:processing-instruction>
+      &newline;
     </xsl:when>
     <xsl:otherwise>
       <xsl:processing-instruction name="xml-stylesheet">
         <xsl:text>type="text/xml" href="</xsl:text>
         <xsl:value-of select="$stylesheet"/><xsl:text>"</xsl:text>
       </xsl:processing-instruction>
+      &newline;
     </xsl:otherwise>
     </xsl:choose>
   </xsl:if>
@@ -166,6 +173,7 @@
            <xsl:value-of select="$value" />
          <xsl:value-of select="$quote" />
       </xsl:processing-instruction>
+      &newline;
     </xsl:if>
 
     <xsl:call-template name="create-pis">

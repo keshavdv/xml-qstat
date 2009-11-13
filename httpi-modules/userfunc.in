@@ -14,12 +14,12 @@ should not be changed as other subroutines call it for their error handling.
 #!/perl  # provide a shebang for using perl -c -x userfunc.in
 
 sub hterror {
-    my ( $errstr, $expl ) = (@_);
+    my ( $errstr, @expl ) = (@_);
     &htcontent( <<"EOF", "text/html" );
 <html>
 <body>
 <h1>$errstr</h1>
-$expl
+@expl
 <hr>
 <address><a href = "http://httpi.floodgap.com/">httpi/$VERSION</a>
 by Cameron Kaiser</address>
@@ -29,8 +29,8 @@ EOF
 }
 
 sub hterror404 {
-    &htsponse( 404 => "File Not Found" );
-    &hterror( "File Not Found",
+    &htsponse( 404 => "Not Found" );
+    &hterror( "Not Found",
         "The resource <tt>$address</tt> was not found on this system." );
     &log;
     exit;
@@ -49,8 +49,8 @@ sub hterror301 {
 
 # like hterror404, but optionally with our own message content
 sub customError404 {
-    &htsponse( 404 => "File Not Found" );
-    &hterror( "Resource Not Found",
+    &htsponse( 404 => "Not Found" );
+    &hterror( "Not Found",
         @_
         ? "@_"
         : "Cannot resolve resource <b>$::address</b>" );
@@ -523,7 +523,10 @@ Cell directory <b>$root/$cell</b> does not exist
 CONTENT
         }
 
-        local *ENV;
+        # localizing should be okay, but seems to fail:
+        # good that we are using a daemon mode anyhow
+        # local *ENV;
+        #
         $ENV{SGE_ROOT} = $root;
         $ENV{SGE_CELL} = $cell;
 
@@ -978,6 +981,7 @@ CONTENT
                 returnXML(
                     xmlProlog(
                         %xsltParam,    #
+                        renderMode => "jobs",
                         stylesheet => "xsl/qstatf-xhtml.xsl",
                     ),
                     xmlFromCache(
@@ -1007,13 +1011,18 @@ CONTENT
             }
 
             #
-            # queues : renderMode 'full'
+            # queues : with optional renderMode (free|warn)
             #
             if ( $function eq "queues" ) {
+                ( $xsltParam{renderMode} ) =
+                  grep { m{^(free|warn)$} } keys %switch;
+
+                # default is "queues", but state it explicitly anyhow
+                $xsltParam{renderMode} ||= "queues";
+
                 returnXML(
                     xmlProlog(
                         %xsltParam,    #
-                        renderMode => "full",
                         stylesheet => "xsl/qstatf-xhtml.xsl",
                     ),
                     xmlFromCache(
@@ -1024,13 +1033,13 @@ CONTENT
             }
 
             #
-            # summary : renderMode 'summary'
+            # report : renderMode 'report'
             #
-            if ( $function eq "summary" ) {
+            if ( $function eq "report" ) {
                 returnXML(
                     xmlProlog(
                         %xsltParam,    #
-                        renderMode => "summary",
+                        renderMode => "report",
                         stylesheet => "xsl/qstatf-xhtml.xsl",
                     ),
                     xmlFromCache(

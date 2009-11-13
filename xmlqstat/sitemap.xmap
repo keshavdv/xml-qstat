@@ -715,6 +715,7 @@
           clusterName="{1}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
           filterByUser="{request-param:user}"
+          renderMode="jobs"
           menuMode="qstatf"
           urlExt=".xml"
       '/>
@@ -747,7 +748,7 @@
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
-          renderMode="queues"
+          renderMode="{request:queryString}"
           menuMode="qstatf"
           urlExt=".xml"
       '/>
@@ -774,13 +775,13 @@
   </map:match>
 
   <!-- client-side XSLT for summary~NAME -->
-  <map:match pattern="summary~*.xml">
+  <map:match pattern="report~*.xml">
     <map:generate  src="cocoon:/qstatf~{1}.xml" />
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
-          renderMode="summary"
+          renderMode="report"
           menuMode="qstatf"
           urlExt=".xml"
       '/>
@@ -802,6 +803,7 @@
       <map:parameter name="timestamp"     value="{date:yyyy-MM-dd_HH:mm:ss}"/>
       <map:parameter name="filterByUser"  value="{request-param:user}"/>
       <map:parameter name="menuMode"      value="qstatf"/>
+      <map:parameter name="renderMode"    value="jobs"/>
     </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>
@@ -828,7 +830,7 @@
     <map:transform src="xsl/qstatf-xhtml.xsl">
       <map:parameter name="clusterName"  value="{1}" />
       <map:parameter name="timestamp"    value="{date:yyyy-MM-dd_HH:mm:ss}"/>
-      <map:parameter name="renderMode"   value="queues"/>
+      <map:parameter name="renderMode"   value="{request:queryString}"/>
       <map:parameter name="menuMode"     value="qstatf"/>
     </map:transform>
     <map:serialize type="xhtml"/>
@@ -865,7 +867,6 @@
     </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>
-
 
   <!-- urls for accessing the default cluster paths -->
   <map:match pattern="jobs">

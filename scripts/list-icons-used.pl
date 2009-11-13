@@ -46,7 +46,8 @@ local @ARGV = "git grep -F css/screen/icons/ |";
 
 my %referenced;
 while (<>) {
-    while (s{css/screen/icons/(.+?\.png)\"}{}) {
+    ## parse until closing quote or next '<' for xsl attributes
+    while (s{css/screen/icons/(.+?\.png)[<\"]}{}) {
         $referenced{$1}++;
     }
 }

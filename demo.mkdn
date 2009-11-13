@@ -4,8 +4,8 @@ navname: Demo
 sidenav:
   - head: Demo
   - text: client-side xslt
-  - text: cluster.xml
-    href: xmlqstat/cluster.xml
+  - text: web-app/index.xml
+    href: web-app/index.xml
   - text: server-side xslt
   - text: http://xml-qstat.org/xmlqstat/
     href: http://xml-qstat.org/xmlqstat/
@@ -22,20 +22,21 @@ codebase.
 
 ### Server-Side Rendering Demo
 
-This site will be running off the GitHub repository so it should
-reflect the latest features, bug fixes and capabilities:<br/>
+The [xml-qstat.org](http://xml-qstat.org/) site is normally running off a
+fairly recent version from the GitHub repository so it should reflect the
+latest features, bug fixes and capabilities:<br/>
 [http://xml-qstat.org/xmlqstat/](http://xml-qstat.org/xmlqstat/)
 
 ### Client-Side Rendering Demo
 
 With client-side XSLT transformations, the webserver process becomes
 trivial. Here is an example with serving cached files from
-**[this website](xmlqstat/cluster.xml)**.
-Note that obviously not all the features are available since the file
-contents of **[qstat -f](xmlqstat/qstatf~demo.xml "qstatf~demo.xml")** are
-actually static.
+**[this website](web-app/index.xml)**.
+Note that many features are not available since the file contents of
+**[qstat -f](web-app/qstatf~demo.xml "qstatf~demo.xml")** are actually
+static and request parameters also have no effect.
 
-The **[test page](xmlqstat/test.xml)** can help you determine if your
+The **[test page](web-app/test.xml)** can help you determine if your
 browser handles XSLT properly, with or without JavaScript. It has been
 tested with Firefox and Opera.
 

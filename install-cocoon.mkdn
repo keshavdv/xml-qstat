@@ -26,7 +26,7 @@ represents a radical change from 2.1
 Within the standard **cocoon** installation directory, the only file touched
 is a customized "mount-table.xml" configuration file that informs the
 application server that the URI-prefix of **/xmlqstat/** should be handled
-by the **xmlqstat/** directory. If you are upgrading from an older version of
+by the **web-app/** directory. If you are upgrading from an older version of
 cocoon, or if you have relocated the **xml-qstat** directory, you will need
 to adjust the "mount-table.xml" accordingly. It may help to be familiar with
 the contents of the **sitemap.xmap** that is distributed with **xml-qstat**
@@ -46,13 +46,13 @@ transformations occur when a particular URL path is seen.
    "./cocoon.sh" as a non-privledged user will cause Cocoon to start up its
    own internal application server that binds to all available network
    interfaces and listens for incoming connections at port number 8888. To
-   test, simply point your web browser at the *http://{host}:8888/xmlqstat/*
-   -- if it works you will see a Cocoon welcome screen. Firewall users should
+   test, simply point your web browser at the *http://{host}:8888/* -- if
+   it works you will see a Cocoon welcome screen. Firewall users should
    make sure that TCP connections to port 8888 are allowed.
 3. Create the **mount-table.xml** configuration file in the cocoon directory
    (details are below).
-4. Build xml-qstat.jar and install it into the proper Cocoon lib/ directory
-   (details are below)
+4. Build the *xml-qstat.jar* and install it into the proper Cocoon *lib/*
+   directory (details are below)
 5. The web interface should be ready for testing.
    Point a web browser at the URL *http://{host}:8888/xmlqstat/*
 
@@ -90,10 +90,10 @@ script called "make-xmlqstat-jar.sh".
 To build and install the Jar file:
 
 1. Edit make-xmlqstat-jar.sh to set the cocoonBase directory
-2. Make sure Java and 'javac' are in your path
+2. Make sure 'java' and 'javac' are in your path
 3. Run the script
-4. Copy the resulting build/xml-qstat.jar file into the location specified by
-   the build script output
+4. Copy the resulting build/xml-qstat.jar file into the location specified
+   by the build script output
 5. Stop and restart Cocoon (if necessary)
 
 ### Creating mount-table.xml
@@ -111,12 +111,15 @@ on the system rather than forcing them to be installed inside the
 
 Then you would simply create a file called **cocoon-2.1.11/mount-table.xml**
 with contents that looked like this (yes the relative uri-prefix
-**"../../../xml-qstat/xmlqstat/"** path is correct for the directory layout
+**"../../../xml-qstat/web-app/"** path is correct for the directory layout
 shown above) :
 
         <mount-table>
-            <!-- Map the browser URI "/xmlqstat" to our webapp directory -->
-            <mount uri-prefix="xmlqstat/" src="../../../xml-qstat/xmlqstat/"/>
+            <!-- Map the browser URI "/xmlqstat" to our web-app directory -->
+            <mount
+                uri-prefix="xmlqstat"
+                src="../../../xml-qstat/web-app/sitemap.xmap"
+            />
         </mount-table>
 
 After creating this file, it will be necessary to stop and restart Cocoon if
@@ -124,6 +127,6 @@ it was running previously. Once cocoon is restarted, the application server
 will know how to find the xmlqstat/ application files when web clients
 request the URI-prefix of **"/xmlqstat"**. Remember that the **$PATH** must
 be adjusted to allow **xml-qstat/scripts/qstat.sh** to be found, and
-possibly adjusting other SGE environment variables (depending on your
-installation).
+possibly other SGE environment variables need adjusting as well (depending
+on your installation).
 

@@ -42,9 +42,10 @@ Inside **xml-qstat**/
         drwxr-xr-x    icons/
         drwxr-xr-x    init-scripts/
         drwxr-xr-x    java/
+        -rw-r-xr-x    make-httpi.sh
         -rw-r--r--    make-xmlqstat-jar.sh
         drwxr-xr-x    scripts/
-        drwxr-xr-x    xmlqstat/
+        drwxr-xr-x    web-app/
 
 httpi-modules/
 : customized modules for HTTPi. Only needed for the HTTPi client-side
@@ -88,11 +89,11 @@ scripts/
   The **'jobinfo'** script can be used as a CGI under Apache or HTTPi if
   an external URL-based source for SGE XML status data is desired.
 
-xmlqstat/
+web-app/
 : this is where this application lives.
   It is organized into the following sub-directories:
 
-        $ ls -l xmlqstat/
+        $ ls -l web-app/
         drwxr-xr-x   config/
         drwxr-xr-x   css/
         drwxr-xr-x   javascript/

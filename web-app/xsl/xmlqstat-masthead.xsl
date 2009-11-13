@@ -103,8 +103,10 @@
   <div id="menu">
     <xsl:element name="a">
       <xsl:attribute name="title">cluster listing</xsl:attribute>
-      <xsl:attribute name="href">../../cluster<xsl:value-of
-        select="$urlExt"/></xsl:attribute>
+      <xsl:attribute name="href">
+        <xsl:text>../../</xsl:text>
+        <xsl:if test="string-length($urlExt)">index.xml</xsl:if>
+      </xsl:attribute>
       <xsl:attribute name="class">leftSpace</xsl:attribute>
       <img
         src="css/screen/icons/house.png"
@@ -251,9 +253,11 @@
 
   <div id="menu">
     <xsl:element name="a">
-      <xsl:attribute name="title">clusters</xsl:attribute>
-      <xsl:attribute name="href">cluster<xsl:value-of
-        select="$urlExt"/></xsl:attribute>
+      <xsl:attribute name="title">cluster listing</xsl:attribute>
+      <xsl:attribute name="href">
+        <xsl:text>./</xsl:text>
+        <xsl:if test="string-length($urlExt)">index.xml</xsl:if>
+      </xsl:attribute>
       <xsl:attribute name="class">leftSpace</xsl:attribute>
       <img
         src="css/screen/icons/house.png"

@@ -16,6 +16,15 @@ sidenav:
     active: true
 ---
 
+### Advanced Installation: Alternative Web-App Name
+
+Although throughout the installation instructions reference is made to
+**/xmlqstat/** as the rendering path for the **web-app/**, it is indeed
+possible to use other names. For *cocoon*, only the *mount-table.xml* needs
+to be changed and *cocoon* restarted. For the **HTTPi-xmlqstat** server, the
+configuration script should be rerun with the new value -- unless you feel
+confident editing the server.
+
 ### Advanced Installation: Cocoon or HTTPi behind Apache Proxies
 
 Many Unix servers already have an Apache webserver running on the system. If

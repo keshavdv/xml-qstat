@@ -35,7 +35,7 @@ or contributors.
    XSLT transformations.
 6. If you will only using HTTPi, the download is part of the corresponding
    make script, which you execute now.
-6. Edit the **xmlqstat/config/config.xml** file to set local configuration
+6. Edit the **web-app/config/config.xml** file to set local configuration
    parameters (details are below)
 7. The web interface should be ready for testing. Point a web browser at the
    URL *http://{host}:8080/xmlqstat/* or *http://{host}:8888/xmlqstat/*,
@@ -43,10 +43,10 @@ or contributors.
 
 ### Customizing the config/
 
-Within the **xmlqstat/config/** directory there is a **config.xml** file
+Within the **web-app/config/** directory there is a **config.xml** file
 that needs to be edited to reflect the local site installation. The file is
 well documented internally so it should be a simple process to edit. The
-file **xmlqstat/config/logo.png** is not tracked in git and can be used to
+file **web-app/config/logo.png** is not tracked in git and can be used to
 define a logo to be displayed at the top of each page.
 
 ### Using Cached Grid Engine XML
@@ -56,10 +56,10 @@ accessed, cached SGE data can be used. A script in the **scripts/** directory
 called "xmlqstat-cacher.pl" can perform this function. The cache location is
 defined by how the cluster is named in **config/config.xml**.
 
-Create a directory with "**cache-**" prepended to the cluster name within
-the **xmlqstat** directory (at the same level as where the sitemap.xmap file
-exists). The application will automatically detect the presence of the cache
-directory if this naming and location convention is followed.
+Create a **web-app/cache-{NAME}** directory, where **{NAME}** corresponds to
+the cluster name defined in the **config.xml** file. The application will
+automatically detect the presence of the cache directory, when this naming
+and location convention is followed.
 
 - The xmlqstat-cacher.pl program will create the needed cache files
   "qstat.xml", "qstatf.xml" and "qhost.xml".
@@ -70,12 +70,12 @@ directory if this naming and location convention is followed.
 
 Edit the **scripts/sge-xml-cacher.pl** script to configure the full Unix
 file path to where cached SGE status data will be stored. The data should
-typically be stored within the **xmlqstat/cache/** directory as
-"qstatf.xml". For a multi-cluster view, the file should be stored as
-**xmlqstat/cache/qstatf~NAME.xml** or as **xmlqstat/cache-NAME/qstatf.xml**,
-where *NAME* is the name given to the cluster. This convention should be
-followed, otherwise severe editing of the sitemap.xmap and/or the custom
-HTTPi will be required.
+typically be stored within the **web-app/cache/** directory as "qstatf.xml".
+For a multi-cluster view, the file should be stored as
+**web-app/cache/qstatf~{NAME}.xml** or as
+**web-app/cache-{NAME}/qstatf.xml**, where **{NAME}** is the name given to the
+cluster. This convention should be followed, otherwise severe editing of the
+sitemap.xmap and/or the custom HTTPi will be required.
 
 
 #### Using cached data from qlicserver

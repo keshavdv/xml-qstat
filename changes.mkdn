@@ -20,6 +20,8 @@ sidenav:
 - Changed the cluster text summary to 'report'
 - Provision for a future 'summary' view for 'qstat -f' output.
   Should be similar in functionality to the existing 'qhost' summary.
+- Eliminated /xmlqstat/cluster in favour of simply /xmlqstat/
+- Removed the restriction of needing */xmlqstat* as the resource URI.
 
 ---------------
 ### Release Candidate (2009-11-01)

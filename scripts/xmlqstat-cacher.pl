@@ -14,7 +14,7 @@ my %config = (
     ## Decide where your cached XML files will be stored
     ## or override on the command-line
     ## Set to an empty string to suppress the query and the output.
-    dir     => "/opt/grid/default/site/xml-qstat/xmlqstat/cache",
+    dir     => "/opt/grid/default/site/xml-qstat/web-app/cache",
     qstatf  => "qstatf.xml",
     qstat   => "",
     qhost   => "",
@@ -165,7 +165,21 @@ usage "ERROR: define at least one of 'qhost', 'qstat' or 'qstatf'\n"
 #
 if ( length $config{dir} ) {
     my $dir = $config{dir};
-    -d $dir or mkdir $dir;
+
+    unless ( -d $dir ) {
+        ## only create the cache directory when the parent exists
+        if ( ( my $parent = $dir ) =~ s{/[^/]+$}{} ) {
+            if ( -d $parent ) {
+                mkdir $dir;
+            }
+            else {
+                warn "no parent directory for $dir\n";
+            }
+        }
+        else {
+            mkdir $dir;
+        }
+    }
 
     for (qw( qhost qstat qstatf qlic )) {
         my $file = $config{$_};

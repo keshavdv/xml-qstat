@@ -3,15 +3,20 @@
 
 
 # get GridEngine arch/lib information
-print "GridEngine configuration\n";
-print "Trying to determine the architecture and library requirements\n";
-print "... checking what '$archScript' reports\n";
+print <<"PRINT";
+
+GridEngine configuration
+------------------------
+Trying to determine the architecture and library requirements
+PRINT
+
 
 ( $DEF_SGE_ARCH, $DEF_LIBENV ) = ( '', '' );
 
 if ( $ENV{SGE_ROOT} and -d $ENV{SGE_ROOT} ) {
     my $archScript = "$ENV{SGE_ROOT}/util/arch";
     # use 'arch' script if possible
+    print "... checking what '$archScript' reports\n";
 
     chomp( $DEF_SGE_ARCH = qx{$archScript 2>/dev/null} );
     if ($DEF_SGE_ARCH)
@@ -35,24 +40,23 @@ else {
 }
 
 while (1) {
-    $DEF_SGE_ARCH = &prompt( <<"EOF", $DEF_SGE_ARCH, 1 );
+    $DEF_SGE_ARCH = &prompt( <<"PRINT", $DEF_SGE_ARCH, 1 );
 
 Define the architecture used for the GridEngine commands.
 This should correspond to the value emitted by the \$SGE_ROOT/util/arch
-except that we couldn't seem to find that script.
 
 Hint: the 'arch' value here should allow us to find
 \$SGE_ROOT/bin/<arch>/qstat
 
 Which value should be used for the GridEngine architecture?
-EOF
+PRINT
 
     if ( $DEF_SGE_ARCH eq "undef" or not $DEF_SGE_ARCH ) {
-        print <<"EOF";
+        print <<"PRINT";
 The GridEngine architecture value '$DEF_SGE_ARCH' looks implausible
 Please try again ...
 
-EOF
+PRINT
     }
     else {
         last;
@@ -67,64 +71,76 @@ if ( $DEF_SGE_ARCH =~ /^(lx|sol)/ or $DEF_SGE_ARCH eq "hp11-64" ) {
 }
 else
 {
-    $DEF_LIBENV = &prompt(<<"EOF", 'LD_LIBRARY_PATH', 1);
+    $DEF_LIBENV = &prompt(<<"PRINT", 'LD_LIBRARY_PATH', 1);
 
 Define the name of the dynamic link library environment variable
 for your machine. This is needed to load the GridEngine libraries.
 
 Which environment variable is used for the libraries?
-EOF
+PRINT
 }
 
 
+# get the name of the web application
+$DEF_XMLQSTAT_WEBAPPNAME = &prompt(<<"PRINT", 'xmlqstat', 1);
+
+xml-qstat customization:
+------------------------
+Serve this web application under which resource name:?
+PRINT
+
+$DEF_XMLQSTAT_WEBAPPNAME =~ s{^/+|/+$}{}g;   # no leading/trailing slashes
+$DEF_XMLQSTAT_WEBAPPNAME =~ s{^//+}{/}g;     # double slashes
+
+
 # get xmlqstat root
-$DEF_XMLQSTAT_ROOT = &interprompt(<<"EOF", '~/xml-qstat', 1, \&inter_homedir);
+$DEF_XMLQSTAT_ROOT = &interprompt(<<"PRINT", '~/xml-qstat', 1, \&inter_homedir);
 
 xml-qstat customization:
 ------------------------
 Specify where the xml-qstat root is located.
-The 'xmlqstat' directory under this root will be served by HTTPi
-as the resource '/xmlqstat'.
+The 'web-app' directory under this root will be served by HTTPi
+as the resource '/$DEF_XMLQSTAT_WEBAPPNAME'.
 
 You can use Perl variables for this option (example: \$ENV{'HOME'}/xml-qstat).
 As a shortcut, ~/ in first position will be turned into \$ENV{'HOME'}/,
 which is "$ENV{'HOME'}/".
 
 xml-qstat resource root:?
-EOF
+PRINT
 
 # verify directory plausibility
 for ($DEF_XMLQSTAT_ROOT)
 {
     if (
         -d $_
-        and -d "$_/xmlqstat"
-        and -d "$_/xmlqstat/css"
-        and -d "$_/xmlqstat/xsl"
+        and -d "$_/web-app"
+        and -d "$_/web-app/css"
+        and -d "$_/web-app/xsl"
       )
     {
-        print <<"EOF";
+        print <<"PRINT";
 Okay. The directory '$_'
-Seems to have the correct xml-qstat directory structure.
+Seems to have the correct directory structure.
 
-EOF
+PRINT
     }
     else {
-        print <<"EOF";
+        print <<"PRINT";
 WARNING: The directory '$_'
-Does not appear to contain the correct xml-qstat directory structure!!
+Does not appear to contain the correct directory structure!!
 
-EOF
+PRINT
     }
 }
 
 
-$DEF_XMLQSTAT_TIMEOUT = &prompt(<<"EOF", '10', 1);
+$DEF_XMLQSTAT_TIMEOUT = &prompt(<<"PRINT", '10', 1);
 
 ------------------------
 xml-qstat customization:
 Define the maximum timeout (seconds) when executing GridEngine commands
-EOF
+PRINT
 
 
 1; # loaded ok

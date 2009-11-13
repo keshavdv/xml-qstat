@@ -25,7 +25,7 @@ Extracts np_load_avg information from GridEngine from each queue instances
   to create the configuration file.
 
 Example:
-  ./$Script > ../xmlqstat/config/alarm-threshold.xml
+  ./$Script > ../web-app/config/alarm-threshold.xml
 
 USAGE
 }

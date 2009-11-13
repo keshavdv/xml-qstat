@@ -30,7 +30,7 @@ my %opt;
 getopts( 'h', \%opt ) or usage();
 $opt{h} and usage();
 
-chdir "$Path/../xmlqstat" or die "cannot change dir $!\n";
+chdir "$Path/../web-app" or die "cannot change dir $!\n";
 
 my $mainDir = "";
 

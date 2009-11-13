@@ -93,26 +93,25 @@ Demonic feature only; xinetd/inetd/etc. need not apply.
 # CUSTOMIZE THIS TO MATCH YOUR REQUIREMENTS:
 #
 
-# the base location of the xmlqstat distribution
-# (including the 'xmlqstat/' directory location)
-my $webappPath = "DEF_XMLQSTAT_ROOT/xmlqstat";
+# the physical location of the web-app directory:
+my $webappPath = "DEF_XMLQSTAT_ROOT/web-app";
 
-# timeout (seconds) for system command like qstat -j etc.
+# the resource for the web-app:
+my $webappName = "DEF_XMLQSTAT_WEBAPPNAME" || "xmlqstat";
+
+# timeout (seconds) for system command like qstat -j etc.:
 my $shellCmdTimeout = DEF_XMLQSTAT_TIMEOUT;
 
-# name of the GridEngine architecture
+# name of the GridEngine architecture:
 my $sgeArch = "DEF_SGE_ARCH";
 
-# name of the system library environment,
-# for systems where runpath won't work
+# name of the system library environment, for systems where runpath won't work:
 my $sgeLibEnv = "DEF_LIBENV";
 
 #
 # END OF CUSTOMIZE SETTINGS
 ################################################################################
 ################################################################################
-
-my $webappName = "xmlqstat"; ## the name for the resource
 
 
 ##</xmlqstat>##

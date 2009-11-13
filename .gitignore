@@ -28,18 +28,18 @@
 *.tar.gz
 *.tgz
 
-# ignore the persistent .build tag in the main directory
+# ignore a persistent .build tag in the main directory
 /.build
 
 # ignore cache directories (might be symbolic links)
-/xmlqstat/cache
-/xmlqstat/cache-*
+/web-app/cache
+/web-app/cache-*
 
 # ignore site-specific config files
-/xmlqstat/config/alarm-threshold.xml
+/web-app/config/alarm-threshold.xml
 
 # ignore site-specific image files
-/xmlqstat/config/logo.png
+/web-app/config/logo.png
 
 # ignore misc build directories
 /build-*/

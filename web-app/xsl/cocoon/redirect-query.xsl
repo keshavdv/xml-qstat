@@ -140,7 +140,7 @@
       <!-- use jobinfo cgi script -->
       <!--
           | typically something like
-          | http://<server>:<port>/xmlqstat/jobinfo?request
+          | http://<server>:<port>/<prefixPath>/jobinfo?request
           | the url is expected to handle a missing request
           |   and treat it like '-j *' (show all jobs)
           -->
@@ -158,7 +158,7 @@
     <!--
         | create a qstat query that can be evaluated later via xinclude
         | typically something like
-        | http://<server>:<port>/xmlqstat/redirect.xml/~{sge_cell}/{sge_root}
+        | http://<server>:<port>/<prefixPath>/redirect.xml/~{sge_cell}/{sge_root}
         |
         | only add ~cell/root if it not being redirected to an external source
         -->

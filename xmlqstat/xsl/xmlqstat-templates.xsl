@@ -18,7 +18,9 @@
 <xsl:template name="cgi-params">
   <xsl:param name="clusterName"/>
 
-  <xsl:variable name="configFile" select="document('../config/config.xml')"/>
+  <xsl:variable
+      name="configFile"
+      select="document('../config/config.xml')/config" />
 
   <!-- treat a bad clusterName as 'default' -->
   <xsl:variable name="name">
@@ -34,11 +36,11 @@
 
   <xsl:variable
     name="clusterNode"
-    select="$configFile/config/clusters/cluster[@name=$name]" />
+    select="$configFile/clusters/cluster[@name=$name]" />
 
   <xsl:variable
     name="defaultNode"
-    select="$configFile/config/clusters/default" />
+    select="$configFile/clusters/default" />
 
 
   <!-- the cell, a missing value is treated as 'default' -->
@@ -83,7 +85,7 @@
       <xsl:value-of select="$value" />
     </xsl:when>
     <xsl:otherwise>
-      <xsl:text>/bin/false</xsl:text><xsl:value-of select="$name" />
+      <xsl:text>/bin/false</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>

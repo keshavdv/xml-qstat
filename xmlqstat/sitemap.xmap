@@ -747,7 +747,7 @@
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
-          renderMode="full"
+          renderMode="queues"
           menuMode="qstatf"
           urlExt=".xml"
       '/>
@@ -828,7 +828,7 @@
     <map:transform src="xsl/qstatf-xhtml.xsl">
       <map:parameter name="clusterName"  value="{1}" />
       <map:parameter name="timestamp"    value="{date:yyyy-MM-dd_HH:mm:ss}"/>
-      <map:parameter name="renderMode"   value="full"/>
+      <map:parameter name="renderMode"   value="queues"/>
       <map:parameter name="menuMode"     value="qstatf"/>
     </map:transform>
     <map:serialize type="xhtml"/>

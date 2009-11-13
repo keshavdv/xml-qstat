@@ -13,7 +13,7 @@
    |     "qstat -u * -xml -r -f -explain aAcE"
    | to produce
    |   1) a list of active and pending jobs (the default)
-   |   2) a detailed list of the queue instances (renderMode = full)
+   |   2) a detailed list of the queue instances (renderMode = queues)
    |   3) a queue report (renderMode = report)
    -->
 
@@ -75,10 +75,21 @@
 <!-- configuration parameters -->
 <xsl:variable
     name="configFile"
-    select="document('../config/config.xml')" />
+    select="document('../config/config.xml')/config" />
 <xsl:variable
     name="alarmFile"
     select="document('../config/alarm-threshold.xml')" />
+<xsl:variable name="sortByQueue">
+  <xsl:choose>
+  <xsl:when test="$configFile/sortByQueue/@enabled = 'true'">
+    <xsl:text>true</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>false</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
+
 
 <!-- this doesn't seem to be working anyhow -->
 <xsl:variable name="enableResourceQueries"/>
@@ -134,7 +145,7 @@
 &newline;
 
 <xsl:choose>
-<xsl:when test="$renderMode='full'">
+<xsl:when test="$renderMode='queues'">
   <link rel="icon" type="image/png" href="css/screen/icons/shape_align_left.png"/>
   <title> queue instances
   <xsl:if test="$clusterName"> @<xsl:value-of select="$clusterName"/></xsl:if>
@@ -353,7 +364,7 @@
 </xsl:if>
 
 <xsl:choose>
-<xsl:when test="$renderMode='full'">
+<xsl:when test="$renderMode='queues'">
   &newline;
   <xsl:comment> Queue Instance Information </xsl:comment>
   &newline;
@@ -801,139 +812,155 @@
       <th>system</th>
       <th>status</th>
     </tr>
-  <xsl:for-each select="./Queue-List">
-    <!-- for unsorted queue instances: comment-out this xsl:sort -->
-    <xsl:sort select="name"/>
-    <xsl:variable name="qinstance" select="name"/>
-    <xsl:variable name="qname"     select="substring-before(name,'@')"/>
 
-    <tr>
-      <!-- queue -->
-      <td>
-        <xsl:value-of select="$qname"/>
-      </td>
-
-      <!-- instance: unqualified host -->
-      <td>
-        <xsl:call-template name="unqualifiedHost">
-          <xsl:with-param name="host" select="substring-after(name,'@')"/>
-        </xsl:call-template>
-      </td>
-
-      <!-- queue type -->
-      <td>
-        <xsl:value-of select="qtype"/>
-      </td>
-
-      <!-- usage -->
-      <!-- NB: slots_total reported actually includes slots_used -->
-      <xsl:variable name="valueUsed0"  select="slots_used"/>
-      <xsl:variable name="valueTotal0" select="slots_total - slots_used"/>
-      <td width="100px" align="left">
-        <xsl:if test="$valueUsed0 &gt; -1">
-          <xsl:call-template name="progressBar">
-            <xsl:with-param name="label"   select="concat($valueUsed0, '/',
-$valueTotal0)" />
-            <xsl:with-param name="percent" select="($valueUsed0 div
-$valueTotal0)*100"/>
-          </xsl:call-template>
-        </xsl:if>
-      </td>
-
-      <!-- load -->
-      <!-- CPU normalized load average and (optional) graph load vs alarm threshold -->
-      <xsl:choose>
-      <xsl:when test="resource[@name='load_avg'] and resource[@name='num_proc']">
-        <!-- load_avg and num_proc available: calculate np_load_avg -->
-        <xsl:variable name="valueUsed"
-            select="format-number(
-                (resource[@name='load_avg'] div resource[@name='num_proc']),
-                '##0.00')
-            "
-        />
-
-        <!-- get alarm threshold for this queue or queue instance -->
-        <xsl:variable
-            name="qiThresh"
-            select="$alarmFile/alarmThreshold/qi[@name=$qinstance]/@np_load_avg"
-        />
-        <xsl:variable
-            name="qThresh"
-            select="$alarmFile/alarmThreshold/q[@name=$qname]/@np_load_avg"
-        />
-
-        <xsl:variable name="valueTotal">
-          <xsl:choose>
-          <xsl:when test="$qiThresh"><xsl:value-of select="$qiThresh"/></xsl:when>
-          <xsl:when test="$qThresh"><xsl:value-of select="$qThresh"/></xsl:when>
-          <xsl:otherwise>0</xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-
-        <xsl:choose>
-        <xsl:when test="$valueTotal &gt; 0">
-          <xsl:variable name="alarmPercent" select="($valueUsed div $valueTotal)*100"/>
-
-          <td width="100px" align="center">
-            <xsl:choose>
-            <xsl:when test="$alarmPercent &gt;= 100">
-            <xsl:call-template name="progressBar">
-              <xsl:with-param name="title"   select="concat('threshold=',$valueTotal)" />
-              <xsl:with-param name="label"   select="$valueUsed" />
-              <xsl:with-param name="percent" select="100"/>
-              <xsl:with-param name="class"   select="'alarmBar'"/>
-            </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-            <xsl:call-template name="progressBar">
-              <xsl:with-param name="title"   select="concat('threshold=',$valueTotal)" />
-              <xsl:with-param name="label"   select="$valueUsed" />
-              <xsl:with-param name="percent" select="$alarmPercent"/>
-            </xsl:call-template>
-            </xsl:otherwise>
-            </xsl:choose>
-          </td>
-
-        </xsl:when>
-        <xsl:otherwise>
-          <!-- no threshold for this queue instance -->
-          <td width="100px" align="center"><xsl:value-of select="$valueUsed"/></td>
-        </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- missing load_avg or num_proc -->
-        <td class="emphasisCode" align="center">unknown</td>
-      </xsl:otherwise>
-      </xsl:choose>
-
-
-      <!-- arch -->
-      <td>
-        <xsl:value-of select="arch"/>
-      </td>
-
-      <!-- state -->
-      <xsl:variable name="state" select="state"/>
-      <td>
-        <xsl:call-template name="queue-state-icon">
-          <xsl:with-param name="state" select="$state"/>
-        </xsl:call-template>
-        &space;
-        <xsl:call-template name="queue-state-explain">
-          <xsl:with-param name="state" select="$state"/>
-        </xsl:call-template>
-      </td>
-
-    </tr>
-
-    <!--
-    <xsl:template match="Queue-List" mode="sortByQueue">
-    -->
-  </xsl:for-each>
+    <!-- render queue instances sorted/unsorted -->
+    <xsl:choose>
+    <xsl:when test="$sortByQueue = 'true'">
+      <xsl:for-each select="./Queue-List">
+        <xsl:sort select="name"/>
+        <xsl:apply-templates select="." mode="queues"/>
+      </xsl:for-each>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:for-each select="./Queue-List">
+        <xsl:apply-templates select="." mode="queues"/>
+      </xsl:for-each>
+    </xsl:otherwise>
+    </xsl:choose>
   </table>
   </div>
 </xsl:template>
+
+
+<!--
+  output a row for this queue instance
+-->
+<xsl:template match="//Queue-List" mode="queues">
+  <xsl:variable name="qinstance" select="name"/>
+  <xsl:variable name="qname"     select="substring-before(name,'@')"/>
+
+  <tr>
+    <!-- queue -->
+    <td>
+      <xsl:value-of select="$qname"/>
+    </td>
+
+    <!-- instance: unqualified host -->
+    <td>
+      <xsl:call-template name="unqualifiedHost">
+        <xsl:with-param name="host" select="substring-after(name,'@')"/>
+      </xsl:call-template>
+    </td>
+
+    <!-- queue type -->
+    <td>
+      <xsl:value-of select="qtype"/>
+    </td>
+
+    <!-- usage -->
+    <!-- NB: slots_total used to include slots_used, but seems to be okay now -->
+    <xsl:variable name="valueUsed0"  select="slots_used"/>
+    <xsl:variable name="valueTotal0" select="slots_total"/>
+    <td width="100px" align="left">
+      <xsl:if test="$valueUsed0 &gt; -1">
+        <xsl:call-template name="progressBar">
+          <xsl:with-param name="label"   select="concat($valueUsed0, '/',
+$valueTotal0)" />
+          <xsl:with-param name="percent" select="($valueUsed0 div
+$valueTotal0)*100"/>
+        </xsl:call-template>
+      </xsl:if>
+    </td>
+
+    <!-- load -->
+    <!-- CPU normalized load average and (optional) graph load vs alarm threshold -->
+    <xsl:choose>
+    <xsl:when test="resource[@name='load_avg'] and resource[@name='num_proc']">
+      <!-- load_avg and num_proc available: calculate np_load_avg -->
+      <xsl:variable name="valueUsed"
+          select="format-number(
+              (resource[@name='load_avg'] div resource[@name='num_proc']),
+              '##0.00')
+          "
+      />
+
+      <!-- get alarm threshold for this queue or queue instance -->
+      <xsl:variable
+          name="qiThresh"
+          select="$alarmFile/alarmThreshold/qi[@name=$qinstance]/@np_load_avg"
+      />
+      <xsl:variable
+          name="qThresh"
+          select="$alarmFile/alarmThreshold/q[@name=$qname]/@np_load_avg"
+      />
+
+      <xsl:variable name="valueTotal">
+        <xsl:choose>
+        <xsl:when test="$qiThresh"><xsl:value-of select="$qiThresh"/></xsl:when>
+        <xsl:when test="$qThresh"><xsl:value-of select="$qThresh"/></xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+
+      <xsl:choose>
+      <xsl:when test="$valueTotal &gt; 0">
+        <xsl:variable name="alarmPercent" select="($valueUsed div $valueTotal)*100"/>
+
+        <td width="100px" align="center">
+          <xsl:choose>
+          <xsl:when test="$alarmPercent &gt;= 100">
+          <xsl:call-template name="progressBar">
+            <xsl:with-param name="title"   select="concat('threshold=',$valueTotal)" />
+            <xsl:with-param name="label"   select="$valueUsed" />
+            <xsl:with-param name="percent" select="100"/>
+            <xsl:with-param name="class"   select="'alarmBar'"/>
+          </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+          <xsl:call-template name="progressBar">
+            <xsl:with-param name="title"   select="concat('threshold=',$valueTotal)" />
+            <xsl:with-param name="label"   select="$valueUsed" />
+            <xsl:with-param name="percent" select="$alarmPercent"/>
+          </xsl:call-template>
+          </xsl:otherwise>
+          </xsl:choose>
+        </td>
+
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- no threshold for this queue instance -->
+        <td width="100px" align="center"><xsl:value-of select="$valueUsed"/></td>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- missing load_avg or num_proc -->
+      <td class="emphasisCode" align="center">unknown</td>
+    </xsl:otherwise>
+    </xsl:choose>
+
+
+    <!-- arch -->
+    <td>
+      <xsl:value-of select="arch"/>
+    </td>
+
+    <!-- state -->
+    <xsl:variable name="state" select="state"/>
+    <td>
+      <xsl:call-template name="queue-state-icon">
+        <xsl:with-param name="state" select="$state"/>
+      </xsl:call-template>
+      &space;
+      <xsl:call-template name="queue-state-explain">
+        <xsl:with-param name="state" select="$state"/>
+      </xsl:call-template>
+    </td>
+
+  </tr>
+
+</xsl:template>
+
 
 
 

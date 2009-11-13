@@ -11,6 +11,16 @@
 <qlicserver enabled="true"/>
 
 <!--
+    If the 'sortByQueue' entity exists and has the attribute enabled="true",
+    the queue instances in the 'qstat -f' rendering will be sorted by
+    the queue name.
+    Other values (or a missing entry) are interpreted as enabled="false"
+    meaning the values are used as they come from the 'qstat -f' output,
+    which normally corresponds to the seqno.
+-->
+<sortByQueue enabled="false"/>
+
+<!--
     specify an external program for querying the jobinfo
     - the jobId, etc. are passed via the queryString
 -->

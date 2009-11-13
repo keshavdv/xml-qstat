@@ -171,7 +171,7 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/xmlqstat/qlicserver~default.xml"
+  <!-- url: "/<webapp>/qlicserver~default.xml"
        resources for the default cluster
        display the resource usage/availability (garnered by qlicserver)
        -->
@@ -194,7 +194,7 @@
     </map:select>
   </map:match>
 
-  <!-- url: "/xmlqstat/qlicserver~{clusterName}.xml"
+  <!-- url: "/<webapp>/qlicserver~{clusterName}.xml"
        resources for a particular cluster name
        display the resource usage/availability (garnered by qlicserver)
        -->
@@ -239,7 +239,7 @@
      |  be used that interpretes these values correctly.
      -->
 
-  <!-- url: "/xmlqstat/qstatf~default.xml"
+  <!-- url: "/<webapp>/qstatf~default.xml"
        qstatf w/o cluster name
        See notes above
        -->
@@ -250,7 +250,7 @@
     </map:when>
     <map:otherwise>
       <!--
-         | fetch from "/xmlqstat/qstatf.xml/~{sge_cell}/{sge_root}" via xinclude
+         | fetch from "/<webapp>/qstatf.xml/~{sge_cell}/{sge_root}" via xinclude
          | (Note: the input xml is irrelevant)
          -->
       <map:generate  type="request" />
@@ -258,7 +258,7 @@
         <map:parameter name="clusterName" value="default" />
         <map:parameter name="resource"    value="qstatf.xml" />
         <map:parameter name="baseURL"
-            value="http://{request:serverName}:{request:serverPort}/xmlqstat/"
+            value="http://{request:serverName}:{request:serverPort}/{request:sitemapURIPrefix}"
             />
       </map:transform>
       <map:transform type="xinclude"/>
@@ -268,7 +268,7 @@
   </map:match>
 
 
-  <!-- url: "/xmlqstat/qstatf~{clusterName}.xml"
+  <!-- url: "/<webapp>/qstatf~{clusterName}.xml"
        qstatf for a particular cluster name
        See notes above
        -->
@@ -282,7 +282,7 @@
     </map:when>
     <map:otherwise>
       <!--
-         | fetch from "/xmlqstat/qstatf.xml/~{sge_cell}/{sge_root}" via xinclude
+         | fetch from "/<webapp>/qstatf.xml/~{sge_cell}/{sge_root}" via xinclude
          | (Note: the input xml is irrelevant)
          -->
       <map:generate  type="request" />
@@ -290,7 +290,7 @@
         <map:parameter name="clusterName" value="{1}" />
         <map:parameter name="resource"    value="qstatf.xml" />
         <map:parameter name="baseURL"
-            value="http://{request:serverName}:{request:serverPort}/xmlqstat/"
+            value="http://{request:serverName}:{request:serverPort}/{request:sitemapURIPrefix}"
             />
       </map:transform>
       <map:transform type="xinclude"/>
@@ -299,7 +299,7 @@
     <map:serialize/>
   </map:match>
 
-  <!-- url: "/xmlqstat/qstatf.xml/~{sge_cell}/{sge_root}"
+  <!-- url: "/<webapp>/qstatf.xml/~{sge_cell}/{sge_root}"
        qstatf for a particular SGE_CELL, SGE_ROOT combination
        -->
   <map:match pattern="qstatf.xml/~*/**">
@@ -310,12 +310,12 @@
   </map:match>
 
 
-  <!-- url: "/xmlqstat/qstatj~{clusterName}.xml?jobId"
+  <!-- url: "/<webapp>/qstatj~{clusterName}.xml?jobId"
      | qstatj for a particular cluster name
      |
      | use configured jobinfo cgi if possible or
      | redirect query to CommandGenerator for 'qstatj'
-     | redirect to "/xmlqstat/qstatj.xml/~{sge_cell}/{sge_root}?param"
+     | redirect to "/<webapp>/qstatj.xml/~{sge_cell}/{sge_root}?param"
      -->
   <map:match pattern="qstatj~*.xml">
     <map:generate  type="request"/>
@@ -325,14 +325,14 @@
       <map:parameter name="request"  value="{request:queryString}" />
       <map:parameter name="resource" value="qstatj.xml" />
       <map:parameter name="baseURL"
-          value="http://{request:serverName}:{request:serverPort}/xmlqstat/"
+          value="http://{request:serverName}:{request:serverPort}/{request:sitemapURIPrefix}"
           />
     </map:transform>
     <map:transform type="xinclude"/>
     <map:serialize/>
   </map:match>
 
-  <!-- url: "/xmlqstat/qstatj.xml/~{sge_cell}/{sge_root}?jobId"
+  <!-- url: "/<webapp>/qstatj.xml/~{sge_cell}/{sge_root}?jobId"
        qstatj for a particular SGE_CELL, SGE_ROOT combination
        -->
   <map:match pattern="qstatj.xml/~*/**">
@@ -343,19 +343,17 @@
   </map:match>
 
 
-  <!--  MAIN ENTRY POINT -->
-
-  <!-- Catch people going to http://<server>/xmlqstat/
-       Redirect to 'cluster'
-       -->
-  <map:match pattern="">
-    <map:redirect-to uri="cluster" />
+  <!-- old entry point -->
+  <map:match pattern="cluster">
+    <map:redirect-to uri="" />
   </map:match>
 
-  <!-- url: "/xmlqstat/cluster"
+  <!--  MAIN ENTRY POINT -->
+
+  <!-- url: "/<webapp>/"
        index of clusters
        -->
-  <map:match pattern="cluster">
+  <map:match pattern="">
     <map:generate  src="cocoon:/cache-files" />
     <map:transform src="xsl/index-xhtml.xsl">
     <!-- server information -->
@@ -366,7 +364,7 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/xmlqstat/cache"
+  <!-- url: "/<webapp>/cache"
        xml listing of potential cache files
        -->
   <map:match pattern="cache">
@@ -375,7 +373,7 @@
   </map:match>
 
 
-  <!-- url: "/xmlqstat/sitemap"
+  <!-- url: "/<webapp>/sitemap"
        view this sitemap
        -->
   <map:match pattern="sitemap.xmap">
@@ -383,7 +381,7 @@
     <map:serialize/>
   </map:match>
 
-  <!-- url: "/xmlqstat/test"
+  <!-- url: "/<webapp>/test"
        misc browser/javascript tests
        apply xslt to any xml junk
        -->
@@ -424,7 +422,7 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- Catch people going to http://<server>/xmlqstat/feed/  -->
+  <!-- Catch people going to http://<server>/<webapp>/feed/  -->
   <map:match pattern="feed/">
     <map:redirect-to uri="overview"/>
   </map:match>
@@ -438,7 +436,7 @@
     <map:transform src="xsl/feed-atom-{1}.xsl">
       <map:parameter name="timestamp" value="{date:yyyy-MM-dd'T'HH:mm:ssZ}"/>
       <map:parameter name="baseURL"
-          value="http://{request:serverName}:{request:serverPort}/xmlqstat/"
+          value="http://{request:serverName}:{request:serverPort}/{request:sitemapURIPrefix}"
           />
     </map:transform>
     <map:serialize type="atom-xml"/>
@@ -449,14 +447,14 @@
 
 <map:pipeline>
 
-  <!-- Catch trailing slash "/xmlqstat/cluster/" -->
+  <!-- Catch trailing slash "/<webapp>/cluster/" -->
   <map:match pattern="cluster/">
     <map:redirect-to uri="../cluster"/>
   </map:match>
 
-  <!-- Redirect "/xmlqstat/cluster/{clusterName}"
-            and "/xmlqstat/cluster/{clusterName}/"
-       to "/xmlqstat/cluster/{clusterName}/jobs"
+  <!-- Redirect "/<webapp>/cluster/{clusterName}"
+            and "/<webapp>/cluster/{clusterName}/"
+       to "/<webapp>/cluster/{clusterName}/jobs"
        -->
   <map:match pattern="cluster/*">
     <map:redirect-to uri="{1}/jobs"/>
@@ -466,7 +464,8 @@
     <map:redirect-to uri="jobs"/>
   </map:match>
 
-  <!-- url: "/xmlqstat/cluster/{clusterName}/cache"
+  <!-- url: "/<webapp>/cluster/{clusterName}/cache"
+       url: "/<webapp>/cluster/default/cache"
        list cache files
        -->
   <map:match pattern="cluster/default/cache">
@@ -487,9 +486,6 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/xmlqstat/cluster/{clusterName}/cache"
-       list cache files
-       -->
   <map:match pattern="cluster/*/cache">
     <map:select type="resource-exists">
     <map:when test="cache-{1}">
@@ -508,7 +504,7 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/xmlqstat/cluster/{clusterName}/qstatj.xml?jobId"
+  <!-- url: "/<webapp>/cluster/{clusterName}/qstatj.xml?jobId"
        generate job details via second webserver (handles empty query strings)
        -->
   <map:match pattern="cluster/*/qstatj.xml">
@@ -585,7 +581,7 @@
   </map:match>
 
 
-  <!-- url: "/xmlqstat/cluster/{clusterName}/*.xml"
+  <!-- url: "/<webapp>/cluster/{clusterName}/*.xml"
        view cached xml files directly
        -->
   <map:match pattern="cluster/default/*.xml">
@@ -600,7 +596,7 @@
     <map:serialize/>
   </map:match>
 
-  <!-- url: "/xmlqstat/cluster/{clusterName}/*.xml"
+  <!-- url: "/<webapp>/cluster/{clusterName}/*.xml"
        view cached xml files directly
        -->
   <map:match pattern="cluster/*/*.xml">
@@ -619,7 +615,7 @@
   </map:match>
 
 
-  <!-- url: "/xmlqstat/cluster/{clusterName}/jobs"
+  <!-- url: "/<webapp>/cluster/{clusterName}/jobs"
        display running and pending jobs, optionally selected by user
        -->
   <map:match pattern="cluster/*/jobs">
@@ -632,7 +628,7 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/xmlqstat/cluster/{clusterName}/queues?renderMode"
+  <!-- url: "/<webapp>/cluster/{clusterName}/queues?renderMode"
        display all the queue instances or just a summary
        -->
   <map:match pattern="cluster/*/queues">
@@ -645,14 +641,14 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- redirect: "/xmlqstat/cluster/{clusterName}/summary"
+  <!-- redirect: "/<webapp>/cluster/{clusterName}/summary"
        to queues?summary
        -->
   <map:match pattern="cluster/*/summary">
     <map:redirect-to uri="queues?summary"/>
   </map:match>
 
-  <!-- url: "/xmlqstat/cluster/{clusterName}/resources"
+  <!-- url: "/<webapp>/cluster/{clusterName}/resources"
        display the resource usage/availability (garnered by qlicserver)
        -->
   <map:match pattern="cluster/*/resources">
@@ -664,7 +660,7 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/xmlqstat/cluster/{clusterName}/jobinfo?jobNumber"
+  <!-- url: "/<webapp>/cluster/{clusterName}/jobinfo?jobNumber"
        generate job details via second webserver (handles empty query strings)
        -->
   <map:match pattern="cluster/*/jobinfo">
@@ -678,11 +674,11 @@
 
   <!--
      | list directory contents:
-     | "/xmlqstat/config"
-     | "/xmlqstat/xsl"
-     | "/xmlqstat/xsl"
+     | "/<webapp>/config"
+     | "/<webapp>/xsl"
+     | "/<webapp>/xsl"
      -->
-  <map:match pattern="^(config|xsl|xml)$" type="regexp">
+  <map:match pattern="^(config|xsl)$" type="regexp">
     <map:generate type="directory"  src="{1}">
       <map:parameter name="depth"   value="1"/>
       <map:parameter name="include" value="\.(png|xml|xsl)$"/>
@@ -691,8 +687,8 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- client-side XSLT for cluster -->
-  <map:match pattern="cluster.xml">
+  <!-- client-side XSLT for index -->
+  <map:match pattern="^(index.)?xml$" type="regexp">
     <map:generate  src="cocoon:/cache-files" />
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <!-- server information -->
@@ -792,7 +788,7 @@
   </map:match>
 
 
-  <!-- url: "/xmlqstat/jobs~{clusterName}?user"
+  <!-- url: "/<webapp>/jobs~{clusterName}?user"
        display running and pending jobs, optionally selected by user
        data gathered from "qstat -f", rendered with xmlqstat navigation
        -->
@@ -808,7 +804,7 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/xmlqstat/jobinfo~{clusterName}?jobId"
+  <!-- url: "/<webapp>/jobinfo~{clusterName}?jobId"
        job details rendered with xmlqstat navigation
        -->
   <map:match pattern="jobinfo~*">
@@ -821,7 +817,7 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/xmlqstat/queues~{clusterName}"
+  <!-- url: "/<webapp>/queues~{clusterName}"
        display all the queue instances
        data gathered from "qstat -f", rendered with xmlqstat navigation
        -->
@@ -840,7 +836,7 @@
     <map:redirect-to uri="resources~default" />
   </map:match>
 
-  <!-- url: "/xmlqstat/cluster/{clusterName}/resources"
+  <!-- url: "/<webapp>/cluster/{clusterName}/resources"
        display the resource usage/availability (garnered by qlicserver)
        -->
   <map:match pattern="resources~*">
@@ -853,7 +849,7 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/xmlqstat/report~{clusterName}"
+  <!-- url: "/<webapp>/report~{clusterName}"
        a very terse report of the queue status for {clusterName}
        data gathered from "qstat -f", rendered with xmlqstat navigation
        -->

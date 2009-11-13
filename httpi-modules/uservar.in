@@ -94,7 +94,8 @@ Demonic feature only; xinetd/inetd/etc. need not apply.
 #
 
 # the base location of the xmlqstat distribution
-my $resourceRoot = "DEF_XMLQSTAT_ROOT";
+# (including the 'xmlqstat/' directory location)
+my $webappPath = "DEF_XMLQSTAT_ROOT/xmlqstat";
 
 # timeout (seconds) for system command like qstat -j etc.
 my $shellCmdTimeout = DEF_XMLQSTAT_TIMEOUT;
@@ -110,5 +111,8 @@ my $sgeLibEnv = "DEF_LIBENV";
 # END OF CUSTOMIZE SETTINGS
 ################################################################################
 ################################################################################
+
+my $webappName = "xmlqstat"; ## the name for the resource
+
 
 ##</xmlqstat>##

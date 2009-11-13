@@ -851,16 +851,16 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/xmlqstat/summary~{clusterName}"
-       a very terse summary of the queue status for {clusterName}
+  <!-- url: "/xmlqstat/report~{clusterName}"
+       a very terse report of the queue status for {clusterName}
        data gathered from "qstat -f", rendered with xmlqstat navigation
        -->
-  <map:match pattern="summary~*">
+  <map:match pattern="report~*">
     <map:generate  src="cocoon:/qstatf~{1}.xml" />
     <map:transform src="xsl/qstatf-xhtml.xsl">
       <map:parameter name="clusterName"  value="{1}" />
       <map:parameter name="timestamp"    value="{date:yyyy-MM-dd_HH:mm:ss}"/>
-      <map:parameter name="renderMode"   value="summary"/>
+      <map:parameter name="renderMode"   value="report"/>
       <map:parameter name="menuMode"     value="qstatf"/>
     </map:transform>
     <map:serialize type="xhtml"/>
@@ -880,8 +880,8 @@
     <map:redirect-to uri="queues~default" />
   </map:match>
 
-  <map:match pattern="summary">
-    <map:redirect-to uri="summary~default" />
+  <map:match pattern="report">
+    <map:redirect-to uri="report~default" />
   </map:match>
 
   <map:match pattern="resources">

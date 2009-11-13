@@ -287,13 +287,13 @@
 
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
-      <xsl:attribute name="title">cluster summary</xsl:attribute>
-      <xsl:attribute name="href">summary<xsl:value-of select="$clusterSuffix"/>
+      <xsl:attribute name="title">cluster report</xsl:attribute>
+      <xsl:attribute name="href">report<xsl:value-of select="$clusterSuffix"/>
         <xsl:value-of select="$urlExt"/>
       </xsl:attribute>
       <img
-        src="css/screen/icons/sum.png"
-        alt="[cluster summary]"
+        src="css/screen/icons/report.png"
+        alt="[cluster report]"
       />
     </xsl:element>
 

@@ -14,7 +14,7 @@
    | to produce
    |   1) a list of active and pending jobs (the default)
    |   2) a detailed list of the queue instances (renderMode = full)
-   |   3) a queue summary (renderMode = summary)
+   |   3) a queue report (renderMode = report)
    -->
 
 <!--
@@ -140,9 +140,9 @@
   <xsl:if test="$clusterName"> @<xsl:value-of select="$clusterName"/></xsl:if>
   </title>
 </xsl:when>
-<xsl:when test="$renderMode='summary'">
-  <link rel="icon" type="image/png" href="css/screen/icons/sum.png"/>
-  <title> cluster summary
+<xsl:when test="$renderMode='report'">
+  <link rel="icon" type="image/png" href="css/screen/icons/report.png"/>
+  <title> cluster report
   <xsl:if test="$clusterName"> @<xsl:value-of select="$clusterName"/></xsl:if>
   </title>
 </xsl:when>
@@ -407,16 +407,16 @@
   </div>
   </blockquote>
 </xsl:when>
-<xsl:when test="$renderMode='summary'">
+<xsl:when test="$renderMode='report'">
   &newline;
-  <xsl:comment> Cluster Summary </xsl:comment>
+  <xsl:comment> Cluster Report </xsl:comment>
   &newline;
-  <!-- cluster summary: -->
+  <!-- cluster report: -->
   <blockquote>
   <table class="listing" width="80%">
     <tr valign="middle">
       <td>
-        <div class="tableCaption">GridEngine Cluster Summary</div>
+        <div class="tableCaption">GridEngine Cluster Report</div>
       </td>
     </tr>
   </table>
@@ -676,7 +676,7 @@
           <xsl:variable name="firstNode" select="generate-id($allNodes[1])"/>
 
           <xsl:if test="$thisNode = $firstNode">
-            <xsl:apply-templates select="." mode="summary"/>
+            <xsl:apply-templates select="." mode="report"/>
           </xsl:if>
         </xsl:for-each>
       </table>
@@ -1045,7 +1045,7 @@ $valueTotal0)*100"/>
   &space;
 </xsl:template>
 
-<xsl:template match="Queue-List/job_list" mode="summary">
+<xsl:template match="Queue-List/job_list" mode="report">
 <xsl:if test="not(string-length($filterByUser)) or JB_owner=$filterByUser">
 
   <xsl:variable name="jobId"  select="JB_job_number" />

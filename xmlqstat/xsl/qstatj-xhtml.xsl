@@ -118,7 +118,7 @@
 <!-- Topomost Logo Div and Top Menu Bar -->
 <xsl:call-template name="topLogo"/>
 <xsl:choose>
-<xsl:when test="$menuMode='qstatf'">
+<xsl:when test="$menuMode = 'qstatf'">
   <xsl:call-template name="qstatfMenu">
     <xsl:with-param name="clusterSuffix" select="$clusterSuffix"/>
     <xsl:with-param name="jobinfo" select="'less'"/>
@@ -353,7 +353,7 @@
 >
   <xsl:variable name="jobs-href">
     <xsl:text>jobs</xsl:text>
-    <xsl:if test="$menuMode='qstatf'">
+    <xsl:if test="$menuMode = 'qstatf'">
       <xsl:value-of select="$clusterSuffix"/>
     </xsl:if>
     <xsl:if test="string-length($urlExt)">

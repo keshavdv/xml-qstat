@@ -89,7 +89,7 @@
 <!-- Topomost Logo Div and Top Menu Bar -->
 <xsl:call-template name="topLogo"/>
 <xsl:choose>
-<xsl:when test="$menuMode='qstatf'">
+<xsl:when test="$menuMode = 'qstatf'">
   <xsl:call-template name="qstatfMenu">
     <xsl:with-param name="clusterSuffix" select="$clusterSuffix"/>
     <xsl:with-param name="urlExt" select="$urlExt"/>

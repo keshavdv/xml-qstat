@@ -531,6 +531,17 @@
       />
     </xsl:element>
 
+    <!-- queues?summary -->
+    &space;
+    <xsl:element name="a">
+      <xsl:attribute name="title">queue summary</xsl:attribute>
+      <xsl:attribute name="href">queues~<xsl:value-of select="$name"/>
+        <xsl:value-of select="$urlExt"/>?summary</xsl:attribute>
+      <img border="0"
+          src="css/screen/icons/sum.png"
+          alt="[queue instances]"
+      />
+    </xsl:element>
 
     <!-- queues?free -->
     &space;

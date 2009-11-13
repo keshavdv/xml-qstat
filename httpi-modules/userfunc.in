@@ -1011,11 +1011,11 @@ CONTENT
             }
 
             #
-            # queues : with optional renderMode (free|warn)
+            # queues : with optional renderMode (summary|free|warn)
             #
             if ( $function eq "queues" ) {
                 ( $xsltParam{renderMode} ) =
-                  grep { m{^(free|warn)$} } keys %switch;
+                  grep { m{^(summary|free|warn)$} } keys %switch;
 
                 # default is "queues", but state it explicitly anyhow
                 $xsltParam{renderMode} ||= "queues";

@@ -16,6 +16,7 @@
    |   - a list of queue instances (renderMode = queues) [default]
    |   - a list of free queues (renderMode = free)
    |   - a list of queues with warnings (renderMode = warn)
+   |   - a queue summary (renderMode = summary)
    |   - a cluster text report (renderMode = report)
    -->
 
@@ -147,25 +148,31 @@
 &newline;
 
 <xsl:choose>
-<xsl:when test="$renderMode='jobs'">
+<xsl:when test="$renderMode = 'jobs'">
   <link rel="icon" type="image/png" href="css/screen/icons/lorry.png"/>
   <title> jobs
   <xsl:if test="$clusterName"> @<xsl:value-of select="$clusterName"/></xsl:if>
   </title>
 </xsl:when>
-<xsl:when test="$renderMode='free'">
+<xsl:when test="$renderMode = 'summary'">
+  <link rel="icon" type="image/png" href="css/screen/icons/sum.png"/>
+  <title> queue summary
+  <xsl:if test="$clusterName"> @<xsl:value-of select="$clusterName"/></xsl:if>
+  </title>
+</xsl:when>
+<xsl:when test="$renderMode = 'free'">
   <link rel="icon" type="image/png" href="css/screen/icons/tick.png"/>
   <title> queues free
   <xsl:if test="$clusterName"> @<xsl:value-of select="$clusterName"/></xsl:if>
   </title>
 </xsl:when>
-<xsl:when test="$renderMode='warn'">
+<xsl:when test="$renderMode = 'warn'">
   <link rel="icon" type="image/png" href="css/screen/icons/error.png"/>
   <title> queue warnings
   <xsl:if test="$clusterName"> @<xsl:value-of select="$clusterName"/></xsl:if>
   </title>
 </xsl:when>
-<xsl:when test="$renderMode='report'">
+<xsl:when test="$renderMode = 'report'">
   <link rel="icon" type="image/png" href="css/screen/icons/report.png"/>
   <title> cluster report
   <xsl:if test="$clusterName"> @<xsl:value-of select="$clusterName"/></xsl:if>
@@ -353,7 +360,7 @@
 <!-- Topomost Logo Div and Top Menu Bar -->
 <xsl:call-template name="topLogo"/>
 <xsl:choose>
-<xsl:when test="$menuMode='qstatf'">
+<xsl:when test="$menuMode = 'qstatf'">
   <xsl:call-template name="qstatfMenu">
     <xsl:with-param name="clusterSuffix" select="$clusterSuffix"/>
     <xsl:with-param name="urlExt" select="$urlExt"/>
@@ -378,7 +385,7 @@
 </xsl:if>
 
 <xsl:choose>
-<xsl:when test="$renderMode='jobs'">
+<xsl:when test="$renderMode = 'jobs'">
   &newline;
   <xsl:comment> Active Jobs </xsl:comment>
   &newline;
@@ -510,7 +517,7 @@
   </xsl:choose>
   </blockquote>
 </xsl:when>
-<xsl:when test="$renderMode='report'">
+<xsl:when test="$renderMode = 'report'">
   &newline;
   <xsl:comment> Cluster Report </xsl:comment>
   &newline;
@@ -723,7 +730,7 @@
   </div>
   </blockquote>
 </xsl:when>
-<xsl:when test="$renderMode='free'">
+<xsl:when test="$renderMode = 'free'">
   &newline;
   <xsl:comment> Queues Free Information </xsl:comment>
   &newline;
@@ -742,7 +749,7 @@
   </div>
   </blockquote>
 </xsl:when>
-<xsl:when test="$renderMode='warn'">
+<xsl:when test="$renderMode = 'warn'">
   &newline;
   <xsl:comment> Queue Warnings Information </xsl:comment>
   &newline;
@@ -759,6 +766,23 @@
   <div id="queueStatusTable">
     <xsl:apply-templates select="//queue_info" />
   </div>
+  </blockquote>
+</xsl:when>
+<xsl:when test="$renderMode = 'summary'">
+  &newline;
+  <xsl:comment> Queue Summary </xsl:comment>
+  &newline;
+
+  <!-- queue instances: -->
+  <blockquote>
+  <table class="listing">
+    <tr valign="middle">
+      <td>
+        <div class="tableCaption">Queue Summary</div>
+      </td>
+    </tr>
+  </table>
+  <xsl:apply-templates select="//queue_info" mode="summary"/>
   </blockquote>
 </xsl:when>
 <xsl:otherwise>
@@ -883,6 +907,29 @@
   </div>
 </xsl:template>
 
+<!--
+  host information: header "summary" mode
+-->
+<xsl:template match="//queue_info" mode="summary">
+  <table class="listing">
+    <tr>
+    <th/>
+    <th>total</th>
+    <th>used</th>
+    <th>
+      <acronym title="a(larm) C(alendar) S(ubordinate)">warnings</acronym>
+    </th>
+    <th>
+      <acronym title="d(isabled) s(uspended) u(nknown) E(rror)">errors</acronym>
+    </th>
+    <th>free</th>
+    </tr>
+  </table>
+
+  NOT IMPLEMENTED
+
+</xsl:template>
+
 
 <!--
   output a row for this queue instance
@@ -893,12 +940,12 @@
 
   <xsl:variable name="render">
     <xsl:choose>
-    <xsl:when test="$renderMode='free'">
+    <xsl:when test="$renderMode = 'free'">
       <xsl:if test="slots_used &lt; slots_total and not(state)">
         <xsl:text>true</xsl:text>
       </xsl:if>
     </xsl:when>
-    <xsl:when test="$renderMode='warn'">
+    <xsl:when test="$renderMode = 'warn'">
       <xsl:if test="contains(state, 'a')
           or contains(state, 'd') or contains(state, 'E')">
         <xsl:text>true</xsl:text>
@@ -1108,12 +1155,12 @@ $valueTotal0)*100"/>
     <td>
 <!-- disable icons in pending state column until we can make them smaller
       <xsl:choose>
-      <xsl:when test="state='qw'">
+      <xsl:when test="state = 'qw'">
         <acronym title="Pending (qw)">
           <img src="css/screen/icons/time.png" />
         </acronym>
       </xsl:when>
-      <xsl:when test="state='hqw'">
+      <xsl:when test="state = 'hqw'">
         <acronym title="Pending with hold state (hqw)">
           <img src="css/screen/icons/time_add.png" />
         </acronym>
@@ -1282,10 +1329,10 @@ $valueTotal0)*100"/>
     <!-- state -->
     <td>
       <xsl:choose>
-      <xsl:when test="state='r'">r</xsl:when>
-      <xsl:when test="state='S'">
+      <xsl:when test="state = 'r'">r</xsl:when>
+      <xsl:when test="state = 'S'">
         <acronym title="Job in (S)ubordinate suspend state">
-          <img alt="" src="css/screen/icons/error.png" />
+          <img alt="(S)" src="css/screen/icons/error.png" />
         </acronym>
       </xsl:when>
       <xsl:otherwise>

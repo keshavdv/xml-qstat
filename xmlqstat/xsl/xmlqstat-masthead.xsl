@@ -273,6 +273,18 @@
       />
     </xsl:element>
 
+    <!-- queues?summary -->
+    <img alt=" | " src="css/screen/icon_divider.png" />
+    <xsl:element name="a">
+      <xsl:attribute name="title">queue summary</xsl:attribute>
+      <xsl:attribute name="href">queues<xsl:value-of select="$clusterSuffix"/>
+        <xsl:value-of select="$urlExt"/>?summary</xsl:attribute>
+      <img
+        src="css/screen/icons/sum.png"
+        alt="[queues summary]"
+      />
+    </xsl:element>
+
     <!-- queues?free -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">

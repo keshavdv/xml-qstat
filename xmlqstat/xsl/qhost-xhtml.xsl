@@ -103,19 +103,19 @@
 &newline;
 
 <xsl:choose>
-<xsl:when test="$renderMode='summary'">
+<xsl:when test="$renderMode = 'summary'">
   <link rel="icon" type="image/png" href="css/screen/icons/sum.png"/>
   <title> queue summary
   <xsl:if test="$clusterName"> @<xsl:value-of select="$clusterName"/></xsl:if>
   </title>
 </xsl:when>
-<xsl:when test="$renderMode='free'">
+<xsl:when test="$renderMode = 'free'">
   <link rel="icon" type="image/png" href="css/screen/icons/tick.png"/>
   <title> queues free
   <xsl:if test="$clusterName"> @<xsl:value-of select="$clusterName"/></xsl:if>
   </title>
 </xsl:when>
-<xsl:when test="$renderMode='warn'">
+<xsl:when test="$renderMode = 'warn'">
   <link rel="icon" type="image/png" href="css/screen/icons/error.png"/>
   <title> queue warnings
   <xsl:if test="$clusterName"> @<xsl:value-of select="$clusterName"/></xsl:if>
@@ -195,7 +195,7 @@
 
 <blockquote>
 <xsl:choose>
-<xsl:when test="$renderMode='summary'">
+<xsl:when test="$renderMode = 'summary'">
   <!-- summary: -->
   <table class="listing">
     <tr valign="middle">
@@ -206,7 +206,7 @@
   </table>
   <xsl:apply-templates select="//qhost" mode="summary"/>
 </xsl:when>
-<xsl:when test="$renderMode='free'">
+<xsl:when test="$renderMode = 'free'">
   <!-- free: -->
   <table class="listing">
     <tr valign="middle">
@@ -217,7 +217,7 @@
   </table>
   <xsl:apply-templates select="//qhost"/>
 </xsl:when>
-<xsl:when test="$renderMode='warn'">
+<xsl:when test="$renderMode = 'warn'">
   <!-- warnings: -->
   <table class="listing">
     <tr valign="middle">
@@ -456,7 +456,7 @@
 
   <xsl:variable name="render">
     <xsl:choose>
-    <xsl:when test="$renderMode='free'">
+    <xsl:when test="$renderMode = 'free'">
       <xsl:for-each select="queue">
         <xsl:if
             test="queuevalue[@name='state_string'] = '' and
@@ -465,7 +465,7 @@
         </xsl:if>
       </xsl:for-each>
     </xsl:when>
-    <xsl:when test="$renderMode='warn'">
+    <xsl:when test="$renderMode = 'warn'">
       <xsl:if test="queue/queuevalue[@name='state_string'][
           contains(., 'a') or contains(., 'd') or contains(., 'E')]">
         <xsl:text>true</xsl:text>

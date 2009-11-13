@@ -6,7 +6,7 @@ layout: nil
 <?xslt-param name="menuMode" value="qstatf"?>
 <?xslt-param name="clusterName" value="demo"?>
 <?xslt-param name="timestamp" value="2009-10-19T11:30:00"?>
-<?xslt-param name="renderMode" value="full"?>
+<?xslt-param name="renderMode" value="queues"?>
 <?xslt-param name="urlExt" value=".xml"?>
 <?xml-stylesheet type="text/xml" href="xsl/qstatf-xhtml.xsl"?>
 {% include qstatf.xml %}

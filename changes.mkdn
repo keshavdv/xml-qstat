@@ -10,11 +10,22 @@ sidenav:
 > For more details, consult the git history.
 
 ---------------
+### Release Candidate (2009-11-13)
+
+- HTTPi-1.6.2 is now released
+- Prompt user for GridEngine arch at configuration time
+- Try harder to set LD_LIBRARY_PATH (or equivalent) for systems that
+  need it.
+- Add 'free' and 'warn' views for 'qstat -f' output
+- Changed the cluster text summary to 'report'
+- Provision for a future 'summary' view for 'qstat -f' output.
+  Should be similar in functionality to the existing 'qhost' summary.
+
+---------------
 ### Release Candidate (2009-11-01)
 
 - Use HTTPi-1.6.2 (unreleased) which allows a custom hook in the
   configuration process
-
 - Added make-httpi.sh script
 
 ---------------

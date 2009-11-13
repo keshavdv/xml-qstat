@@ -531,6 +531,42 @@
       />
     </xsl:element>
 
+    <!-- queues?summary -->
+    &space;
+    <xsl:element name="a">
+      <xsl:attribute name="title">queue summary</xsl:attribute>
+      <xsl:attribute name="href">queues~<xsl:value-of select="$name"/>
+        <xsl:value-of select="$urlExt"/>?summary</xsl:attribute>
+      <img border="0"
+          src="css/screen/icons/sum.png"
+          alt="[queue instances]"
+      />
+    </xsl:element>
+
+    <!-- queues?free -->
+    &space;
+    <xsl:element name="a">
+      <xsl:attribute name="title">queues free</xsl:attribute>
+      <xsl:attribute name="href">queues~<xsl:value-of select="$name"/>
+        <xsl:value-of select="$urlExt"/>?free</xsl:attribute>
+      <img border="0"
+          src="css/screen/icons/tick.png"
+          alt="[queues free]"
+      />
+    </xsl:element>
+
+    <!-- queues?warn -->
+    &space;
+    <xsl:element name="a">
+      <xsl:attribute name="title">queue warnings</xsl:attribute>
+      <xsl:attribute name="href">queues~<xsl:value-of select="$name"/>
+        <xsl:value-of select="$urlExt"/>?warn</xsl:attribute>
+      <img border="0"
+          src="css/screen/icons/error.png"
+          alt="[warn queue]"
+      />
+    </xsl:element>
+
     <!-- queues: using qstat -f output (cached or direct) -->
     &space;
     <xsl:element name="a">

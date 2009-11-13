@@ -18,7 +18,9 @@
 <xsl:template name="cgi-params">
   <xsl:param name="clusterName"/>
 
-  <xsl:variable name="configFile" select="document('../config/config.xml')"/>
+  <xsl:variable
+      name="configFile"
+      select="document('../config/config.xml')/config" />
 
   <!-- treat a bad clusterName as 'default' -->
   <xsl:variable name="name">
@@ -34,11 +36,11 @@
 
   <xsl:variable
     name="clusterNode"
-    select="$configFile/config/clusters/cluster[@name=$name]" />
+    select="$configFile/clusters/cluster[@name=$name]" />
 
   <xsl:variable
     name="defaultNode"
-    select="$configFile/config/clusters/default" />
+    select="$configFile/clusters/default" />
 
 
   <!-- the cell, a missing value is treated as 'default' -->
@@ -83,7 +85,7 @@
       <xsl:value-of select="$value" />
     </xsl:when>
     <xsl:otherwise>
-      <xsl:text>/bin/false</xsl:text><xsl:value-of select="$name" />
+      <xsl:text>/bin/false</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -446,13 +448,14 @@
   <xsl:element name="img">
     <xsl:attribute name="title"><xsl:value-of select="$state"/></xsl:attribute>
     <xsl:attribute name="alt">(<xsl:value-of select="$state"/>) </xsl:attribute>
-    <xsl:attribute name="src">css/screen/icons/<xsl:choose>
-      <xsl:when test="contains($state, 'd')">delete.png</xsl:when>
-      <xsl:when test="contains($state, 'E')">exclamation.png</xsl:when>
-      <xsl:when test="contains($state, 'u')">cross.png</xsl:when>
-      <xsl:when test="contains($state, 'a')">error.png</xsl:when>
-      <xsl:when test="contains($state, 'S')">control_pause.png</xsl:when>
-      <xsl:otherwise>tick.png</xsl:otherwise>
+    <xsl:attribute name="src">
+    <xsl:choose>
+      <xsl:when test="contains($state, 'd')">css/screen/icons/delete.png</xsl:when>
+      <xsl:when test="contains($state, 'E')">css/screen/icons/exclamation.png</xsl:when>
+      <xsl:when test="contains($state, 'u')">css/screen/icons/cross.png</xsl:when>
+      <xsl:when test="contains($state, 'a')">css/screen/icons/error.png</xsl:when>
+      <xsl:when test="contains($state, 'S')">css/screen/icons/control_pause.png</xsl:when>
+      <xsl:otherwise>css/screen/icons/tick.png</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
   </xsl:element>

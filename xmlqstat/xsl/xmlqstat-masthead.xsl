@@ -273,6 +273,42 @@
       />
     </xsl:element>
 
+    <!-- queues?summary -->
+    <img alt=" | " src="css/screen/icon_divider.png" />
+    <xsl:element name="a">
+      <xsl:attribute name="title">queue summary</xsl:attribute>
+      <xsl:attribute name="href">queues<xsl:value-of select="$clusterSuffix"/>
+        <xsl:value-of select="$urlExt"/>?summary</xsl:attribute>
+      <img
+        src="css/screen/icons/sum.png"
+        alt="[queues summary]"
+      />
+    </xsl:element>
+
+    <!-- queues?free -->
+    <img alt=" | " src="css/screen/icon_divider.png" />
+    <xsl:element name="a">
+      <xsl:attribute name="title">queue free</xsl:attribute>
+      <xsl:attribute name="href">queues<xsl:value-of select="$clusterSuffix"/>
+        <xsl:value-of select="$urlExt"/>?free</xsl:attribute>
+      <img
+        src="css/screen/icons/tick.png"
+        alt="[queues free]"
+      />
+    </xsl:element>
+
+    <!-- queues?warn -->
+    <img alt=" | " src="css/screen/icon_divider.png" />
+    <xsl:element name="a">
+      <xsl:attribute name="title">queue warn</xsl:attribute>
+      <xsl:attribute name="href">queues<xsl:value-of select="$clusterSuffix"/>
+        <xsl:value-of select="$urlExt"/>?warn</xsl:attribute>
+      <img
+        src="css/screen/icons/error.png"
+        alt="[warn queues]"
+      />
+    </xsl:element>
+
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
       <xsl:attribute name="title">queue instances</xsl:attribute>
@@ -379,8 +415,7 @@
         <xsl:text>Rendered</xsl:text>
       </xsl:element>
       <xsl:text>: </xsl:text>
-      <!-- replace 'T' in dateTime for easier reading -->
-      <xsl:value-of select="translate($timestamp, 'T', '_')"/>
+      <xsl:value-of select="$timestamp"/>
     </div>
     &newline;
   </xsl:if>

@@ -533,7 +533,10 @@ CONTENT
         }
 
         # first argument is a currently just a dummy (OO-remnant)
-        shellCmd( "gridEngineCmd", $cmdPath, @cmdArgs );
+        my $x = shellCmd( "gridEngineCmd", $cmdPath, @cmdArgs );
+
+        $x =~ s{</*>\s*}{}g if $x;  # cleanup incorrect XML
+        $x;
     }
 
     #

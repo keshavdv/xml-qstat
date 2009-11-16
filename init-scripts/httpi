@@ -6,21 +6,21 @@ PATH=/bin:/usr/bin
 #
 ## CUSTOMIZE AS REQUIRED
 #
-# 1. Downgrade to a non-root user account (adjust as required)
-runAs=nobody
-
-# 2. Location of httpi server program
+# 1. Location of httpi server program
 HTTPI=/data/app/httpi/httpi
 
-# 3. Extra path(s) for anything we wish to have but don't want to add to the
+# 2. Extra path(s) for anything we wish to have but don't want to add to the
 #    cgi scripts ourselves
 for d in /data/app/bin
 do
     [ -d $d ] && PATH=$PATH:$d
 done
 
+# 3. Downgrade to a non-root user account (adjust as required)
+runAs=nobody
+
 export PATH
-unset DISPLAY SGE_ROOT SGE_CELL  # a bit extra safety
+unset DISPLAY SGE_ROOT SGE_CELL  # extra safety
 
 #---------------------------------------------------------------------------
 # The following lines provide the necessary info for adding a startup script
@@ -37,8 +37,8 @@ unset DISPLAY SGE_ROOT SGE_CELL  # a bit extra safety
 ### END INIT INFO
 #---------------------------------------------------------------------------
 
-# this script should run as 'runAs'
-if [ "$UID" -eq 0 -a "${runAs:=root}" != root ]
+# this script should never run as root
+if [ "$UID" -eq 0 -a "${runAs:=nobody}" != root ]
 then
     exec sudo -S -u $runAs $0 $@
     exitcode=$?       # retain exitcode
@@ -108,7 +108,7 @@ restart)
     ;;
 
 *)
-    echo "Usage: $0 {start|stop|restart}" >&2
+    echo "Usage: $0 {start|stop|restart} [httpi-location]" >&2
     exit 1
     ;;
 esac

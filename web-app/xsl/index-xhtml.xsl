@@ -203,9 +203,9 @@
   </xsl:when>
   <xsl:otherwise>
     <xsl:call-template name="addClusterLinks">
-      <xsl:with-param name="name" select="'default'"/>
       <xsl:with-param name="unnamed" select="'default'"/>
-      <xsl:with-param name="root" select="'X'"/>
+      <xsl:with-param name="name" select="'default'"/>
+      <xsl:with-param name="root" select="'?'"/>
     </xsl:call-template>
   </xsl:otherwise>
   </xsl:choose>

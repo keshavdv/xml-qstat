@@ -6,28 +6,23 @@ PATH=/bin:/usr/bin
 #
 ## CUSTOMIZE AS REQUIRED
 #
-# 1. Downgrade to a non-root user account (adjust as required)
-runAs=cfdadmin
 
-# 2. Location of cocoon server and java
+# 1. Location of cocoon server and java
 COCOON_HOME=/data/app/cocoon
 JAVA_HOME=/usr/lib/jvm/java
 
-# 3. Extra path(s) for anything we wish to use via the java CommandGenerator
+# 2. Extra path(s) for anything we wish to use via the java CommandGenerator
 #    eg, qstat.sh
 for d in /data/app/bin
 do
     [ -d $d ] && PATH=$PATH:$d
 done
 
-# 4. Could require GridEngine information for later queries
-#    (using the command-generator), but try to see it if works without
-unset SGE_ROOT SGE_CELL  # a bit extra safety
-# SGE_ROOT=/opt/grid; export SGE_ROOT
-# SGE_CELL=default; export SGE_CELL
+# 3. Downgrade to a non-root user account (adjust as required)
+runAs=nobody
 
 export COCOON_HOME JAVA_HOME PATH
-unset DISPLAY  # a bit extra safety
+unset  DISPLAY SGE_ROOT SGE_CELL    # extra safety
 
 #---------------------------------------------------------------------------
 # The following lines provide the necessary info for adding a startup script
@@ -44,8 +39,8 @@ unset DISPLAY  # a bit extra safety
 ### END INIT INFO
 #---------------------------------------------------------------------------
 
-# this script should run as 'runAs'
-if [ "$UID" -eq 0 -a "${runAs:=root}" != root ]
+# this script should never run as root
+if [ "$UID" -eq 0 -a "${runAs:=nobody}" != root ]
 then
     exec sudo -S -u $runAs $0 $@
     exitcode=$?       # retain exitcode
@@ -56,18 +51,6 @@ then
     }
 fi
 
-# Init GridEngine path/environment variables
-# to allow webserver access to GridEngine commands
-# (if not unset above)
-if [ -f $SGE_ROOT/$SGE_CELL/common/settings.sh ]
-then
-    export SGE_ROOT SGE_CELL
-    . $SGE_ROOT/$SGE_CELL/common/settings.sh
-else
-    unset SGE_ROOT SGE_CELL
-fi
-
-
 daemon=$COCOON_HOME/cocoon.sh
 name=cocoon
 desc="Apache Cocoon"
@@ -76,12 +59,14 @@ desc="Apache Cocoon"
 LOG=/var/log/cocoon
 LOG=/dev/null
 
+#
+# check that the daemon program is installed
+#
 [ -f $daemon -a -x $daemon ] || {
     echo "$daemon not found"
     exit 5      # LSB compliant exit status - program is not installed
 }
 
-test -f $daemon || exit 0
 set -e
 case "$1" in
 start)
@@ -93,7 +78,7 @@ start)
 stop)
     echo -n "Stopping $desc: "
     # get pid
-    pid=`ps aux | awk '{if (/java/ && /cocoon/ && !/awk/) print $2}'`
+    pid=$(ps aux | awk '{if (/java/ && /cocoon/ && !/awk/) print $2}')
     if [ -z "$pid" ]
     then
         echo "process not found"
@@ -106,7 +91,7 @@ stop)
 restart)
     ## Stop (if running) and start anew
     $0 stop
-    $0 start
+    $0 start $@
     ;;
 
 *)

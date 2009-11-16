@@ -3,12 +3,12 @@
 
 
 # get GridEngine arch/lib information
-print <<"PRINT";
+print <<"PROMPT";
 
 GridEngine configuration
 ------------------------
 Trying to determine the architecture and library requirements
-PRINT
+PROMPT
 
 
 ( $DEF_SGE_ARCH, $DEF_LIBENV ) = ( '', '' );
@@ -40,7 +40,7 @@ else {
 }
 
 while (1) {
-    $DEF_SGE_ARCH = &prompt( <<"PRINT", $DEF_SGE_ARCH, 1 );
+    $DEF_SGE_ARCH = &prompt( <<"PROMPT", $DEF_SGE_ARCH, 1 );
 
 Define the architecture used for the GridEngine commands.
 This should correspond to the value emitted by the \$SGE_ROOT/util/arch
@@ -49,14 +49,14 @@ Hint: the 'arch' value here should allow us to find
 \$SGE_ROOT/bin/<arch>/qstat
 
 Which value should be used for the GridEngine architecture?
-PRINT
+PROMPT
 
     if ( $DEF_SGE_ARCH eq "undef" or not $DEF_SGE_ARCH ) {
-        print <<"PRINT";
+        print <<"PROMPT";
 The GridEngine architecture value '$DEF_SGE_ARCH' looks implausible
 Please try again ...
 
-PRINT
+PROMPT
     }
     else {
         last;
@@ -71,30 +71,30 @@ if ( $DEF_SGE_ARCH =~ /^(lx|sol)/ or $DEF_SGE_ARCH eq "hp11-64" ) {
 }
 else
 {
-    $DEF_LIBENV = &prompt(<<"PRINT", 'LD_LIBRARY_PATH', 1);
+    $DEF_LIBENV = &prompt(<<"PROMPT", 'LD_LIBRARY_PATH', 1);
 
 Define the name of the dynamic link library environment variable
 for your machine. This is needed to load the GridEngine libraries.
 
 Which environment variable is used for the libraries?
-PRINT
+PROMPT
 }
 
 
 # get the name of the web application
-$DEF_XMLQSTAT_WEBAPPNAME = &prompt(<<"PRINT", 'xmlqstat', 1);
+$DEF_XMLQSTAT_WEBAPPNAME = &prompt(<<"PROMPT", 'grid', 1);
 
 xml-qstat customization:
 ------------------------
 Serve this web application under which resource name:?
-PRINT
+PROMPT
 
 $DEF_XMLQSTAT_WEBAPPNAME =~ s{^/+|/+$}{}g;   # no leading/trailing slashes
 $DEF_XMLQSTAT_WEBAPPNAME =~ s{^//+}{/}g;     # double slashes
 
 
 # get xmlqstat root
-$DEF_XMLQSTAT_ROOT = &interprompt(<<"PRINT", '~/xml-qstat', 1, \&inter_homedir);
+$DEF_XMLQSTAT_ROOT = &interprompt(<<"PROMPT", '~/xml-qstat', 1, \&inter_homedir);
 
 xml-qstat customization:
 ------------------------
@@ -107,7 +107,7 @@ As a shortcut, ~/ in first position will be turned into \$ENV{'HOME'}/,
 which is "$ENV{'HOME'}/".
 
 xml-qstat resource root:?
-PRINT
+PROMPT
 
 # verify directory plausibility
 for ($DEF_XMLQSTAT_ROOT)
@@ -119,28 +119,28 @@ for ($DEF_XMLQSTAT_ROOT)
         and -d "$_/web-app/xsl"
       )
     {
-        print <<"PRINT";
+        print <<"PROMPT";
 Okay. The directory '$_'
 Seems to have the correct directory structure.
 
-PRINT
+PROMPT
     }
     else {
-        print <<"PRINT";
+        print <<"PROMPT";
 WARNING: The directory '$_'
 Does not appear to contain the correct directory structure!!
 
-PRINT
+PROMPT
     }
 }
 
 
-$DEF_XMLQSTAT_TIMEOUT = &prompt(<<"PRINT", '10', 1);
+$DEF_XMLQSTAT_TIMEOUT = &prompt(<<"PROMPT", '10', 1);
 
 ------------------------
 xml-qstat customization:
 Define the maximum timeout (seconds) when executing GridEngine commands
-PRINT
+PROMPT
 
 
 1; # loaded ok

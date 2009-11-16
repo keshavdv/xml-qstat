@@ -146,8 +146,7 @@
           -->
       <xsl:value-of select="$jobinfo"/>
       <xsl:text>?</xsl:text>
-      <xsl:text>ROOT=</xsl:text><xsl:value-of select="$root"/>
-      <xsl:text>&amp;CELL=</xsl:text><xsl:value-of select="$cell"/>
+      <xsl:text>cluster=</xsl:text><xsl:value-of select="$name"/>
       <xsl:if test="string-length($request)">
         <xsl:text>&amp;</xsl:text>
         <xsl:value-of select="$request"/>

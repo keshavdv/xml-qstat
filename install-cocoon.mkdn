@@ -25,7 +25,7 @@ represents a radical change from 2.1
 
 Within the standard **cocoon** installation directory, the only file touched
 is a customized "mount-table.xml" configuration file that informs the
-application server that the URI-prefix of **/xmlqstat/** should be handled
+application server that the URI-prefix of **/grid/** should be handled
 by the **web-app/** directory. If you are upgrading from an older version of
 cocoon, or if you have relocated the **xml-qstat** directory, you will need
 to adjust the "mount-table.xml" accordingly. It may help to be familiar with
@@ -54,7 +54,7 @@ transformations occur when a particular URL path is seen.
 4. Build the *xml-qstat.jar* and install it into the proper Cocoon *lib/*
    directory (details are below)
 5. The web interface should be ready for testing.
-   Point a web browser at the URL *http://{host}:8888/xmlqstat/*
+   Point a web browser at the URL *http://{host}:8888/grid/*
 
 
 ### Installation Details: Apache Cocoon
@@ -104,29 +104,26 @@ The purpose of this file is to allow webapp directories to exist elsewhere
 on the system rather than forcing them to be installed inside the
 **cocoon/** directory itself. If your file layout matches the example:
 
-        $ ls -l /opt/xml-qstat/
+        $ ls -l /opt/grid/
         drwxr-xr-x    cocoon-2.1.11/
-        drwxr-xr-x    httpi-1.6.1/
         drwxr-xr-x    xml-qstat/
 
 Then you would simply create a file called **cocoon-2.1.11/mount-table.xml**
-with contents that looked like this (yes the relative uri-prefix
-**"../../../xml-qstat/web-app/"** path is correct for the directory layout
-shown above) :
+with contents that look like this:
 
         <mount-table>
-            <!-- Map the browser URI "/xmlqstat" to our web-app directory -->
+            <!-- Map the browser URI "/grid/" to our web-app directory -->
             <mount
-                uri-prefix="xmlqstat"
-                src="../../../xml-qstat/web-app/sitemap.xmap"
+                uri-prefix="grid"
+                src="/opt/grid/xml-qstat/web-app/sitemap.xmap"
             />
         </mount-table>
 
 After creating this file, it will be necessary to stop and restart Cocoon if
 it was running previously. Once cocoon is restarted, the application server
-will know how to find the xmlqstat/ application files when web clients
-request the URI-prefix of **"/xmlqstat"**. Remember that the **$PATH** must
-be adjusted to allow **xml-qstat/scripts/qstat.sh** to be found, and
-possibly other SGE environment variables need adjusting as well (depending
-on your installation).
+will know how to find the **xml-qstat** application files when web clients
+request the URI-prefix of **"/grid/"** (with a trailing slash). Remember
+that the **$PATH** must be adjusted to allow **xml-qstat/scripts/qstat.sh**
+to be found, and possibly other SGE environment variables need adjusting as
+well (depending on your installation).
 

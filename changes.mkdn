@@ -10,7 +10,7 @@ sidenav:
 > For more details, consult the git history.
 
 ---------------
-### Release Candidate (2009-11-13)
+### Release Candidate (2009-11-16)
 
 - HTTPi-1.6.2 is now released
 - Prompt user for GridEngine arch at configuration time
@@ -22,6 +22,11 @@ sidenav:
   Should be similar in functionality to the existing 'qhost' summary.
 - Eliminated /xmlqstat/cluster in favour of simply /xmlqstat/
 - Removed the restriction of needing */xmlqstat* as the resource URI.
+- Use */grid/* as the default resource URI instead of */xmlqstat*. This is
+  admittedly poor marketing, but requires fewer letters and fits better with
+  end-user expectations for GridEngine monitoring.
+- Tightened security on the jobinfo cgi script used in the cocoon
+  implementation.
 
 ---------------
 ### Release Candidate (2009-11-01)

@@ -19,11 +19,12 @@ sidenav:
 ### Advanced Installation: Alternative Web-App Name
 
 Although throughout the installation instructions reference is made to
-**/xmlqstat/** as the rendering path for the **web-app/**, it is indeed
+**/grid/** as the rendering path for the **web-app/**, it is indeed
 possible to use other names. For *cocoon*, only the *mount-table.xml* needs
 to be changed and *cocoon* restarted. For the **HTTPi-xmlqstat** server, the
 configuration script should be rerun with the new value -- unless you feel
-confident editing the server.
+confident editing the server. Yet another alternative is to use Apache
+Proxies, as described in the next section.
 
 ### Advanced Installation: Cocoon or HTTPi behind Apache Proxies
 
@@ -31,8 +32,8 @@ Many Unix servers already have an Apache webserver running on the system. If
 you have administrative access to this server, you can proxy the
 **xml-qstat** application server behind Apache. The primary benefit is
 removing the browser requirement to connect to TCP port 8080 or 8888. The
-URL changes (for example) from http://{host}:8888/xmlqstat/ to
-http://{host}/xmlqstat/. This also allows firewall administrators to seal
+URL changes (for example) from http://{host}:8888/grid/ to
+http://{host}/grid/. This also allows firewall administrators to seal
 port 8888 closed against all connections not coming from the Apache server.
 
 For the proxying to work, we need both `mod_proxy` and `proxy_http`. On some
@@ -48,9 +49,18 @@ configuration.
 The Apache configuration directives for enabling the proxy:
 
         <IfModule mod_proxy.c>
-            # proxy connections to port 8888 forward and reverse...
-            ProxyPass  /xmlqstat  http://127.0.0.1:8888/xmlqstat
-            ProxyPassReverse  /xmlqstat  http://127.0.0.1:8888/xmlqstat
+           # proxy connections to port 8888 forward and reverse...
+           ProxyPass         /grid/  http://127.0.0.1:8888/grid/
+           ProxyPassReverse  /grid/  http://127.0.0.1:8888/grid/
+        </IfModule>
+
+Of course, the names of the proxied locations need not be identical. The
+following is also possible:
+
+        <IfModule mod_proxy.c>
+           # proxy connections to port 8888 forward and reverse...
+           ProxyPass         /xmlqstat/  http://127.0.0.1:8888/grid/
+           ProxyPassReverse  /xmlqstat/  http://127.0.0.1:8888/grid/
         </IfModule>
 
 And finally restart or reload Apache. For example,

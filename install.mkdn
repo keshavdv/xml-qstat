@@ -31,14 +31,14 @@ or contributors.
    Grid Engine produce different XML output and may not be supported well.
 3. Create a directory to hold the misc. components (something like xml-qstat/)
 4. Checkout or download xml-qstat from github.com
-5. Download and build Apache Cocoon, if you will be using the server-side
-   XSLT transformations.
+5. Download and build Apache Cocoon, *if you will be using the server-side
+   XSLT transformations*.
 6. If you will only using HTTPi, the download is part of the corresponding
    make script, which you execute now.
 6. Edit the **web-app/config/config.xml** file to set local configuration
    parameters (details are below)
 7. The web interface should be ready for testing. Point a web browser at the
-   URL *http://{host}:8080/xmlqstat/* or *http://{host}:8888/xmlqstat/*,
+   URL *http://{host}:8080/grid/* or *http://{host}:8888/grid/*,
    the host and port number depending on your configuration.
 
 ### Customizing the config/
@@ -73,21 +73,36 @@ file path to where cached SGE status data will be stored. The data should
 typically be stored within the **web-app/cache/** directory as "qstatf.xml".
 For a multi-cluster view, the file should be stored as
 **web-app/cache/qstatf~{NAME}.xml** or as
-**web-app/cache-{NAME}/qstatf.xml**, where **{NAME}** is the name given to the
-cluster. This convention should be followed, otherwise severe editing of the
-sitemap.xmap and/or the custom HTTPi will be required.
+**web-app/cache-{NAME}/qstatf.xml**, where **{NAME}** is the name given to
+the cluster. This convention should be followed, otherwise severe editing of
+the sitemap.xmap and/or the customized HTTPi will be required.
+
+Check that the SGE environment has been set up (you can run 'qstat' via the
+command line), then starting the perl caching daemon should be as simple as
+entering the **scripts/** directory and issuing the command
+"./xmlqstat-cacher.pl -d". To stop the daemon, issue the command
+"./xmlqstat-cacher.pl -k". To verify that the daemon is working, check the
+process table to see if it exists and then monitor the timestamps on the
+cache file. In its default setting, XML data should be updated every 30
+seconds.
 
 
 #### Using cached data from qlicserver
 
-If you are running the qlicserver on your system, you can instruct it to
-cache its data for reuse here. Otherwise, start caching grid data! If your
-SGE environment has been set up (you can run 'qstat' via the command line)
-then starting the perl caching daemon should be as simple as entering the
-**scripts/** directory and issuing the command "./xmlqstat-cacher.pl -d". To
-stop the daemon, issue the command "./xmlqstat-cacher.pl -k". To verify that
-the daemon is working, check the process table to see if it exists and then
-monitor the timestamps on the cache file. In its default setting, XML data
-should be updated every 30 seconds.
+If you are running the **qlicserver** on your system, its cached data can be
+reused here. The **qlicserver** already gathers some 'qstat' information as
+part of its heuristics. To complete the **xmlqstat** integration, you should
+also have it cache a 'qhost' query:
 
+        dir=/some/path/cache \
+        output=qlicserver.xml \
+        qhost=qhost.xml \
+        qstat=qstat.xml
+
+And then link it back into the **xmlqstat/web-app/** directory under the
+corresponding cluster name. For example,
+
+        $ ln -s /some/path/cache /opt/grid/xml-qstat/web-app/cache-NAME
+
+where the *cache-{NAME}* convention has been described above.
 

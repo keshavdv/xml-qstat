@@ -81,10 +81,10 @@ Depending upon your final configuration, you may not need to adjust all
 of the following files:
 
         make-xmlqstat-jar.sh
+        cgi-bin/jobinfo
         init-scripts/cocoon
         init-scripts/httpi
         init-scripts/xmlqstat-cacher
-        scripts/jobinfo
         scripts/xmlqstat-cacher.pl
 
 You should also adjust the **xmlqstat/config/config.xml** to

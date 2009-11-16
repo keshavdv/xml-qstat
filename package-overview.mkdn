@@ -18,10 +18,10 @@ sidenav:
 
 ### Housekeeping
 
-The choice of installation directory is up to you, we recommend organizing
-the independent components parallel to each other in the following manner:
+The choice of installation directory is up to you. One possibility would be
+to organize the independent components parallel to each other:
 
-        $ ls -l /opt/xml-qstat/
+        $ ls -l /opt/grid/
         drwxr-xr-x    cocoon-2.1.11/   # for server-side xslt
         drwxr-xr-x    httpi-1.6.2/     # for client-side xslt
         drwxr-xr-x    xml-qstat/       # our application
@@ -38,6 +38,7 @@ sources (XML or otherwise) may be desired.
 Inside **xml-qstat**/
 
         $ ls -l xml-qstat/
+        drwxr-xr-x    cgi-bin/
         drwxr-xr-x    httpi-modules/
         drwxr-xr-x    icons/
         drwxr-xr-x    init-scripts/
@@ -46,6 +47,14 @@ Inside **xml-qstat**/
         -rw-r--r--    make-xmlqstat-jar.sh
         drwxr-xr-x    scripts/
         drwxr-xr-x    web-app/
+
+cgi-bin/
+: sample CGI scripts. The **'jobinfo'** script provides an external
+  URL-based source for GridEngine job data. It provides a somewhat safer
+  means of issuing calls to the GridEngine `qstat -j` command since only
+  specific paths are allowed, and the escaping for `-j \*` seems to work
+  more reliably than the equivalent CommandGenerator-based solution. It is
+  primarily needed for the cocoon-based implementation.
 
 httpi-modules/
 : customized modules for HTTPi. Only needed for the HTTPi client-side
@@ -69,25 +78,26 @@ java/
 : script for compiling the CommandGenerator (*cocoon only*)
 
 scripts/
-: currently contains 2 perl scripts, a CGI script
-  called 'jobinfo' and a "qstat.sh"; shell script that the
-  application can use to directly query the Grid Engine qmaster. The
-  "sge-xml-cacher.pl" script is a Perl daemon script that runs constantly
-  and periodically refreshes the cached Grid Engine XML status data. This
-  cached data is what the XSLT uses to generate various views and interfaces.
-  The default setting for this daemon is to refresh Grid Data every 30
-  seconds (this value is user configurable). The Perl daemon is used so that
-  the webserver does not call "qstat -f -xml" every time a user hits the web page.
-  The caching mechanism greatly reduces the load on the SGE qmaster and the
-  webserver.
-  The second Perl script, "**create-threshold-config.pl**" is *optional*
-  and is a helper script that can query Grid Engine to learn the configured load
-  alarm thresholds for each queue. Since Grid Engine only reports current load
-  values (and not the configured alarm thresholds) this helper script can
-  create a secondary configuration file that is used in the XSLT to generate
-  customized graphical "load ratio" reports within the web interface.
-  The **'jobinfo'** script can be used as a CGI under Apache or HTTPi if
-  an external URL-based source for SGE XML status data is desired.
+: currently contains 2 Perl scripts and a "qstat.sh"; shell script that the
+  application can use to directly query the Grid Engine qmaster.
+
+: The "sge-xml-cacher.pl" script is a Perl daemon script that runs
+  constantly and periodically refreshes the cached Grid Engine XML status
+  data. This cached data is what the XSLT uses to generate various views and
+  interfaces. The default setting for this daemon is to refresh Grid Data
+  every 30 seconds (this value is user configurable). The Perl daemon is
+  used so that the webserver does not call "qstat -f -xml" every time a user
+  hits the web page. The caching mechanism greatly reduces the load on the
+  SGE qmaster and the webserver.
+
+: The second Perl script, "**create-threshold-config.pl**" is *optional* and
+  is a helper script that can query Grid Engine to learn the configured load
+  alarm thresholds for each queue. Since Grid Engine only reports current
+  load values (and not the configured alarm thresholds) this helper script
+  can create a secondary configuration file that is used in the XSLT to
+  generate customized graphical "load ratio" reports within the web
+  interface.
+
 
 web-app/
 : this is where this application lives.
@@ -127,6 +137,6 @@ xsl/
 
 
 Generally speaking, the user will only need to edit files in the **config/**
-directory. In very rare cases the user may need to edit **sitemap.xmap** to
-make configuration changes for Cocoon.
+directory. In contrast to previous versions, editing the **sitemap.xmap**
+to make configuration changes for Cocoon should normally be unnecessary.
 

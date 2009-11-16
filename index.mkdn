@@ -9,6 +9,8 @@ sidenav:
     href: features.html
   - text: History
     href: history.html
+  - text: Security
+    href: security.html
   - text: Known Issues
     href: issues.html
   - text: Disclaimer
@@ -47,4 +49,12 @@ Engine XML into various desired output formats. Quite a bit of effort has
 also gone into the various JavaScript, CSS stylesheets and other "web design"
 elements (although more work can always done).
 
+
+### Future
+
+The client-side XSLT using **HTTPi** is currently the recommended solution
+when the browser allows it. The server-side XSLT uses an older version of
+Cocoon and also contains some potential [security issues](security.html)
+that might be a concern. This is one of several reasons for the desire
+to drop Cocoon support in the future.
 

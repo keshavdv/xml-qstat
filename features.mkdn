@@ -10,6 +10,8 @@ sidenav:
     active: true
   - text: History
     href: history.html
+  - text: Security
+    href: security.html
   - text: Known Issues
     href: issues.html
   - text: Disclaimer

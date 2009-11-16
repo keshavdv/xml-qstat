@@ -1,0 +1,41 @@
+---
+layout:  default
+navname: About
+sidenav:
+  - head: About
+  - text: Overview
+    href: index.html
+  - text: Features
+    href: features.html
+  - text: History
+    href: history.html
+  - text: Security
+    href: security.html
+    active: true
+  - text: Known Issues
+    href: issues.html
+  - text: Disclaimer
+    href: disclaimer.html
+---
+
+### Security
+
+For security, it is advised that the webservers run as non-privileged users.
+If started by the root user, both **init-script/cocoon** and
+**init-script/httpi** will attempt to run as *nobody*.
+
+In the **HTTPi-xmlqstat** web application, any GridEngine system calls are
+only executed with the absolute path *{SGE_ROOT}/bin/{arch}*, where the
+value of the *{SGE_ROOT}* is taken from the *config/config.xml* information
+and the value of *{arch}* is that specified during the configuration of
+**HTTPi-xmlqstat**.
+
+The **cocoon** web application unfortunately does not currently afford quite
+the same level of security. While the `jobinfo` cgi script has been tighten
+to follow similar logic to what the **HTTPi-xmlqstat** version is using, 
+the continued reliance on the CommandGenerator opens a potential for abuse.
+**It is absolutely imperative that the cocoon webserver run as *nobody*!**
+
+Further tightening the security on the **cocoon** web application would 
+mean that the remaining CommandGenerator calls be replaced by an equivalent
+cgi script and continue to require a second webserver to use.

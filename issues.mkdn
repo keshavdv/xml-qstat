@@ -9,6 +9,8 @@ sidenav:
     href: features.html
   - text: History
     href: history.html
+  - text: Security
+    href: security.html
   - text: Known Issues
     href: issues.html
     active: true
@@ -31,4 +33,5 @@ sidenav:
   be it shell escaping or whatever.
   The `jobinfo` cgi script can be used as a workaround, but requires a
   second webserver.
+- Some [security issues](security.html)
 

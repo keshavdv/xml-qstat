@@ -13,7 +13,7 @@
 <!--
    |
    | extract @root @cell from clusterNode
-   | format into "&ROOT=@root&CELL=@cell" for cgi queries
+   | format into "&root=@root&cell=@cell" for cgi queries
    -->
 <xsl:template name="cgi-params">
   <xsl:param name="clusterName"/>
@@ -90,8 +90,8 @@
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:text>&amp;ROOT=</xsl:text><xsl:value-of select="$root"/>
-  <xsl:text>&amp;CELL=</xsl:text><xsl:value-of select="$cell"/>
+  <xsl:text>&amp;root=</xsl:text><xsl:value-of select="$root"/>
+  <xsl:text>&amp;cell=</xsl:text><xsl:value-of select="$cell"/>
 </xsl:template>
 
 

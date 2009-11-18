@@ -26,14 +26,6 @@
 -->
 <programs>
   <!--
-      Cocoon only:
-      specify an external program for obtaining the qstat -j information
-      - leave empty if you don't have such a program, or if you wish
-        to use the CommandGenerator
-  -->
-  <jobinfo>http://dealog01:8080/cgi-bin/jobinfo</jobinfo>
-
-  <!--
       specify an external program for viewing the stdout files
       (jobId, filenames, etc. are passed via the queryString)
       - leave empty if you don't have such a program

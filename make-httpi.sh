@@ -26,7 +26,7 @@ usage() {
 usage: $Script [OPTION]
 options:
   -clean             remove contents of build-httpi directory
-  -rebuild SETTINGS  for repeated builds (not fully tested)
+  -rebuild SETTINGS  for repeated builds
   -version VERSION   specify an alternative version (current value: $packageDir)
   -help
 

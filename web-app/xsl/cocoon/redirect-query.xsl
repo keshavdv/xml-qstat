@@ -20,7 +20,6 @@
 <!-- ======================== Passed Parameters =========================== -->
 <xsl:param name="clusterName"/>
 <xsl:param name="request"/>
-<xsl:param name="mode"/>
 <xsl:param name="resource" />
 <xsl:param name="baseURL" />
 
@@ -29,10 +28,6 @@
 <xsl:variable
     name="configFile"
     select="document('../../config/config.xml')/config" />
-<xsl:variable
-    name="jobinfo"
-    select="$configFile/programs/jobinfo"/>
-
 
 <!-- treat a bad clusterName as 'default' -->
 <xsl:variable name="name">
@@ -135,24 +130,6 @@
 
   <xsl:element name="xi:include">
   <xsl:attribute name="href">
-    <xsl:choose>
-    <xsl:when test="$mode = 'jobinfo' and string-length($jobinfo)">
-      <!-- use jobinfo cgi script -->
-      <!--
-          | typically something like
-          | http://<server>:<port>/<prefixPath>/jobinfo?request
-          | the url is expected to handle a missing request
-          |   and treat it like '-j *' (show all jobs)
-          -->
-      <xsl:value-of select="$jobinfo"/>
-      <xsl:text>?</xsl:text>
-      <xsl:text>cluster=</xsl:text><xsl:value-of select="$name"/>
-      <xsl:if test="string-length($request)">
-        <xsl:text>&amp;</xsl:text>
-        <xsl:value-of select="$request"/>
-      </xsl:if>
-    </xsl:when>
-    <xsl:otherwise>
     <!-- redirect (likely uses CommandGenerator) -->
     <!--
         | create a qstat query that can be evaluated later via xinclude
@@ -161,17 +138,15 @@
         |
         | only add ~cell/root if it not being redirected to an external source
         -->
-      <xsl:value-of select="$redirect"/>
-      <xsl:if test="not(string-length($base))">
-        <xsl:text>/~</xsl:text><xsl:value-of select="$cell" />
-        <xsl:value-of select="$root"/>
-      </xsl:if>
-      <xsl:if test="string-length($request)">
-        <xsl:text>?</xsl:text>
-        <xsl:value-of select="$request"/>
-      </xsl:if>
-    </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="$redirect"/>
+    <xsl:if test="not(string-length($base))">
+      <xsl:text>/~</xsl:text><xsl:value-of select="$cell" />
+      <xsl:value-of select="$root"/>
+    </xsl:if>
+    <xsl:if test="string-length($request)">
+      <xsl:text>?</xsl:text>
+      <xsl:value-of select="$request"/>
+    </xsl:if>
   </xsl:attribute>
   </xsl:element>
 

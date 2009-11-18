@@ -1,8 +1,5 @@
 #!/bin/sh
-# This is mostly a wrapper to add file logging about when a command was called.
-# For example, to track how often a command is 'hit' from a webserver request.
-#
-# But the wrapper also interprets these initial parameters:
+# This wrapper interprets these initial parameters:
 #     CELL=... interpret as SGE_CELL
 #     ROOT=... interpret as SGE_ROOT - should be an absolute path
 #     JOB=...  interpret as '-j' option for qstat, but handle empty argument as '*'
@@ -12,6 +9,9 @@
 # and for issue
 #     http://gridengine.sunsource.net/issues/show_bug.cgi?id=2515
 #     [for older installations]
+#
+# It can also be used to add file logging about when a command was called.
+# For example, to track how often a command is 'hit' from a webserver request.
 #
 # don't rely on the exit code
 # -----------------------------------------------------------------------------
@@ -36,23 +36,19 @@ fi
 # echo "$(date) $USER@$HOST: $cmd $@" >> $logfile 2>/dev/null
 
 #
-# NB: using CDATA in the error messages doesn't seem to help with bad characters
+# NB: using CDATA in the error messages doesn't really help with bad characters
 #
 error()
 {
-    echo "<?xml version='1.0'?><error>"
-    while [ "$#" -ge 1 ]; do echo "$1"; shift; done
-    echo "</error>"
+    echo "<?xml version='1.0'?><error>$@</error>"
     exit 1
 }
-
 
 # adjust the GridEngine environment based on the leading parameters:
 #    CELL= (SGE_CELL), ROOT= (SGE_ROOT)
 #    JOB=  the '-j' option for qstat, but handle empty argument as '*'
 #
-unset abspath
-unset jobArgs
+unset jobArgs qualifiedCmd
 while [ "$#" -gt 0 ]
 do
     case "$1" in
@@ -62,12 +58,11 @@ do
         ;;
     ROOT=*)
         export SGE_ROOT="${1##ROOT=}"
-        abspath=/
         shift
         ;;
     JOB=*)
         jobArgs="${1##JOB=}"
-        [ -n "$jobArgs" ] || jobArgs="*"    # missing job number is '*' (all jobs)
+        [ -n "$jobArgs" ] || jobArgs="*" # missing job number is '*' (all jobs)
         shift
         ;;
     *)
@@ -82,36 +77,77 @@ done
     error "invalid SGE_ROOT directory '$SGE_ROOT'"
 
 # require a good SGE_CELL:
-[ -d "$SGE_ROOT/${SGE_CELL:-default}" ] || \
-    error "invalid SGE_CELL directory '$SGE_ROOT/${SGE_CELL:-default}'"
+: ${SGE_CELL:=default}
+[ -d "$SGE_ROOT/$SGE_CELL" ] || \
+    error "invalid SGE_CELL directory '$SGE_ROOT/${SGE_CELL:=default}'"
 
 
 # Expand the path $SGE_ROOT/bin/<ARCH>/ (the essential bit from settings.sh).
 # We need this for handling different SGE_ROOT values.
-# NB: works on Linux and SunOS without adjusting LD_LIBRARY_PATH
-if [ "$abspath" = / ]
+if [ -f "$SGE_ROOT/util/arch" -a -x "$SGE_ROOT/util/arch" ]
 then
-    if [ -x "$SGE_ROOT/util/arch" ]
-    then
-        abspath=$SGE_ROOT/bin/$($SGE_ROOT/util/arch)/
-    else
-        error "'$SGE_ROOT/util/arch' not found"
-    fi
+    arch=$($SGE_ROOT/util/arch)
+
+    # works on Linux and SunOS without adjusting LD_LIBRARY_PATH
+    case $arch in
+    sol*|lx*|hp11-64)
+       ;;
+    *)
+        shlib_path_name=$($SGE_ROOT/util/arch -lib)
+        old_value=$(eval echo '$'$shlib_path_name)
+        if [ -n "$old_value" ]
+        then
+            eval $shlib_path_name=$SGE_ROOT/lib/$arch:$old_value
+        else
+            eval $shlib_path_name=$SGE_ROOT/lib/$arch
+        fi
+        export $shlib_path_name
+        unset old_value shlib_path_name
+        ;;
+    esac
+
+    qualifiedCmd="$SGE_ROOT/bin/$arch/$cmd"
+    unset arch
+else
+    error "'$SGE_ROOT/util/arch' not found"
 fi
 
 
-case "$cmd" in
-qhost)
-    $abspath$cmd "$@" | sed -e 's@xmlns=@xmlns:xsd=@'
+[ -f "$qualifiedCmd" -a -x "$qualifiedCmd" ] || \
+    error "'$qualifiedCmd' not found"
+
+
+# special output for -xml
+xmlOutput=false
+case "$@" in *-xml*) xmlOutput=true;; esac
+
+# special clean up for xmlOutput
+case "$@" in
+*-xml*)
+    case "$cmd" in
+    qhost)
+        echo $($qualifiedCmd "$@" 2>/dev/null | sed -e 's@xmlns=@xmlns:xsd=@')
+        ;;
+    qstat)
+        if [ -n "$jobArgs" ]
+        then
+            echo $($qualifiedCmd "$@" -j "$jobArgs" 2>/dev/null | sed -e 's@</*>@@g')
+        else
+            echo $($qualifiedCmd "$@" 2>/dev/null)
+        fi
+        ;;
+    *)
+        echo $($qualifiedCmd "$@" 2>/dev/null)
+        ;;
+    esac
     ;;
 *)
     if [ -n "$jobArgs" ]
     then
-        $abspath$cmd "$@" -j "$jobArgs" | sed -e 's@</*>@@g'
+        exec $qualifiedCmd "$@" -j "$jobArgs"
     else
-        $abspath$cmd "$@" | sed -e 's@</*>@@g'
+        exec $qualifiedCmd "$@"
     fi
-
     ;;
 esac
 

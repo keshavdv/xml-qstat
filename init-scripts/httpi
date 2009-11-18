@@ -20,7 +20,7 @@ done
 runAs=nobody
 
 export PATH
-unset DISPLAY SGE_ROOT SGE_CELL  # extra safety
+unset DISPLAY  # extra safety
 
 #---------------------------------------------------------------------------
 # The following lines provide the necessary info for adding a startup script

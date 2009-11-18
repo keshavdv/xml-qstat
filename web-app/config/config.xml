@@ -16,13 +16,6 @@
 -->
 <programs>
   <!--
-      specify an external program for obtaining the qstat -j information
-      - leave empty if you don't have such a program, or if you wish
-        to use the CommandGenerator
-  -->
-  <jobinfo></jobinfo>
-
-  <!--
       specify an external program for viewing the stdout files
       (jobId, filenames, etc. are passed via the queryString)
       - leave empty if you don't have such a program
@@ -40,11 +33,21 @@
 
 <!--
     define a logo for all of the pages and the link location
-    <topLogo src="config/.png" href="http://www.xml-qstat.org" height="29" />
+    <topLogo src="config/xmlqstat-logo.png" href="http://www.xml-qstat.org" height="29" />
 -->
 <topLogo src="config/xmlqstat-logo.png" href="http://olesenm.github.com/xml-qstat/" height="29"/>
 
-<!-- define cluster settings and if a default cluster is allowed -->
+<!--
+    define cluster settings and if a default cluster is allowed
+    @name - SGE_CLUSTER_NAME required for 'cluster' but not for 'default'
+    @root - SGE_ROOT required unless @baseURL is used
+    @cell - SGE_CELL optional, provided the downstream uses 'default'
+    @baseURL - optional means of getting at resources, needs a trailing slash
+
+    If the 'default' entity exists in 'clusters' and has the attribute
+    enabled="false", the default (unnamed) cluster will be disabled.
+    Other values (or a missing entry) are interpreted as enabled="true".
+-->
 <clusters>
   <default enabled="false" />
   <cluster name="demo" root="/opt/grid" cell="default" />

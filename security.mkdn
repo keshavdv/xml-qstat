@@ -32,10 +32,7 @@ and the value of *{arch}* is that specified during the configuration of
 
 The **cocoon** web application unfortunately does not currently afford quite
 the same level of security. While the `jobinfo` cgi script has been tighten
-to follow similar logic to what the **HTTPi-xmlqstat** version is using, 
-the continued reliance on the CommandGenerator opens a potential for abuse.
+to follow similar logic to what the **HTTPi-xmlqstat** version is using,
+the current reliance on the CommandGenerator opens a potential for abuse.
 **It is absolutely imperative that the cocoon webserver run as *nobody*!**
 
-Further tightening the security on the **cocoon** web application would 
-mean that the remaining CommandGenerator calls be replaced by an equivalent
-cgi script and continue to require a second webserver to use.

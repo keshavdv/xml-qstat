@@ -66,9 +66,6 @@ browser at *http://{host}:8888/* and seeing the "Welcome to Apache Cocoon"
 message. When starting **cocoon.sh** to service the **xml-qstat** web
 application, the following conditions must be met:
 
-- The xml-qstat **scripts/qstat.sh** and **scripts/qhost.sh**
-  must be in the **$PATH** before starting the cocoon server so that the
-  server can find and execute them when needed
 - Under some circumstances, it may be desirable to have the SGE settings and
   environment variables present before starting the cocoon server &ndash;
   e.g., by sourcing the Grid Engine **settings.sh** or **settings.csh**
@@ -122,8 +119,5 @@ with contents that look like this:
 After creating this file, it will be necessary to stop and restart Cocoon if
 it was running previously. Once cocoon is restarted, the application server
 will know how to find the **xml-qstat** application files when web clients
-request the URI-prefix of **"/grid/"** (with a trailing slash). Remember
-that the **$PATH** must be adjusted to allow **xml-qstat/scripts/qstat.sh**
-to be found, and possibly other SGE environment variables need adjusting as
-well (depending on your installation).
+request the URI-prefix of **"/grid/"** (with a trailing slash).
 

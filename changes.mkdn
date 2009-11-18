@@ -10,6 +10,19 @@ sidenav:
 > For more details, consult the git history.
 
 ---------------
+### Release Candidate (2009-11-18)
+
+Can finally run cocoon without an extra cgi-script!
+
+- loosen the paranoid security on the init-scripts/ and allow
+  existing values of SGE_ROOT and SGE_CELL through to the webserver.
+- reworked qstat.sh script. It now seems to interact well with cocoon.
+  Dropped jobinfo cgi-script accordingly.
+- The absolute path to scripts/qstat.sh is used in the CommandGenerator
+  call. This eliminates an installation/configuration step and also boosts
+  security.
+
+---------------
 ### Release Candidate (2009-11-16)
 
 - HTTPi-1.6.2 is now released

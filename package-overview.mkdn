@@ -38,7 +38,6 @@ sources (XML or otherwise) may be desired.
 Inside **xml-qstat**/
 
         $ ls -l xml-qstat/
-        drwxr-xr-x    cgi-bin/
         drwxr-xr-x    httpi-modules/
         drwxr-xr-x    icons/
         drwxr-xr-x    init-scripts/
@@ -47,14 +46,6 @@ Inside **xml-qstat**/
         -rw-r--r--    make-xmlqstat-jar.sh
         drwxr-xr-x    scripts/
         drwxr-xr-x    web-app/
-
-cgi-bin/
-: sample CGI scripts. The **'jobinfo'** script provides an external
-  URL-based source for GridEngine job data. It provides a somewhat safer
-  means of issuing calls to the GridEngine `qstat -j` command since only
-  specific paths are allowed, and the escaping for `-j \*` seems to work
-  more reliably than the equivalent CommandGenerator-based solution. It is
-  primarily needed for the cocoon-based implementation.
 
 httpi-modules/
 : customized modules for HTTPi. Only needed for the HTTPi client-side
@@ -78,10 +69,9 @@ java/
 : script for compiling the CommandGenerator (*cocoon only*)
 
 scripts/
-: currently contains 2 Perl scripts and a "qstat.sh"; shell script that the
-  application can use to directly query the Grid Engine qmaster.
+: currently contains 2 Perl scripts and a shell script.
 
-: The "sge-xml-cacher.pl" script is a Perl daemon script that runs
+: The "*sge-xml-cacher.pl*" script is a Perl daemon script that runs
   constantly and periodically refreshes the cached Grid Engine XML status
   data. This cached data is what the XSLT uses to generate various views and
   interfaces. The default setting for this daemon is to refresh Grid Data
@@ -90,14 +80,18 @@ scripts/
   hits the web page. The caching mechanism greatly reduces the load on the
   SGE qmaster and the webserver.
 
-: The second Perl script, "**create-threshold-config.pl**" is *optional* and
-  is a helper script that can query Grid Engine to learn the configured load
+: The second Perl script, "*create-threshold-config.pl*" is an *optional*
+  helper script that can query Grid Engine to learn the configured load
   alarm thresholds for each queue. Since Grid Engine only reports current
   load values (and not the configured alarm thresholds) this helper script
   can create a secondary configuration file that is used in the XSLT to
   generate customized graphical "load ratio" reports within the web
-  interface.
+  interface. This will only need to be done once after new queues have be
+  added or removed from the cluster.
 
+: The "*qstat.sh*" shell script is used by the cocoon webapp to query the Grid
+  Engine qmaster directly. It should be left in this location where cocoon
+  can find it. It does not need to be in the PATH.
 
 web-app/
 : this is where this application lives.

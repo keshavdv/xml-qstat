@@ -1,41 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- XML-QSTAT site-specific configuration file -->
 <config>
-
-<!--
-   | If the 'qlicserver' entity exists and has the attribute enabled="true",
-   | the viewing of the resource allocation reported by the qlicserver program
-   | will be enabled.
-   | Other values (or a missing entry) are interpreted as enabled="false".
-   -->
 <qlicserver enabled="true"/>
-
-<!--
-   | Define a top logo for all of the pages and a link location.
-   | This can be useful to link back to the main site
-   -->
 <topLogo
     src="config/xmlqstat-logo.png"
     href="http://olesenm.github.com/xml-qstat/"
     height="29"
     />
-
-<!--
-   | Define cluster settings and if a default cluster is allowed.
-   |
-   | @name - SGE_CLUSTER_NAME required for 'cluster' but not for 'default'
-   | @root - SGE_ROOT required unless @baseURL is used
-   | @cell - SGE_CELL optional, provided the downstream uses 'default'
-   | @baseURL - optional means of getting at resources, needs a trailing slash
-   |
-   | If the 'default' entity exists in 'clusters' and has the attribute
-   | enabled="false", the default (unnamed) cluster will be disabled.
-   | Other values (or a missing entry) are interpreted as enabled="true".
--->
-<clusters>
-  <default enabled="false" />
-  <cluster name="demo" root="/opt/grid" cell="default" />
-</clusters>
-
 </config>
 <!-- end-of-file -->

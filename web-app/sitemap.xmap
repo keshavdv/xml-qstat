@@ -666,7 +666,6 @@
      | list directory contents:
      | "/<webapp>/config"
      | "/<webapp>/xsl"
-     | "/<webapp>/xsl"
      -->
   <map:match pattern="^(config|xsl)$" type="regexp">
     <map:generate type="directory"  src="{1}">

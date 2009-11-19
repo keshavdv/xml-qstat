@@ -11,14 +11,7 @@ PATH=/bin:/usr/bin
 COCOON_HOME=/data/app/cocoon
 JAVA_HOME=/usr/lib/jvm/java
 
-# 2. Extra path(s) for anything we wish to use via the java CommandGenerator
-#    eg, qstat.sh
-for d in /data/app/bin
-do
-    [ -d $d ] && PATH=$PATH:$d
-done
-
-# 3. Downgrade to a non-root user account (adjust as required)
+# 2. Downgrade to a non-root user account (adjust if required)
 runAs=nobody
 
 export COCOON_HOME JAVA_HOME PATH

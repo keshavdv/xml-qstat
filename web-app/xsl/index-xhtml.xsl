@@ -45,13 +45,13 @@
     select="document('../config/config.xml')/config" />
 
 
-<xsl:variable name="qlicserverAllowed">
+<xsl:variable name="qlicserverEnabled">
   <xsl:choose>
-  <xsl:when test="$configFile/qlicserver/@enabled = 'false'">
-    <xsl:text>false</xsl:text>
+  <xsl:when test="$configFile/qlicserver/@enabled = 'true'">
+    <xsl:text>true</xsl:text>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:text>true</xsl:text>
+    <xsl:text>false</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:variable>
@@ -205,7 +205,7 @@
     <xsl:call-template name="addClusterLinks">
       <xsl:with-param name="unnamed" select="'default'"/>
       <xsl:with-param name="name" select="'default'"/>
-      <xsl:with-param name="root" select="'?'"/>
+      <xsl:with-param name="root" select="'SGE_ROOT'"/>
     </xsl:call-template>
   </xsl:otherwise>
   </xsl:choose>
@@ -236,10 +236,19 @@
 </xsl:template>
 
 <xsl:template match="default">
+  <xsl:variable name="root">
+    <xsl:choose>
+      <xsl:when test="@root">
+        <xsl:value-of select="@root"/>
+      </xsl:when>
+      <xsl:otherwise>SGE_ROOT</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:call-template name="addClusterLinks">
     <xsl:with-param name="unnamed" select="'default'"/>
     <xsl:with-param name="name" select="'default'"/>
-    <xsl:with-param name="root" select="@root"/>
+    <xsl:with-param name="root" select="$root"/>
     <xsl:with-param name="cell" select="@cell"/>
   </xsl:call-template>
 </xsl:template>
@@ -310,7 +319,7 @@
   </xsl:variable>
 
   <xsl:variable name="qlicserver_exists">
-    <xsl:if test="$qlicserverAllowed = 'true'">
+    <xsl:if test="$qlicserverEnabled = 'true'">
       <xsl:call-template name="hasCacheFile">
         <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
         <xsl:with-param name="fileQualifier" select="$fileQualifier"/>

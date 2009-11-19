@@ -93,14 +93,14 @@ Demonic feature only; xinetd/inetd/etc. need not apply.
 # CUSTOMIZE THIS TO MATCH YOUR REQUIREMENTS:
 #
 
-# the physical location of the web-app directory:
+# physical location of the web-app directory:
 my $webappPath = "DEF_XMLQSTAT_ROOT/web-app";
 
-# the resource for the web-app:
+# resource name for the web-app:
 my $webappName = "DEF_XMLQSTAT_WEBAPPNAME" || "xmlqstat";
 
 # timeout (seconds) for system command like qstat -j etc.:
-my $shellCmdTimeout = DEF_XMLQSTAT_TIMEOUT;
+my $shellCmdTimeout = DEF_XMLQSTAT_TIMEOUT || 10;
 
 # name of the GridEngine architecture:
 my $sgeArch = "DEF_SGE_ARCH";
@@ -113,5 +113,7 @@ my $sgeLibEnv = "DEF_LIBENV";
 ################################################################################
 ################################################################################
 
+# regex matching the start of the web-app:
+my $webappRE = qr{^/\Q$webappName\E}o;
 
 ##</xmlqstat>##

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML-QSTAT site-specific configuration file -->
+<config>
+
+<!--
+   | If the 'qlicserver' entity exists and has the attribute enabled="true",
+   | the viewing of the resource allocation reported by the qlicserver program
+   | will be enabled.
+   | Other values (or a missing entry) are interpreted as enabled="false".
+   -->
+<qlicserver enabled="true"/>
+
+<!--
+   | If the 'sortByQueue' entity exists and has the attribute enabled="true",
+   | the queue instances in the 'qstat -f' rendering will be sorted by
+   | the queue name.
+   | Other values (or a missing entry) are interpreted as enabled="false"
+   | meaning the values are used as they come from the 'qstat -f' output,
+   | which should correspond to the seqno.
+   -->
+<sortByQueue enabled="true"/>
+
+<!--
+   | Optional external programs
+   | Leave empty (or remove) if you don't have such a programs
+   -->
+<programs>
+  <!--
+     | An external program for viewing the GridEngine stdout files.
+     | (jobId, root, cell, etc. are passed via the queryString)
+     | Leave empty if you don't have such a program.
+     -->
+  <viewfile>http://dealog01:8080/cgi-bin/viewfile</viewfile>
+
+  <!--
+     | An external program for finding and viewing the log files.
+     | (jobId, root, cell, etc. are passed via the queryString)
+     | Leave empty if you don't have such a program.
+     -->
+  <viewlog>http://dealog01:8080/cgi-bin/logview</viewlog>
+
+</programs>
+
+<!--
+   | Define a top logo for all of the pages and a link location.
+   | This can be useful to link back to the main site
+   -->
+<!--
+    <topLogo
+        src="config/xmlqstat-logo.png"
+        href="http://www.xml-qstat.org"
+        height="29"
+        />
+-->
+<topLogo
+    src="config/logo.png"
+    href="http://dealog01"
+    height="29"
+    />
+
+<!--
+   | Define cluster settings and if a default cluster is allowed.
+   |
+   | @name - SGE_CLUSTER_NAME required for 'cluster' but not for 'default'
+   | @root - SGE_ROOT required unless @baseURL is used
+   | @cell - SGE_CELL optional, provided the downstream uses 'default'
+   | @baseURL - optional means of getting at resources, needs a trailing slash
+   |
+   | If the 'default' entity exists in 'clusters' and has the attribute
+   | enabled="false", the default (unnamed) cluster will be disabled.
+   | Other values (or a missing entry) are interpreted as enabled="true".
+-->
+<clusters>
+  <default
+      enabled="true"
+      root="/opt/grid"
+      cell="default"
+      />
+
+  <cluster
+      name="augsburg01"
+      root="/data/app/grid01"
+      cell="default"
+      />
+
+  <cluster
+      name="augsburg02"
+      root="/data/app/grid02"
+      cell="default"
+      />
+
+</clusters>
+
+</config>
+<!-- end-of-file -->

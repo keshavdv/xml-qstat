@@ -20,9 +20,6 @@
 *.so
 *.jar
 
-# except jar files in the main directory
-!/*.jar
-
 # source packages - anywhere
 *.tar.bz2
 *.tar.gz
@@ -31,12 +28,13 @@
 # ignore a persistent .build tag in the main directory
 /.build
 
-# ignore cache directories (might be symbolic links)
+# ignore cache directories (might be symbolic links - thus no trailing slash)
 /web-app/cache
 /web-app/cache-*
 
 # ignore site-specific config files
 /web-app/config/alarm-threshold.xml
+/web-app/config/config.xml
 
 # ignore site-specific image files
 /web-app/config/logo.png

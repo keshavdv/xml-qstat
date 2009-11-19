@@ -1,9 +1,0 @@
-### 2009-04-16:
-
-- command-generator caching needs attention
-
-- command-generator lacks environ for passing SGE_ROOT etc. which is
-  required for multi-cluster support
-  - use qhost.sh and qstat.sh wrappers, they handle ROOT=.. CELL=..
-    parameters
-

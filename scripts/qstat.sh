@@ -30,7 +30,7 @@ then
 fi
 
 ## Note: "date --rfc-3339" is not a valid option for some systems (eg, Mac OSX)
-## Uncomment whichever line that works on your system
+## Uncomment whichever line works on your system
 
 # echo "$(date --rfc-3339=s) $USER@$HOST: $cmd $@" >> $logfile 2>/dev/null
 # echo "$(date) $USER@$HOST: $cmd $@" >> $logfile 2>/dev/null
@@ -117,7 +117,8 @@ fi
     error "'$qualifiedCmd' not found"
 
 
-# special output for -xml
+# special output for -xml, which is actually the standard case for
+# the cocoon webserver integration
 xmlOutput=false
 case "$@" in *-xml*) xmlOutput=true;; esac
 

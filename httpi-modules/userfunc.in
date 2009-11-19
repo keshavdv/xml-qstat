@@ -235,7 +235,6 @@ sub hterror404 {
             # only retain content of <clusters> .. </clusters> bit
             s{^.*<clusters>|</clusters>.*$}{}sg;
 
-
             ## process <cluster .../> and <cluster ...> .. </cluster>
             while (s{<cluster \s+([^<>]+?) />}{}sx
                 or s{<cluster \s+([^<>]+) > (.*?) </cluster>}{}sx )
@@ -250,12 +249,10 @@ sub hterror404 {
                 }
             }
 
-
             ## handle <default ... />
             my ( $name, %attr ) = ("default");
 
-
-            if (s{<default \s+([^<>]+?) />}{}sx
+            if (   s{<default \s+([^<>]+?) />}{}sx
                 or s{<default \s+([^<>]+) > (.*?) </default>}{}sx )
             {
                 my ( $attr, $content ) = ( $1, $2 );
@@ -266,13 +263,15 @@ sub hterror404 {
             }
 
             my $enabled = delete $attr{enabled};
-            if ( $enabled and $enabled eq "no" ) {
+            if ( $enabled and $enabled eq "false" ) {
                 %attr = ();
-            } else {
-                $clusterPaths{"default"} = {%attr};
+            }
+            else {
+                $clusterPaths{default} = {%attr};
             }
         }
     }
+
 
     #
     # output <?xml .. ?> processing-instruction
@@ -304,6 +303,7 @@ qq{<?${disabled}xml-stylesheet type="text/xml" href="$stylesheet"?>\n};
 
         $prolog;
     }
+
 
     #
     # simple wrapper to join the args and return text/xml
@@ -369,6 +369,7 @@ qq{<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0" name="$src"
 
         qq{$content</dir:directory>\n};
     }
+
 
     # special purpose Directory Generator
     #
@@ -478,7 +479,13 @@ CONTENT
             $root = $clusterPaths{$cluster}{root};
             $cell = $clusterPaths{$cluster}{cell};
         }
-        $cell ||= "default"; # fallback
+        elsif ( $cluster eq "default"
+            and exists $ENV{SGE_ROOT} )
+        {
+            ## 'default' is allowed to fallback to the SGE_ROOT
+            $root = $ENV{SGE_ROOT};
+        }
+        $cell ||= "default";    # fallback
 
         unless ( defined $root ) {
             &hterror404(<<"CONTENT");
@@ -503,7 +510,6 @@ Could not resolve command in <tt>$root/bin/$sgeArch</tt>
 CONTENT
         }
 
-
         # no cell directory? error!
         unless ( -d "$root/$cell" ) {
             &hterror404(<<"CONTENT");
@@ -515,10 +521,10 @@ Cell directory <b>$root/$cell</b> does not exist
 CONTENT
         }
 
-        # localizing should be okay, but seems to fail:
-        # good that we are using a daemon mode anyhow
+        # localizing should be okay, but seems to fail?!
+        # - good that we are using a daemon mode anyhow
         # local *ENV;
-        #
+
         $ENV{SGE_ROOT} = $root;
         $ENV{SGE_CELL} = $cell;
 
@@ -535,7 +541,7 @@ CONTENT
         # first argument is a currently just a dummy (OO-remnant)
         my $x = shellCmd( "gridEngineCmd", $cmdPath, @cmdArgs );
 
-        $x =~ s{</*>\s*}{}g if $x;  # cleanup incorrect XML
+        $x =~ s{</*>\s*}{}g if $x;    # cleanup incorrect XML
         $x;
     }
 
@@ -558,9 +564,7 @@ CONTENT
         for (
               ( not $cluster or $cluster eq "default" )
             ? ("cache/$cacheName")
-            : (
-                "cache-$cluster/$cacheName", "cache/$cacheName~$cluster"
-            )
+            : ( "cache-$cluster/$cacheName", "cache/$cacheName~$cluster" )
           )
         {
             my $x = "$mainDir/$_.xml";
@@ -611,7 +615,6 @@ CONTENT
             }
         }
 
-
         if ($content) {
             ## strip <?xml ...?> # or have problems later!
             $content =~ s{^\s*<\?xml[^?]+\?>\s*}{}sx;
@@ -638,28 +641,25 @@ CONTENT
         my %xsltParam =
           ( timestamp => POSIX::strftime( "%Y-%m-%d %H:%M:%S", localtime ), );
 
-        # hack for quick serving of qstat/qhost information
-        # ----------------------------------------------
-
-        # match qstat.xml, qstatf.xml, qhost.xml, etc
+        #
+        # quick serving of qhost/qstat information
+        # ----------------------------------------
+        #    /qhost.xml
+        #    /qstat.xml
+        #    /qstatf.xml
+        #    /qstatj.xml
+        #
         if ( $::address =~ m{^/(q[a-z]+)\.xml$} ) {
             my ( $function, $clusterName ) = ( $1, "default" );
-
-            updateClusterConfig();
-
             if ( exists $gridEngineQuery{$function} ) {
-                if ( $function eq "qstatj" ) {
-                    &hterror404(<<"CONTENT");
-Resource-intensive request denied
-<blockquote><b>$::address</b></blockquote>
-CONTENT
-                }
+                updateClusterConfig();
 
                 returnXML(
                     xmlProlog(%xsltParam),
                     xmlFromCache(
                         $clusterName,
-                        $function => [ $gridEngineQuery{$function}, $clusterName ]
+                        $function =>
+                          [ $gridEngineQuery{$function}, $clusterName ]
                     )
                 );
             }
@@ -667,7 +667,7 @@ CONTENT
         }
 
         # trivial check - not our resource
-        return if $::address !~ m{^/$webappName(?:/|$)};
+        return if $::address !~ m{$webappRE(?:/|$)};
 
         # the file paths must exist
         # give diagnosis of what is missing or mis-configured:
@@ -700,20 +700,19 @@ CONTENT
 
         #
         # re-direct rules first
-        #
+        # ---------------------
 
         #    /<webapp>
         # or /<webapp>/cluster
         # or /<webapp>/cluster/
         # -> /<webapp>/
-        if ( $::address =~ m{^/$webappName(/cluster/*)?$} )
-        {
+        if ( $::address =~ m{$webappRE(/cluster/*)?$} ) {
             &hterror301("/$webappName/");
         }
 
         #    /<webapp>/cluster/{clusterName}
         # -> /<webapp>/cluster/{clusterName}/jobs
-        if ( $::address =~ m{^/$webappName/cluster/([^\s/]+?)/*$} ) {
+        if ( $::address =~ m{$webappRE/cluster/([^\s/]+?)/*$} ) {
             my ($clusterName) = ($1);
             $::address =~ s{/+$}{};
 
@@ -734,7 +733,7 @@ CONTENT
         # etc
         # -> /<webapp>/css/.../*.(css|png) etc
         if (
-            $::address =~ m{^/$webappName/.*
+            $::address =~ m{$webappRE/.*
                   (
                       /(?:config|css|javascript|x[ms]l)/
                       .+\.(?:css|js|png|x[ms]l)
@@ -752,8 +751,7 @@ CONTENT
         #  /<webapp>/
         #  /<webapp>/index.xml
         #
-        if ( $::address =~ m{^/$webappName/(?:index\.(xml))?$} )
-        {
+        if ( $::address =~ m{$webappRE/(?:index\.(xml))?$} ) {
             $xsltParam{urlExt} = $1 if $1;
 
             returnXML(
@@ -769,7 +767,7 @@ CONTENT
         #
         #  /<webapp>/cache
         #
-        if ( $::address eq "/$webappName/cache" ) {
+        if ( $::address =~ m{$webappRE/cache$} ) {
             returnXML(
                 xmlProlog(%xsltParam),    #
                 directoryGeneratorCacheFiles()
@@ -779,7 +777,7 @@ CONTENT
         #
         #  /<webapp>/test(.xml)
         #
-        if ( $::address =~ m{^/$webappName/test(\.xml)?$} ) {
+        if ( $::address =~ m{$webappRE/test(\.xml)?$} ) {
             returnXML(
                 xmlProlog(
                     %xsltParam,           #
@@ -789,8 +787,12 @@ CONTENT
             );
         }
 
+        #
         # create directory listings
-        if ( $::address =~ m{^/$webappName/(config|xsl)$} ) {
+        #  /<webapp>/config
+        #  /<webapp>/xsl
+        #
+        if ( $::address =~ m{$webappRE/(config|xsl)$} ) {
             my $dir = $1;
 
             returnXML(
@@ -805,7 +807,7 @@ CONTENT
         #
         # /<webapp>/info/*
         #
-        if ( $::address =~ m{^/$webappName/(info/.+)\.html$} ) {
+        if ( $::address =~ m{$webappRE/(info/.+)\.html$} ) {
             my $file = "xml/$1.xml";
 
             returnXML(
@@ -821,7 +823,7 @@ CONTENT
         # /<webapp>/cluster/{clusterName}/{function}(.xml)
         #
         if ( $::address =~
-            m{^/$webappName/cluster/([^\s/]+?)/([^\s/]+?)(\.xml)?/*$} )
+            m{$webappRE/cluster/([^\s/]+?)/([^\s/]+?)(\.xml)?/*$} )
         {
             my ( $clusterName, $function, $urlExt ) = ( $1, $2, $3 );
 
@@ -926,8 +928,8 @@ CONTENT
         # special handling for
         # qstatf.xml, qstatf~.xml and qstatf~{clusterName}.xml
         #
-        if (   $::address =~ m{^/$webappName/(qstatf)~([^\s/]*)\.xml$}
-            or $::address =~ m{^/$webappName/(qstatf)\.xml$} )
+        if (   $::address =~ m{$webappRE/(qstatf)~([^\s/]*)\.xml$}
+            or $::address =~ m{$webappRE/(qstatf)\.xml$} )
         {
             my ( $function, $clusterName ) = ( $1, $2 );
 
@@ -953,8 +955,8 @@ CONTENT
         #    /<webapp>/(resource|jobs|..)~{clusterName}(.xml)
         # or /<webapp>/(resource|jobs|..)(.xml)
         #
-        if (   $::address =~ m{^/$webappName/(\w+)~([^\s/]*?)(\.xml)?$}
-            or $::address =~ m{^/$webappName/(\w+)(\.xml)?$} )
+        if (   $::address =~ m{$webappRE/(\w+)~([^\s/]*?)(\.xml)?$}
+            or $::address =~ m{$webappRE/(\w+)(\.xml)?$} )
         {
             my ( $function, $clusterName, $urlExt ) = ( $1, $2, $3 );
 
@@ -1060,7 +1062,7 @@ CONTENT
 
         ## warn "fall-thru with $::address\n";
         $::path = $webappPath;
-        $::address =~ s{^/$webappName}{};
+        $::address =~ s{$webappRE}{};
 
     }
 

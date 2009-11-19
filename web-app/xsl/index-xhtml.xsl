@@ -232,16 +232,17 @@
     <xsl:with-param name="name" select="@name"/>
     <xsl:with-param name="root" select="@root"/>
     <xsl:with-param name="cell" select="@cell"/>
+    <xsl:with-param name="base" select="@baseURL"/>
   </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="default">
   <xsl:variable name="root">
     <xsl:choose>
-      <xsl:when test="@root">
-        <xsl:value-of select="@root"/>
-      </xsl:when>
-      <xsl:otherwise>SGE_ROOT</xsl:otherwise>
+    <xsl:when test="@root">
+      <xsl:value-of select="@root"/>
+    </xsl:when>
+    <xsl:otherwise>SGE_ROOT</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
@@ -250,6 +251,7 @@
     <xsl:with-param name="name" select="'default'"/>
     <xsl:with-param name="root" select="$root"/>
     <xsl:with-param name="cell" select="@cell"/>
+    <xsl:with-param name="base" select="@baseURL"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -277,6 +279,7 @@
   <xsl:param name="name" />
   <xsl:param name="root" />
   <xsl:param name="cell" />
+  <xsl:param name="base" />
 
   <!-- cache dir qualified with cluster name -->
   <xsl:variable name="fqCacheDir">
@@ -644,14 +647,35 @@
 
   </td>
 
-  <!-- sge root -->
-  <td>
+  <xsl:choose>
+  <xsl:when test="string-length($base)">
+    <!--
+       | misuse sge root for URL
+       | but don't supply href since it may not point anywhere useful
+       -->
+    <td>
+      <xsl:element name="a">
+        <xsl:attribute name="title">
+          <xsl:value-of select="$base"/>
+        </xsl:attribute>
+        <xsl:text>http://</xsl:text>
+      </xsl:element>
+    </td>
+    <!-- sge cell -->
+    <td>
+    </td>
+  </xsl:when>
+  <xsl:otherwise>
+    <!-- sge root -->
+    <td>
       <xsl:value-of select="$root"/>
-  </td>
-  <!-- sge cell -->
-  <td>
+    </td>
+    <!-- sge cell -->
+    <td>
       <xsl:value-of select="$cell"/>
-  </td>
+    </td>
+  </xsl:otherwise>
+  </xsl:choose>
 
   </tr>
 </xsl:template>

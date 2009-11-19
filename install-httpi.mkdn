@@ -126,7 +126,4 @@ which arguments they have.
 Additionally, the GridEngine commands will only be executed when they are
 located in the **$SGE_ROOT/bin/$SGE_ARCH/** directory, where the value of
 **$SGE_ARCH** is determined internally by the program. The **PATH** will
-**not** be searched.  The values of **$SGE_ROOT** and **$SGE_CELL** are not
-taken from the environment, but rather from the **config/config.xml** file
-directly.
-
+**not** be searched.

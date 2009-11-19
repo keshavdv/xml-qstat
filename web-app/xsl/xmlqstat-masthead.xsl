@@ -36,14 +36,11 @@
   <p>
     <xsl:element name="a">
       <!-- a href -->
-      <xsl:attribute name="href">
-        <xsl:choose>
-        <xsl:when test="$topLogo/@href">
+      <xsl:if test="$topLogo/@href">
+        <xsl:attribute name="href">
           <xsl:value-of select="$topLogo/@href"/>
-        </xsl:when>
-        <xsl:otherwise>#</xsl:otherwise>
-        </xsl:choose>
-      </xsl:attribute>
+        </xsl:attribute>
+      </xsl:if>
 
       <xsl:element name="img">
         <!-- img src -->
@@ -58,7 +55,7 @@
         </xsl:attribute>
 
         <!-- img alt -->
-        <xsl:attribute name="alt">logo</xsl:attribute>
+        <xsl:attribute name="alt">Web-based status monitoring of GridEngine clusters</xsl:attribute>
         <xsl:attribute name="border">0</xsl:attribute>
 
         <!-- img height -->
@@ -89,13 +86,13 @@
   <xsl:param name="jobinfo" />
   <xsl:param name="urlExt" />
 
-  <xsl:variable name="qlicserverAllowed">
+  <xsl:variable name="qlicserverEnabled">
     <xsl:choose>
-    <xsl:when test="document('../config/config.xml')/config/qlicserver/@enabled = 'false'">
-      <xsl:text>false</xsl:text>
+    <xsl:when test="document('../config/config.xml')/config/qlicserver/@enabled = 'true'">
+      <xsl:text>true</xsl:text>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:text>true</xsl:text>
+      <xsl:text>false</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -174,7 +171,7 @@
       />
     </xsl:element>
 
-  <xsl:if test="$qlicserverAllowed = 'true'">
+  <xsl:if test="$qlicserverEnabled = 'true'">
     <!-- resources -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
@@ -240,13 +237,13 @@
   <xsl:param name="jobinfo" />
   <xsl:param name="urlExt" />
 
-  <xsl:variable name="qlicserverAllowed">
+  <xsl:variable name="qlicserverEnabled">
     <xsl:choose>
-    <xsl:when test="document('../config/config.xml')/config/qlicserver/@enabled = 'false'">
-      <xsl:text>false</xsl:text>
+    <xsl:when test="document('../config/config.xml')/config/qlicserver/@enabled = 'true'">
+      <xsl:text>true</xsl:text>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:text>true</xsl:text>
+      <xsl:text>false</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -337,7 +334,7 @@
       />
     </xsl:element>
 
-  <xsl:if test="$qlicserverAllowed = 'true'">
+  <xsl:if test="$qlicserverEnabled = 'true'">
     <!-- resources -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">

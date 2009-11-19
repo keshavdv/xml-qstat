@@ -10,7 +10,15 @@ sidenav:
 > For more details, consult the git history.
 
 ---------------
-### Release Candidate (2009-11-18)
+### Release Candidate (2009-11-19)
+
+Made config/config.xml optional and stop tracking it
+
+- the default installation should now work without needing to have
+  or edit a config/config.xml file.
+- qlicserver support must be explicitly enabled. This is only a slight
+  inconvenience for qlicserver users, but provides a better general set of
+  defaults for clusters without any file caching.
 
 Can finally run cocoon without an extra cgi-script!
 

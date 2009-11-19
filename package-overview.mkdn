@@ -52,7 +52,7 @@ httpi-modules/
   installation.
 
 icons/
-: various icons that are not currently used in the rendered views. They are
+: silk icons that are not currently used in the rendered views. They are
   split off to permit a more compact final installation if required.
 
 init-scripts/
@@ -60,10 +60,10 @@ init-scripts/
   the application servers (cocoon and/or HTTPi) and the XML caching scripts.
 
 java/
-: the CommandGenerator required for the Cocoon server-side installation.
+: the CommandGenerator code (*cocoon only*)
 
 ./make-httpi.sh
-: script for configuring/installing the HTTPi-xmlqstat webserver
+: script for configuring and installing the HTTPi-xmlqstat webserver
 
 ./make-xmlqstat-jar.sh
 : script for compiling the CommandGenerator (*cocoon only*)
@@ -107,7 +107,7 @@ web-app/
 
 config/
 : contains XML configuration files for the
-  xml-qstat application and the logo image.
+  **xml-qstat** application and the logo image.
 
 css/
 : contains CSS stylesheets used for separation of content from presentation.
@@ -132,5 +132,5 @@ xsl/
 
 Generally speaking, the user will only need to edit files in the **config/**
 directory. In contrast to previous versions, editing the **sitemap.xmap**
-to make configuration changes for Cocoon should normally be unnecessary.
+file to make configuration changes for Cocoon should be unnecessary.
 

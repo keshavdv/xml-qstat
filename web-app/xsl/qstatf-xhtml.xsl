@@ -82,7 +82,7 @@
 <xsl:variable
     name="alarmFile"
     select="document('../config/alarm-threshold.xml')" />
-<xsl:variable name="sortByQueue">
+<xsl:variable name="sortByQueueEnabled">
   <xsl:choose>
   <xsl:when test="$configFile/sortByQueue/@enabled = 'true'">
     <xsl:text>true</xsl:text>
@@ -891,7 +891,7 @@
 
     <!-- render queue instances sorted/unsorted -->
     <xsl:choose>
-    <xsl:when test="$sortByQueue = 'true'">
+    <xsl:when test="$sortByQueueEnabled = 'true'">
       <xsl:for-each select="./Queue-List">
         <xsl:sort select="name"/>
         <xsl:apply-templates select="." mode="queues"/>

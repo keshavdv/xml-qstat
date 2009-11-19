@@ -20,9 +20,6 @@
 *.so
 *.jar
 
-# except jar files in the main directory
-!/*.jar
-
 # source packages - anywhere
 *.tar.bz2
 *.tar.gz
@@ -31,7 +28,7 @@
 # ignore a persistent .build tag in the main directory
 /.build
 
-# ignore cache directories (might be symbolic links)
+# ignore cache directories (might be symbolic links - thus no trailing slash)
 /web-app/cache
 /web-app/cache-*
 
@@ -45,6 +42,6 @@
 /_site/
 
 # ignore github pages
-/gh-pages/
+/gh-pages
 
 # end-of-file

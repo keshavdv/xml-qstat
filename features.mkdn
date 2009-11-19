@@ -28,6 +28,12 @@ flex-grid (qlicserver) integration
   in combination with the
   [flex-grid/qlicserver](http://olesenm.github.com/flex-grid) package.
 
+Live Display Mode
+: Grid Engine state and status data is refreshed before every page display
+  by builtin methods that query the SGE qmaster directly. Suitable for sites
+  and clusters where generating a 'qstat' call each time a page is accessed
+  does not present scaling or performance issues.
+
 Cached Display Mode
 : XML status data from Grid Engine can be cached to a local file at a user
   definable interval and used for generating web pages. This mode prevents
@@ -35,12 +41,6 @@ Cached Display Mode
   each time a page is accessed. Most suitable for sites operating very large
   clusters or systems with many thousands of active jobs. Information about
   individual jobs is still fetched dynamically.
-
-Live Display Mode
-: Grid Engine state and status data is refreshed before every page display
-  by builtin methods that query the SGE qmaster directly. Suitable for sites
-  and clusters where generating a 'qstat' call each time a page is accessed
-  does not present scaling or performance issues.
 
 Client-side XSLT transformations
 : using the HTTPi webserver or Apache Cocoon 2.1
@@ -55,8 +55,15 @@ Per user job sorting
 Job Detail handling via URL
 : for any active or pending job.
 
-Standard or Terse view
-: a special "terse" ('summary') view can be used for very large or very
+Standard or Report view for qstat -f output
+: a special terse "report" view can be used for very large or very
   active clusters. This is to handle clusters with thousands of nodes or
   hundreds of thousands of active grid jobs
+
+Monitoring of remote clusters
+: **xml-qstat** can also be used to relay raw xml streams from the
+  Grid Engine qstat output across a http transport. This is particularly
+  useful with the **HTTPi-xmlqstat** version -- a stripped-down version
+  (webserver only) can be run on the remote cluster with the results
+  integrated into the standard multi-cluster view.
 

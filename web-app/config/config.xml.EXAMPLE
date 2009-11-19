@@ -64,7 +64,7 @@
    | @name - SGE_CLUSTER_NAME required for 'cluster' but not for 'default'
    | @root - SGE_ROOT required unless @baseURL is used
    | @cell - SGE_CELL optional, provided the downstream uses 'default'
-   | @baseURL - optional means of getting at resources, needs a trailing slash
+   | @baseURL - optional means of getting at resources via http://
    |
    | If the 'default' entity exists in 'clusters' and has the attribute
    | enabled="false", the default (unnamed) cluster will be disabled.
@@ -87,6 +87,11 @@
       name="augsburg02"
       root="/data/app/grid02"
       cell="default"
+      />
+
+  <cluster
+      name="github-demo"
+      baseURL="http://olesenm.github.com/xml-qstat/web-app/"
       />
 
 </clusters>

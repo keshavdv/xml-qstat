@@ -100,7 +100,7 @@ my $webappPath = "DEF_XMLQSTAT_ROOT/web-app";
 my $webappName = "DEF_XMLQSTAT_WEBAPPNAME" || "xmlqstat";
 
 # timeout (seconds) for system command like qstat -j etc.:
-my $shellCmdTimeout = DEF_XMLQSTAT_TIMEOUT || 10;
+my $shellCmdTimeout = DEF_XMLQSTAT_TIMEOUT || 20;
 
 # name of the GridEngine architecture:
 my $sgeArch = "DEF_SGE_ARCH";

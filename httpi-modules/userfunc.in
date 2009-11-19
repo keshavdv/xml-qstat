@@ -112,7 +112,9 @@ sub hterror404 {
     # ideas from LWP::Simple but without IO::Socket.pm
     #
     sub get_http_source {
-        my ( $host, $port, $path ) = @_;
+        ( my $url = shift ) =~ m{^http://([^/:\@]+)(?::(\d+))?(/\S*)?$};
+        my ( $host, $port, $path ) = ( $1, $2, $3 );
+
         $port ||= 80;
         if ($path) {
             $path =~ s{//+}{/}g;
@@ -136,19 +138,27 @@ sub hterror404 {
         socket SOCK, DEF_PF_INET, DEF_SOCK_STREAM, DEF_IPPROTO_TCP;
         connect SOCK, $packaddr or return undef;
 
-        ## add timeout?
-
         # use syswrite to avoid buffering
         syswrite SOCK,
           join(
-            "\015\012" => "GET $path HTTP/1.0",
+            "\015\012" => "GET $url HTTP/1.0",
             "User-Agent: HTTPi/$::VERSION",
             "",
             ""
           );
 
+        ## get buffer, handle timeout too
         my ( $buf, $n ) = ("");
-        1 while $n = sysread( SOCK, $buf, 8 * 1024, length($buf) );
+        local $SIG{'__DIE__'} = sub { undef $n; };
+        eval {
+            local $SIG{ALRM} = sub { die "TIMEOUT\n"; };    # NB: '\n' required
+            alarm DEF_XMLQSTAT_TIMEOUT;
+
+            1 while $n = sysread( SOCK, $buf, 8 * 1024, length($buf) );
+
+            alarm 0;
+        };
+
         defined $n or return undef;
 
         # only deal with good (200) values
@@ -175,6 +185,7 @@ sub hterror404 {
 
         return [ \@response, \%header, $buf ];
     }
+
 
     #
     # parse request string
@@ -505,7 +516,7 @@ CONTENT
             &hterror404(<<"CONTENT");
 Resource <b>$::address</b> &ndash; for cluster <em>$cluster</em>
 (<tt>SGE_ROOT=$root</tt>)<br/>
-Could not resolve command in <tt>$root/bin/$sgeArch</tt>
+Could not resolve command in <tt>$root/bin/$sgeArch/</tt>
 <blockquote><pre>$cmd @cmdArgs<pre></blockquote>
 CONTENT
         }
@@ -587,19 +598,17 @@ CONTENT
             and exists $clusterPaths{$cluster}
             and exists $clusterPaths{$cluster}{baseURL} )
         {
-            my $get = "$clusterPaths{$cluster}{baseURL}/$cacheName.xml";
-            my $got;
+            ## url may or may not have trailing slash
+            ( my $url = "$clusterPaths{$cluster}{baseURL}" ) =~ s{/+$}{};
+            $url .= "/$cacheName.xml";
 
-            if ( $get =~ m{(?:^|/)http://([^/:\@]+)(?::(\d+))?(/\S*)?$} ) {
-                my ( $host, $port, $path ) = ( $1, $2, $3 );
-                $got = get_http_source( $host, $port, $path );
-            }
+            my $got = $url =~ m{^http://.+} ? get_http_source($url) : undef;
 
             if ( ref $got eq "ARRAY" ) {
                 $content = $got->[2];
             }
             else {
-                &hterror404("Could not fetch <b>$get</b>");
+                &hterror404("Could not fetch <b>$url</b>");
             }
         }
         elsif ( ref $altCmd eq "ARRAY" ) {

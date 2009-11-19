@@ -135,7 +135,7 @@ PROMPT
 }
 
 
-$DEF_XMLQSTAT_TIMEOUT = &prompt(<<"PROMPT", '10', 1);
+$DEF_XMLQSTAT_TIMEOUT = &prompt(<<"PROMPT", '20', 1);
 
 ------------------------
 xml-qstat customization:

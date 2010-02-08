@@ -437,7 +437,7 @@ sub qhostCacher {
 ###
 ##-----------------------------------------------------------
 ##   NOTE:
-##         copyright (c) 2003-09 <Mark.Olesen\@emconTechnologies.com>
+##         copyright (c) 2003-10 <Mark.Olesen\@faurecia.com>
 ##
 ##         Licensed and distributed under the Creative Commons
 ##         Attribution-NonCommercial-ShareAlike 2.5 License.

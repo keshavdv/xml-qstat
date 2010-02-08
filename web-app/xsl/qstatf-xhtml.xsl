@@ -23,7 +23,7 @@
 <!--
    ============================================================================
    Author : Chris Dagdigian (chris@bioteam.net)
-   Author : Mark.Olesen@emconTechnologies.com
+   Author : Mark.Olesen@faurecia.com
    License: Creative Commons
    ============================================================================
 -->

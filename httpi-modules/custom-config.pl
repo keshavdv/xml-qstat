@@ -1,6 +1,5 @@
 # This file contains custom questions for configuring the HTTPi-xmlqstat
-# It hooks into the configure system provided by HTTPi-1.6.2
-
+# It hooks into the configure system provided by HTTPi-1.6.2 and above
 
 # get GridEngine arch/lib information
 print <<"PROMPT";
@@ -10,25 +9,22 @@ GridEngine configuration
 Trying to determine the architecture and library requirements
 PROMPT
 
-
 ( $DEF_SGE_ARCH, $DEF_LIBENV ) = ( '', '' );
 
 if ( $ENV{SGE_ROOT} and -d $ENV{SGE_ROOT} ) {
-    my $archScript = "$ENV{SGE_ROOT}/util/arch";
+    my $archScript = &detaint( $ENV{SGE_ROOT} ) . "/util/arch";
+
     # use 'arch' script if possible
     print "... checking what '$archScript' reports\n";
 
-    chomp( $DEF_SGE_ARCH = qx{$archScript 2>/dev/null} );
-    if ($DEF_SGE_ARCH)
-    {
+    chomp( $DEF_SGE_ARCH = qx{$archScript} );
+    if ($DEF_SGE_ARCH) {
         chomp( $DEF_LIBENV = qx{$archScript -lib 2>/dev/null} );
     }
-    else
-    {
+    else {
         print "Hmm. Couldn't seem to execute $archScript\n";
     }
 }
-
 
 if ($DEF_SGE_ARCH) {
     print "Using $DEF_SGE_ARCH for the GridEngine architecture\n";
@@ -63,15 +59,13 @@ PROMPT
     }
 }
 
-
 # library path setting for architectures where RUNPATH is not supported
 if ( $DEF_SGE_ARCH =~ /^(lx|sol)/ or $DEF_SGE_ARCH eq "hp11-64" ) {
     print "Good. We can apparently use RUNPATH for this architecture!\n";
     $DEF_LIBENV = '';
 }
-else
-{
-    $DEF_LIBENV = &prompt(<<"PROMPT", 'LD_LIBRARY_PATH', 1);
+else {
+    $DEF_LIBENV = &prompt( <<"PROMPT", 'LD_LIBRARY_PATH', 1 );
 
 Define the name of the dynamic link library environment variable
 for your machine. This is needed to load the GridEngine libraries.
@@ -80,21 +74,20 @@ Which environment variable is used for the libraries?
 PROMPT
 }
 
-
 # get the name of the web application
-$DEF_XMLQSTAT_WEBAPPNAME = &prompt(<<"PROMPT", 'grid', 1);
+$DEF_XMLQSTAT_WEBAPPNAME = &prompt( <<"PROMPT", 'grid', 1 );
 
 xml-qstat customization:
 ------------------------
 Serve this web application under which resource name:?
 PROMPT
 
-$DEF_XMLQSTAT_WEBAPPNAME =~ s{^/+|/+$}{}g;   # no leading/trailing slashes
-$DEF_XMLQSTAT_WEBAPPNAME =~ s{^//+}{/}g;     # double slashes
-
+$DEF_XMLQSTAT_WEBAPPNAME =~ s{^/+|/+$}{}g;    # no leading/trailing slashes
+$DEF_XMLQSTAT_WEBAPPNAME =~ s{^//+}{/}g;      # double slashes
 
 # get xmlqstat root
-$DEF_XMLQSTAT_ROOT = &interprompt(<<"PROMPT", '~/xml-qstat', 1, \&inter_homedir);
+$DEF_XMLQSTAT_ROOT =
+  &interprompt( <<"PROMPT", '~/xml-qstat', 1, \&inter_homedir );
 
 xml-qstat customization:
 ------------------------
@@ -110,14 +103,11 @@ xml-qstat resource root:?
 PROMPT
 
 # verify directory plausibility
-for ($DEF_XMLQSTAT_ROOT)
-{
-    if (
-        -d $_
+for ($DEF_XMLQSTAT_ROOT) {
+    if (    -d $_
         and -d "$_/web-app"
         and -d "$_/web-app/css"
-        and -d "$_/web-app/xsl"
-      )
+        and -d "$_/web-app/xsl" )
     {
         print <<"PROMPT";
 Okay. The directory '$_'
@@ -134,14 +124,13 @@ PROMPT
     }
 }
 
-
-$DEF_XMLQSTAT_TIMEOUT = &prompt(<<"PROMPT", '20', 1);
+$DEF_XMLQSTAT_TIMEOUT = &prompt( <<"PROMPT", '20', 1 );
 
 ------------------------
 xml-qstat customization:
 Define the maximum timeout (seconds) when executing GridEngine commands
 PROMPT
 
+1;    # loaded ok
 
-1; # loaded ok
 # ----------------------------------------------------------------- end-of-file

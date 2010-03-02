@@ -7,7 +7,7 @@
 #
 # Mark Olesen
 # -----------------------------------------------------------------------------
-packageDir=httpi-1.6.2
+packageDir=httpi-1.7
 urlBase=http://www.floodgap.com/httpi/
 
 buildDir=build-httpi

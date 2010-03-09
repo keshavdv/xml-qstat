@@ -3,7 +3,7 @@ title: qstatf.xml
 layout: nil
 ---
 <?xml version="1.0" encoding="utf-8"?>
-<?xslt-param name="clusterName" value="demo"?>
+<?xslt-param name="clusterName" value="default"?>
 <?xslt-param name="timestamp" value="2009-10-19T11:30:00"?>
 <?xslt-param name="urlExt" value=".xml"?>
 {% include qstatf.xml %}

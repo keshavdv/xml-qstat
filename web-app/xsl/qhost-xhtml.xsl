@@ -164,7 +164,7 @@
 <xsl:when test="$clusterNode">
   <!-- cluster/cell name -->
   <xsl:value-of select="$clusterNode/@name"/>
-  <xsl:if test="string-length($clusterNode/@cell) and 
+  <xsl:if test="string-length($clusterNode/@cell) and
       $clusterNode/@cell != 'default'">/<xsl:value-of
       select="$clusterNode/@cell"/>
   </xsl:if>
@@ -265,10 +265,10 @@
   <th>total</th>
   <th>used</th>
   <th>
-    <acronym title="a(larm) C(alendar) S(ubordinate)">warnings</acronym>
+    <abbr title="a(larm) C(alendar) S(ubordinate)">warnings</abbr>
   </th>
   <th>
-    <acronym title="d(isabled) s(uspended) u(nknown) E(rror)">errors</acronym>
+    <abbr title="d(isabled) s(uspended) u(nknown) E(rror)">errors</abbr>
   </th>
   <th>free</th>
   </tr>
@@ -432,10 +432,10 @@
   <thead>
   <tr>
     <th/>
-    <th><acronym title="non-normalized cpu load">load</acronym></th>
+    <th><abbr title="non-normalized cpu load">load</abbr></th>
     <th>
       queue
-      <acronym title="B(atch), I(nteractive), P(arallel)">information</acronym>
+      <abbr title="B(atch), I(nteractive), P(arallel)">information</abbr>
     </th>
     <th>cpu</th>
     <th>jobs</th>
@@ -520,7 +520,7 @@
 
   <!-- ncpu (w/o dash for missing values) with arch -->
   <td>
-    <xsl:element name="acronym">
+    <xsl:element name="abbr">
       <xsl:attribute name="title">arch = <xsl:value-of select="hostvalue[@name='arch_string']"/></xsl:attribute>
       <xsl:value-of select="translate(hostvalue[@name='num_proc'], '-', ' ')"/>
     </xsl:element>

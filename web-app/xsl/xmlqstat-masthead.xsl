@@ -404,8 +404,8 @@
     &newline;
 
     <div class="dividerBarAbove">
-      <!-- Rendered: with acronym showing the XSLT version and vendor name -->
-      <xsl:element name="acronym">
+      <!-- Rendered: with abbr showing the XSLT version and vendor name -->
+      <xsl:element name="abbr">
         <xsl:attribute name="title">
           <xsl:text>XSLT </xsl:text>
           <xsl:value-of select="format-number(number(system-property('xsl:version')), '0.0')" />

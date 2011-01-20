@@ -144,7 +144,7 @@
 <xsl:when test="$clusterNode">
   <!-- cluster/cell name -->
   <xsl:value-of select="$clusterNode/@name"/>
-  <xsl:if test="string-length($clusterNode/@cell) and 
+  <xsl:if test="string-length($clusterNode/@cell) and
       $clusterNode/@cell != 'default'">/<xsl:value-of
       select="$clusterNode/@cell"/>
   </xsl:if>
@@ -341,7 +341,7 @@
       <th>slots</th>
       <th>tasks</th>
       <th>queue</th>
-      <th><acronym title="priority">startTime</acronym></th>
+      <th><abbr title="priority">startTime</abbr></th>
       <th>state</th>
     </tr>
     &newline;
@@ -416,7 +416,7 @@
   </td>
   <!-- startTime with priority-->
   <td>
-    <xsl:element name="acronym">
+    <xsl:element name="abbr">
       <xsl:attribute name="title"><xsl:value-of select="JAT_prio"/></xsl:attribute>
       <xsl:value-of select="JAT_start_time" />
     </xsl:element>
@@ -448,7 +448,7 @@
       <th>slots</th>
       <th>tasks</th>
       <th>queue</th>
-      <th><acronym title="submissionTime">priority</acronym></th>
+      <th><abbr title="submissionTime">priority</abbr></th>
       <th>state</th>
     </tr>
     <xsl:for-each select="job_list[@state='pending']">
@@ -524,7 +524,7 @@
   </td>
   <!-- priority with submissionTime-->
   <td>
-    <xsl:element name="acronym">
+    <xsl:element name="abbr">
       <xsl:attribute name="title">
         <xsl:value-of select="JB_submission_time"/>
       </xsl:attribute>

@@ -197,7 +197,7 @@
   <td align="left">
     <xsl:choose>
     <xsl:when test="@served">
-      <xsl:element name="acronym">
+      <xsl:element name="abbr">
         <xsl:attribute name="title"><xsl:value-of select="$annotation"/></xsl:attribute>
         <xsl:value-of select="@name" />
       </xsl:element>
@@ -267,7 +267,7 @@
   <xsl:choose>
   <xsl:when test="@extern">
     <td>
-      <xsl:element name="acronym">
+      <xsl:element name="abbr">
         <xsl:attribute name="title">
           <xsl:for-each select="user[@type = 'extern']">
             <xsl:value-of select="@name"/>@<xsl:value-of select="@host"/>=<xsl:value-of select="."/>
@@ -290,7 +290,7 @@
   <xsl:choose>
   <xsl:when test="@intern">
     <td>
-      <xsl:element name="acronym">
+      <xsl:element name="abbr">
         <xsl:attribute name="title">
           <xsl:for-each select="user[@type = 'intern']">
             <xsl:value-of select="@name"/>@<xsl:value-of select="@host"/>=<xsl:value-of select="."/>
@@ -311,7 +311,7 @@
   </xsl:choose>
   <!-- waiting: display users -->
   <td>
-    <xsl:element name="acronym">
+    <xsl:element name="abbr">
       <xsl:attribute name="title">
         <xsl:for-each select="user[@type = 'waiting']">
           <xsl:value-of select="@name"/>=<xsl:value-of select="."/>

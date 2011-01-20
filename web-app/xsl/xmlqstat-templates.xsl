@@ -243,7 +243,7 @@
       </xsl:if>
       <xsl:choose>
       <xsl:when test="$title">
-        <xsl:element name="acronym">
+        <xsl:element name="abbr">
           <xsl:attribute name="title"><xsl:value-of select="$title"/></xsl:attribute>
           <xsl:value-of select="$label" />
         </xsl:element>
@@ -275,7 +275,7 @@
       </xsl:if>
       <xsl:choose>
       <xsl:when test="$title">
-        <xsl:element name="acronym">
+        <xsl:element name="abbr">
           <xsl:attribute name="title"><xsl:value-of select="$title"/></xsl:attribute>
           <xsl:value-of select="$label" />
         </xsl:element>
@@ -471,33 +471,33 @@
   <xsl:choose>
   <xsl:when test="contains($state, 'u')" >
     <!-- 'u' unavailable state : alarm color -->
-    <acronym title="This queue instance is in ALARM/UNREACHABLE state. Is SGE running on this node?">
+    <abbr title="This queue instance is in ALARM/UNREACHABLE state. Is SGE running on this node?">
       <xsl:value-of select="$state"/>
-    </acronym>
+    </abbr>
   </xsl:when>
   <xsl:when test="contains($state, 'E')" >
     <!-- 'E' error : alarm color -->
-    <acronym title="This queue instance is in ERROR state. Check node!">
+    <abbr title="This queue instance is in ERROR state. Check node!">
       <xsl:value-of select="$state"/>
-    </acronym>
+    </abbr>
   </xsl:when>
   <xsl:when test="contains($state, 'a')" >
     <!-- 'a' alarm state : warn color -->
-    <acronym title="This queue instance is in ALARM state.">
+    <abbr title="This queue instance is in ALARM state.">
       <xsl:value-of select="$state"/>
-    </acronym>
+    </abbr>
   </xsl:when>
   <xsl:when test="contains($state, 'd')" >
     <!-- 'd' disabled state : empty color -->
-    <acronym title="This queue has been disabled by a grid administrator">
+    <abbr title="This queue has been disabled by a grid administrator">
       <xsl:value-of select="$state"/>
-    </acronym>
+    </abbr>
   </xsl:when>
   <xsl:when test="contains($state, 'S')" >
     <!-- 'S' suspended -->
-    <acronym title="Queue is (S)uspended">
+    <abbr title="Queue is (S)uspended">
       <xsl:value-of select="$state"/>
-    </acronym>
+    </abbr>
   </xsl:when>
   <xsl:otherwise>
     <!-- default -->
@@ -564,7 +564,7 @@
 
   <xsl:choose>
   <xsl:when test="string-length($name) &gt; $length">
-    <xsl:element name="acronym">
+    <xsl:element name="abbr">
       <xsl:attribute name="title">
         <xsl:value-of select="$name" />
       </xsl:attribute>

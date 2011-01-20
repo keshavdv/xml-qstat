@@ -391,7 +391,7 @@
 
     <!-- Exec file / script -->
     <td>
-      <xsl:element name="acronym">
+      <xsl:element name="abbr">
         <xsl:attribute name="title">script=<xsl:value-of select="JB_script_file" /></xsl:attribute>
         <xsl:value-of select="JB_exec_file" />
       </xsl:element>
@@ -399,7 +399,7 @@
 
     <!-- POSIX: group / gid -->
     <td>
-      <xsl:element name="acronym">
+      <xsl:element name="abbr">
         <xsl:attribute name="title">gid <xsl:value-of select="JB_gid"/></xsl:attribute>
         <xsl:value-of select="JB_group" />
       </xsl:element>
@@ -915,7 +915,7 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
 <xsl:template name="statusTranslation">
   <xsl:param name="status" />
 
-  <xsl:element name="acronym">
+  <xsl:element name="abbr">
     <xsl:attribute name="title">
       <!-- this lookup translates JAT_state to something more readable -->
       <xsl:value-of

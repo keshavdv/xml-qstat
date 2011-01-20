@@ -437,7 +437,7 @@ qq{<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0">\n};
             &hterror404(<<"CONTENT");
 Resource <b>$::address</b> &ndash;
 Timeout or error when executing command :
-<blockquote><pre>@command<pre></blockquote>
+<blockquote><pre>@command</pre></blockquote>
 CONTENT
         };
 
@@ -502,7 +502,7 @@ CONTENT
             &hterror404(<<"CONTENT");
 Resource <b>$::address</b> &ndash;
 Undefined SGE_ROOT for cluster <em>$cluster</em> while executing command :
-<blockquote><pre>$cmd @cmdArgs<pre></blockquote>
+<blockquote><pre>$cmd @cmdArgs</pre></blockquote>
 CONTENT
         }
 
@@ -515,9 +515,9 @@ CONTENT
         unless ( -d $root and -f $cmdPath and -x $cmdPath ) {
             &hterror404(<<"CONTENT");
 Resource <b>$::address</b> &ndash; for cluster <em>$cluster</em>
-(<tt>SGE_ROOT=$root</tt>)<br/>
-Could not resolve command in <tt>$root/bin/$sgeArch/</tt>
-<blockquote><pre>$cmd @cmdArgs<pre></blockquote>
+(<pre>SGE_ROOT=$root</pre>)<br/>
+Could not resolve command in <pre>$root/bin/$sgeArch/</pre>
+<blockquote><pre>$cmd @cmdArgs</pre></blockquote>
 CONTENT
         }
 
@@ -525,9 +525,9 @@ CONTENT
         unless ( -d "$root/$cell" ) {
             &hterror404(<<"CONTENT");
 Resource <b>$::address</b> &ndash; for cluster <em>$cluster</em>
-<tt>(SGE_ROOT=$root</tt>, <tt>SGE_CELL=$root)</tt><br/>
+<pre>(SGE_ROOT=$root</pre>, <pre>SGE_CELL=$root)</pre><br/>
 During command
-<blockquote><pre>$cmd @cmdArgs<pre></blockquote>
+<blockquote><pre>$cmd @cmdArgs</pre></blockquote>
 Cell directory <b>$root/$cell</b> does not exist
 CONTENT
         }

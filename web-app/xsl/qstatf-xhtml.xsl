@@ -420,7 +420,7 @@
         <th>slots</th>
         <th>tasks</th>
         <th>queue</th>
-        <th><acronym title="priority">startTime</acronym></th>
+        <th><abbr title="priority">startTime</abbr></th>
         <th>state</th>
         </tr>
 
@@ -493,7 +493,7 @@
         <th>name</th>
         <th>slots</th>
         <th>tasks</th>
-        <th><acronym title="submissionTime">priority</acronym></th>
+        <th><abbr title="submissionTime">priority</abbr></th>
         <th>state</th>
         </tr>
       <xsl:for-each select="//job_list[@state='pending']">
@@ -879,12 +879,12 @@
       <th>queue</th>
       <th>instance</th>
       <th>
-        <acronym
+        <abbr
             title="Defines if the queue supports (B)atch, (I)nteractive or (P)arallel job types"
-        >type</acronym>
+        >type</abbr>
       </th>
       <th>usage</th>
-      <th><acronym title="normalized cpu load">load</acronym></th>
+      <th><abbr title="normalized cpu load">load</abbr></th>
       <th>system</th>
       <th>status</th>
     </tr>
@@ -917,10 +917,10 @@
     <th>total</th>
     <th>used</th>
     <th>
-      <acronym title="a(larm) C(alendar) S(ubordinate)">warnings</acronym>
+      <abbr title="a(larm) C(alendar) S(ubordinate)">warnings</abbr>
     </th>
     <th>
-      <acronym title="d(isabled) s(uspended) u(nknown) E(rror)">errors</acronym>
+      <abbr title="d(isabled) s(uspended) u(nknown) E(rror)">errors</abbr>
     </th>
     <th>free</th>
     </tr>
@@ -1143,7 +1143,7 @@ $valueTotal0)*100"/>
 
     <!-- priority with submissionTime -->
     <td>
-      <xsl:element name="acronym">
+      <xsl:element name="abbr">
         <xsl:attribute name="title">
           <xsl:value-of select="JB_submission_time"/>
         </xsl:attribute>
@@ -1156,14 +1156,14 @@ $valueTotal0)*100"/>
 <!-- disable icons in pending state column until we can make them smaller
       <xsl:choose>
       <xsl:when test="state = 'qw'">
-        <acronym title="Pending (qw)">
+        <abbr title="Pending (qw)">
           <img src="css/screen/icons/time.png" />
-        </acronym>
+        </abbr>
       </xsl:when>
       <xsl:when test="state = 'hqw'">
-        <acronym title="Pending with hold state (hqw)">
+        <abbr title="Pending with hold state (hqw)">
           <img src="css/screen/icons/time_add.png" />
-        </acronym>
+        </abbr>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="state"/>
@@ -1294,7 +1294,7 @@ $valueTotal0)*100"/>
     <td>
       <xsl:choose>
       <xsl:when test="$nInstances &gt; 1">
-        <xsl:element name="acronym">
+        <xsl:element name="abbr">
           <xsl:attribute name="title">
             <xsl:for-each select="../../Queue-List/name[../job_list/JB_job_number = $jobId]">
               <xsl:call-template name="unqualifiedQueue">
@@ -1318,7 +1318,7 @@ $valueTotal0)*100"/>
 
     <!-- startTime with priority -->
     <td>
-      <xsl:element name="acronym">
+      <xsl:element name="abbr">
         <xsl:attribute name="title">
           <xsl:value-of select="JAT_prio"/>
         </xsl:attribute>
@@ -1331,9 +1331,9 @@ $valueTotal0)*100"/>
       <xsl:choose>
       <xsl:when test="state = 'r'">r</xsl:when>
       <xsl:when test="state = 'S'">
-        <acronym title="Job in (S)ubordinate suspend state">
+        <abbr title="Job in (S)ubordinate suspend state">
           <img alt="(S)" src="css/screen/icons/error.png" />
-        </acronym>
+        </abbr>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="state"/>

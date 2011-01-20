@@ -14,7 +14,7 @@ blockquote {
     margin-right: 20px;
 }
 
-acronym {
+abbr {
     cursor: help;
     border-bottom: 1px dotted;
     font-variant: normal;

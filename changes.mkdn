@@ -10,6 +10,17 @@ sidenav:
 > For more details, consult the git history.
 
 ---------------
+### Release Candidate (2011-02-14)
+
+Avoid some tags that are not supported in HTML5
+
+- change:  acronym, tt -> abbr, pre
+
+Display new 'note' attribute for derived/internal resources
+
+- this attribute is now passed through from qlicserver
+
+---------------
 ### Release Candidate (2009-11-19)
 
 Made config/config.xml optional and stop tracking it

@@ -190,13 +190,14 @@
   <xsl:variable name="annotation">
     <xsl:if test="@served">served = <xsl:value-of select="@served"/>
       <xsl:if test="@from"> [<xsl:value-of select="@from"/>]</xsl:if>
+      <xsl:if test="@note">&space;</xsl:if>
     </xsl:if>
-    <xsl:if test="@note"> (<xsl:value-of select="@note"/>)</xsl:if>
+    <xsl:if test="@note">(<xsl:value-of select="@note"/>)</xsl:if>
   </xsl:variable>
 
   <td align="left">
     <xsl:choose>
-    <xsl:when test="@served">
+    <xsl:when test="@served or @note">
       <xsl:element name="abbr">
         <xsl:attribute name="title"><xsl:value-of select="$annotation"/></xsl:attribute>
         <xsl:value-of select="@name" />

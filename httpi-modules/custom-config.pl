@@ -10,13 +10,29 @@ Trying to determine the architecture and library requirements
 PROMPT
 
 ( $DEF_SGE_ARCH, $DEF_LIBENV ) = ( '', '' );
+$DEF_SGE_ROOT = &detaint( $ENV{SGE_ROOT} || 'none' );
 
-if ( $ENV{SGE_ROOT} and -d $ENV{SGE_ROOT} ) {
-    my $archScript = &detaint( $ENV{SGE_ROOT} ) . "/util/arch";
+$DEF_SGE_ROOT = &prompt( <<"PROMPT", $DEF_SGE_ROOT, 1 );
+Define the default SGE_ROOT for GridEngine commands.
+
+Which value should be used for default GridEngine queries?
+PROMPT
+
+$DEF_SGE_ROOT =~ s{\s*}{}g;
+if ($DEF_SGE_ROOT) {
+    print qq{Using SGE_ROOT="$DEF_SGE_ROOT" for the default GridEngine queries\n};
+}
+else {
+    print "Setting GridEngine SGE_ROOT to empty - ie, disabling default GridEngine queries\n";
+}
+
+if ( -d $DEF_SGE_ROOT ) {
+    my $archScript = &detaint( $DEF_SGE_ROOT ) . "/util/arch";
 
     # use 'arch' script if possible
     print "... checking what '$archScript' reports\n";
 
+    $ENV{SGE_ROOT} = $DEF_SGE_ROOT;
     chomp( $DEF_SGE_ARCH = qx{$archScript} );
     if ($DEF_SGE_ARCH) {
         chomp( $DEF_LIBENV = qx{$archScript -lib 2>/dev/null} );
@@ -25,6 +41,7 @@ if ( $ENV{SGE_ROOT} and -d $ENV{SGE_ROOT} ) {
         print "Hmm. Couldn't seem to execute $archScript\n";
     }
 }
+
 
 if ($DEF_SGE_ARCH) {
     print "Using $DEF_SGE_ARCH for the GridEngine architecture\n";
@@ -68,7 +85,8 @@ else {
     $DEF_LIBENV = &prompt( <<"PROMPT", 'LD_LIBRARY_PATH', 1 );
 
 Define the name of the dynamic link library environment variable
-for your machine. This is needed to load the GridEngine libraries.
+for your machine. This may be needed to load the GridEngine libraries
+on non Linux/Solaris machines.
 
 Which environment variable is used for the libraries?
 PROMPT

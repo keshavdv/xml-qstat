@@ -454,8 +454,8 @@ qq{<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0">\n};
             kill 9, $pid if $pid;
 
             &hterror404(<<"CONTENT");
-Resource <b>$::address</b> &ndash;
-Timeout or error when executing command :
+Resource <blockquote><pre>$::address</pre></blockquote>
+Timeout or error when executing command:
 <blockquote><pre>@command</pre></blockquote>
 CONTENT
         };
@@ -502,70 +502,53 @@ CONTENT
 
         $cluster ||= '';
 
-        # get root/cell from config information
+        # get root/cell from config information,
+        # allow 'default' to use pre-configured value
         if (    exists $clusterPaths{$cluster}
             and exists $clusterPaths{$cluster}{root} )
         {
             $root = $clusterPaths{$cluster}{root};
             $cell = $clusterPaths{$cluster}{cell};
         }
-        elsif ( $cluster eq "default"
-            and exists $ENV{SGE_ROOT} )
+        elsif ( $cluster eq "default" )
         {
-            ## 'default' is allowed to fallback to the SGE_ROOT
-            $root = $ENV{SGE_ROOT};
+            $root = $sge_root;
         }
+        $root ||= '';
         $cell ||= "default";    # fallback
 
-        unless ( defined $root ) {
-            &hterror404(<<"CONTENT");
-Resource <b>$::address</b> &ndash;
-Undefined SGE_ROOT for cluster <em>$cluster</em> while executing command :
+        # need root + cell directory
+        -d $root and $root =~ m{^/} and -d "$root/$cell"
+          or &hterror404(<<"CONTENT");
+Resource <blockquote><pre>$::address</pre></blockquote>
+Root or Cell directory does not exist for cluster <em>$cluster</em>
+<blockquote><pre>SGE_ROOT="$root"<br/>SGE_CELL="$cell"</pre></blockquote>
+while executing command:
 <blockquote><pre>$cmd @cmdArgs</pre></blockquote>
 CONTENT
-        }
 
         #
         # resolve cmd in the <sge_root>/bin/<sge_arch>/ directory
         #
-        my $cmdPath = "$root/bin/$sgeArch/$cmd";
+        my $cmdPath = "$root/bin/$sge_arch/$cmd";
 
-        # not found? error!
-        unless ( -d $root and -f $cmdPath and -x $cmdPath ) {
-            &hterror404(<<"CONTENT");
-Resource <b>$::address</b> &ndash; for cluster <em>$cluster</em>
-(<pre>SGE_ROOT=$root</pre>)<br/>
-Could not resolve command in <pre>$root/bin/$sgeArch/</pre>
+        -f $cmdPath and -x _ or &hterror404(<<"CONTENT");
+Resource<blockquote><pre>$::address</pre></blockquote>
+for cluster <em>$cluster</em>
+<blockquote><pre>SGE_ROOT="$root"</pre></blockquote>
+Could not resolve command in <pre>$root/bin/$sge_arch/</pre>
 <blockquote><pre>$cmd @cmdArgs</pre></blockquote>
 CONTENT
-        }
-
-        # no cell directory? error!
-        unless ( -d "$root/$cell" ) {
-            &hterror404(<<"CONTENT");
-Resource <b>$::address</b> &ndash; for cluster <em>$cluster</em>
-<pre>(SGE_ROOT=$root</pre>, <pre>SGE_CELL=$root)</pre><br/>
-During command
-<blockquote><pre>$cmd @cmdArgs</pre></blockquote>
-Cell directory <b>$root/$cell</b> does not exist
-CONTENT
-        }
 
         # localizing should be okay, but seems to fail?!
         # - good that we are using a daemon mode anyhow
         # local *ENV;
-
         $ENV{SGE_ROOT} = $root;
         $ENV{SGE_CELL} = $cell;
 
-        my $libDir = "$root/lib/$sgeArch";
-        if ( $sgeLibEnv and -d $libDir ) {
-            if ( exists $ENV{$sgeLibEnv} ) {
-                $ENV{$sgeLibEnv} = "$libDir:$ENV{$sgeLibEnv}";
-            }
-            else {
-                $ENV{$sgeLibEnv} = $libDir;
-            }
+        my $libDir = "$root/lib/$sge_arch";
+        if ( $libEnvName and -d $libDir ) {
+            $ENV{$libEnvName} = $libDir;
         }
 
         # first argument is a currently just a dummy (OO-remnant)
@@ -627,7 +610,9 @@ CONTENT
                 $content = $got->[2];
             }
             else {
-                &hterror404("Could not fetch <b>$url</b>");
+                &hterror404(<<"CONTENT");
+Could not fetch <blockquote><pre>$url</pre></blockquote>
+CONTENT
             }
         }
         elsif ( ref $altCmd eq "ARRAY" ) {
@@ -650,7 +635,9 @@ CONTENT
             # we could also do a simple check for non-truncated content?
         }
         else {
-            &hterror404("Cannot resolve resource <b>$::address</b>");
+            &hterror404(<<"CONTENT");
+Cannot resolve resource <blockquote><pre>$::address</pre></blockquote>
+CONTENT
         }
 
         $content;
@@ -699,13 +686,11 @@ CONTENT
 
         # the file paths must exist
         # give diagnosis of what is missing or mis-configured:
-        -d $webappPath
-          or &hterror404(<<"CONTENT");
-Cannot handle resource <b>/$webappName/*</b> &ndash; possible installation error<br/>
-Configured to resolve the resource <b>$webappName</b> using:
-<blockquote>
-<b>$webappPath</b> as the webapp path
-</blockquote>
+        -d $webappPath or &hterror404(<<"CONTENT");
+Possible installation error for handler <blockquote><pre>/$webappName/</pre></blockquote>
+The underlying web-app path:
+<blockquote><pre>$webappPath</pre></blockquote>
+does not seem to exist.
 CONTENT
 
         # place named parameters in %param and unnamed parameters in %switch
@@ -956,7 +941,7 @@ CONTENT
         # special handling for
         # qstatf.xml, qstatf~.xml and qstatf~{clusterName}.xml
         #
-        if (   $::address =~ m{$webappRE/(qstatf)~([^\s/]*)\.xml$}
+        if (   $::address =~ m{$webappRE/(qstatf)[~]([^\s/]*)\.xml$}
             or $::address =~ m{$webappRE/(qstatf)\.xml$} )
         {
             my ( $function, $clusterName ) = ( $1, $2 );
@@ -983,7 +968,7 @@ CONTENT
         #    /<webapp>/(resource|jobs|..)~{clusterName}(.xml)
         # or /<webapp>/(resource|jobs|..)(.xml)
         #
-        if (   $::address =~ m{$webappRE/(\w+)~([^\s/]*?)(\.xml)?$}
+        if (   $::address =~ m{$webappRE/(\w+)[~]([^\s/]*?)(\.xml)?$}
             or $::address =~ m{$webappRE/(\w+)(\.xml)?$} )
         {
             my ( $function, $clusterName, $urlExt ) = ( $1, $2, $3 );

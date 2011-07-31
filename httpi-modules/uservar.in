@@ -102,11 +102,14 @@ my $webappName = "DEF_XMLQSTAT_WEBAPPNAME" || "xmlqstat";
 # timeout (seconds) for system command like qstat -j etc.:
 my $shellCmdTimeout = DEF_XMLQSTAT_TIMEOUT || 20;
 
+# the default GridEngine root (SGE_ROOT):
+my $sge_root = "DEF_SGE_ROOT";
+
 # name of the GridEngine architecture:
-my $sgeArch = "DEF_SGE_ARCH";
+my $sge_arch = "DEF_SGE_ARCH";
 
 # name of the system library environment, for systems where runpath won't work:
-my $sgeLibEnv = "DEF_LIBENV";
+my $libEnvName = "DEF_LIBENV";
 
 #
 # END OF CUSTOMIZE SETTINGS

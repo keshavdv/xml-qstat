@@ -10,15 +10,32 @@
     xmlns:h="http://apache.org/cocoon/request/2.0"
 >
 <!--
-   | process output from a cocoon request generator:
-   | In Apache Cocoon
-   |   <map:generate type="request"/>
-   |
-   | extract <h:request target="..." >
-   |
-   | produce a custom "resource not found" page
-   |
-   -->
+Copyright 2009-2011 Mark Olesen
+
+    This file is part of xml-qstat.
+
+    xml-qstat is free software: you can redistribute it and/or modify it under
+    the terms of the GNU Affero General Public License as published by the
+    Free Software Foundation, either version 3 of the License,
+    or (at your option) any later version.
+
+    xml-qstat is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+    or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
+
+Description
+    process output from a cocoon request generator:
+    In Apache Cocoon
+      <map:generate type="request"/>
+
+    extract <h:request target="..." >
+
+    produce a custom "resource not found" page
+-->
 
 <!-- ======================= Imports / Includes =========================== -->
 <!-- NONE -->

@@ -1,5 +1,8 @@
 // use -*- java -*- mode for javascript
 
+// Written by: Chris Dagdigian, Mark Olesen
+// The following functions are released to the public domain.
+
 //
 // set a div 'name' to visible or hidden
 // set a cookie for persistence across browser reloads etc

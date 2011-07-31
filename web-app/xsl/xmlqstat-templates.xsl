@@ -4,9 +4,27 @@
     xmlns="http://www.w3.org/1999/xhtml"
 >
 <!--
-   | A collection of Named Templates with various useful functions
-   -->
+Copyright 2006-2007 Chris Dagdigian (chris@bioteam.net)
+Copyright 2009-2011 Mark Olesen
 
+    This file is part of xml-qstat.
+
+    xml-qstat is free software: you can redistribute it and/or modify it under
+    the terms of the GNU Affero General Public License as published by the
+    Free Software Foundation, either version 3 of the License,
+    or (at your option) any later version.
+
+    xml-qstat is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+    or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
+
+Description
+    A collection of Named Templates with various useful functions
+-->
 
 <!-- ========================= Named Templates ============================ -->
 

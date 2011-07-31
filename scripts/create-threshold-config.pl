@@ -2,8 +2,32 @@
 use strict;
 use Getopt::Std qw( getopts );
 ( my $Script = $0 ) =~ s{^.*/}{};
-
-# --------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# Copyright 2006-2007 Chris Dagdigian (dag@sonsorol.org)
+# Copyright 2009-2011 Mark Olesen
+#
+#     This file is part of xml-qstat.
+#
+#     xml-qstat is free software: you can redistribute it and/or modify it under
+#     the terms of the GNU Affero General Public License as published by the
+#     Free Software Foundation, either version 3 of the License,
+#     or (at your option) any later version.
+#
+#     xml-qstat is distributed in the hope that it will be useful, but
+#     WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+#     or FITNESS FOR A PARTICULAR PURPOSE.
+#     See the GNU Affero General Public License for more details.
+#
+#     You should have received a copy of the GNU Affero General Public License
+#     along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
+# ------------------------------------------------------------------------------
+# Script
+#     create-threshold-config.pl
+#
+# Description
+#     Extracts np_load_avg information from GridEngine from each queue instances
+#
+# -----------------------------------------------------------------------------
 sub usage {
     $! = 0;    # clean exit
     warn "@_\n" if @_;
@@ -14,7 +38,6 @@ options:
   -o FILE redirect stdout to FILE
   -u      unqualified host names (removes domain names)
   -h      help
-
 
 Extracts np_load_avg information from GridEngine from each queue instances
 

@@ -3,16 +3,34 @@
     xmlns:xi="http://www.w3.org/2001/XInclude"
 >
 <!--
-   | process config/config.xml to generate an appropriate
-   | xi:include element for querying jobs, which can be expanded later
-   |
-   | this is likely only useful for server-side transformations
-   |
-   | any xml expected - the relevant information is from the config file
-   |
-   | uses external files:
-   |  - config/config.xml
-   -->
+Copyright 2009-2011 Mark Olesen
+
+    This file is part of xml-qstat.
+
+    xml-qstat is free software: you can redistribute it and/or modify it under
+    the terms of the GNU Affero General Public License as published by the
+    Free Software Foundation, either version 3 of the License,
+    or (at your option) any later version.
+
+    xml-qstat is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+    or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
+
+Description
+    process config/config.xml to generate an appropriate
+    xi:include element for querying jobs, which can be expanded later
+
+    this is likely only useful for server-side transformations
+
+    any xml expected - the relevant information is from the config file
+
+    uses external files:
+     - config/config.xml
+-->
 
 <!-- ======================= Imports / Includes =========================== -->
 <!-- NONE -->

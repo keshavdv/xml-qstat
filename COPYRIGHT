@@ -1,0 +1,20 @@
+xml-qstat is
+Copyright 2006-2007 Chris Dagdigian
+Copyright 2009-2011 Mark Olesen
+
+The files herein are licensed under the GNU Affero General Public License
+version 3, the text of which can be found in GNU-AGPL-3.0, or any later
+version of the AGPL, unless otherwise noted.
+
+* The included javascript code is Public Domain.
+
+* The Silk Icon Library from Mark James is used under
+  Creative Commons Attribution 2.5 License
+
+* The EXSLT Template files are
+  Copyright Jeni Tennison, David Pawson, James Fuller and Uche Ogbuji.
+  It is freely available, but without any obvious licensing restrictions.
+
+* The CommandGenerator.java code is licensed under the Apache License,
+  Version 2.0
+

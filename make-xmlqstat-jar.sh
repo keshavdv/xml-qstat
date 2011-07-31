@@ -1,12 +1,30 @@
 #!/bin/sh
-
-# Chris Dagdigian (dag@sonsorol.org)
+# -----------------------------------------------------------------------------
+# Copyright 2006-2007 Chris Dagdigian (dag@sonsorol.org)
 #
-# This script can be used to compile and package the xml-qstat.jar file
-# required by Apache Cocoon for direct XML queries to the SGE qmaster.
+#     This file is part of xml-qstat.
+#
+#     xml-qstat is free software: you can redistribute it and/or modify it under
+#     the terms of the GNU Affero General Public License as published by the
+#     Free Software Foundation, either version 3 of the License,
+#     or (at your option) any later version.
+#
+#     xml-qstat is distributed in the hope that it will be useful, but
+#     WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+#     or FITNESS FOR A PARTICULAR PURPOSE.
+#     See the GNU Affero General Public License for more details.
+#
+#     You should have received a copy of the GNU Affero General Public License
+#     along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
+# ------------------------------------------------------------------------------
+# Script
+#     make-xmlqstat-jar.sh
+#
+# Description
+#     This script can be used to compile and package the xml-qstat.jar file
+#     required by Apache Cocoon for direct XML queries to the SGE qmaster.
 #
 # Instructions:
-#
 #  1. Run this script, fix as required until it runs properly to completion
 #
 #  2. Copy (or symlink) the resulting xml-qstat.jar file to your Cocoon

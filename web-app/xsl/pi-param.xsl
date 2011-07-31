@@ -4,31 +4,47 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >
 <!--
-   | extract name/value processing instructions from documents
-   | defaults to selecting mozilla-style xslt-param
-   | For example,
-   |
-   | in main document:
-   |   <?xslt-param name="title" value="my title"?>
-   |   <?xml-stylesheet type="text/xml" href="foo.xsl"?>
-   |
-   | in stylesheet:
-   |   <xsl:include href="pi-param.xsl"/>
-   |   <xsl:param name="title">
-   |     <xsl:call-template name="pi-param">
-   |       <xsl:with-param  name="name"    select="'title'"/>
-   |       <xsl:with-param  name="default" select="'default title'"/>
-   |     </xsl:call-template>
-   |   </xsl:param>
-   -->
+Copyright 2009-2011 Mark Olesen
+
+    This file is part of xml-qstat.
+
+    xml-qstat is free software: you can redistribute it and/or modify it under
+    the terms of the GNU Affero General Public License as published by the
+    Free Software Foundation, either version 3 of the License,
+    or (at your option) any later version.
+
+    xml-qstat is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+    or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
+
+Description
+    extract name/value processing instructions from documents
+    defaults to selecting mozilla-style xslt-param
+    For example,
+
+    in main document:
+      <?xslt-param name="title" value="my title"?>
+      <?xml-stylesheet type="text/xml" href="foo.xsl"?>
+
+    in stylesheet:
+      <xsl:include href="pi-param.xsl"/>
+      <xsl:param name="title">
+        <xsl:call-template name="pi-param">
+          <xsl:with-param  name="name"    select="'title'"/>
+          <xsl:with-param  name="default" select="'default title'"/>
+        </xsl:call-template>
+      </xsl:param>
+-->
 
 <!-- ========================= Named Templates ============================ -->
 
 <!--
-   |
    | extract attribute="..." from text
-   |
--->
+   -->
 <xsl:template name="pi-parse-attribute">
   <xsl:param name="text" />
   <xsl:param name="attr" />
@@ -42,10 +58,8 @@
 </xsl:template>
 
 <!--
-   |
-   |  hand-rolled parsing of <?xslt-param name=".." value=".." ?>
-   |
--->
+   | hand-rolled parsing of <?xslt-param name=".." value=".." ?>
+   -->
 <xsl:template name="pi-param">
   <xsl:param name="pis" select="processing-instruction('xslt-param')" />
   <xsl:param name="name" />
@@ -91,10 +105,8 @@
 </xsl:template>
 
 <!--
-   |
-   |  hand-rolled parsing of <?xxx foo=".." ?>
-   |
--->
+   | hand-rolled parsing of <?xxx foo=".." ?>
+   -->
 <xsl:template name="pi-named-param">
   <xsl:param name="pis" select="processing-instruction('xslt-param')" />
   <xsl:param name="name" />

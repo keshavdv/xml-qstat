@@ -6,10 +6,8 @@ use Getopt::Std qw( getopts );
 import Sge;
 
 ###############################################################################
-###############################################################################
 # CUSTOMIZE THESE SETTINGS TO MATCH YOUR REQUIREMENTS:
 #
-
 my %config = (
     ## Decide where your cached XML files will be stored
     ## or override on the command-line
@@ -26,7 +24,33 @@ my %config = (
 #
 # END OF CUSTOMIZE SETTINGS
 ###############################################################################
-###############################################################################
+
+# -----------------------------------------------------------------------------
+# Copyright 2006-2007 Chris Dagdigian (dag@sonsorol.org)
+# Copyright 2009-2011 Mark Olesen
+#
+#     This file is part of xml-qstat.
+#
+#     xml-qstat is free software: you can redistribute it and/or modify it under
+#     the terms of the GNU Affero General Public License as published by the
+#     Free Software Foundation, either version 3 of the License,
+#     or (at your option) any later version.
+#
+#     xml-qstat is distributed in the hope that it will be useful, but
+#     WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+#     or FITNESS FOR A PARTICULAR PURPOSE.
+#     See the GNU Affero General Public License for more details.
+#
+#     You should have received a copy of the GNU Affero General Public License
+#     along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
+# ------------------------------------------------------------------------------
+# Script
+#     xmlqstat-cacher.sh
+#
+# Description
+#     Cache GridEngine information in xml format.
+#
+# -----------------------------------------------------------------------------
 ( my $Script = $0 ) =~ s{^.*/}{};
 
 # --------------------------------------------------------------------------
@@ -35,7 +59,7 @@ sub usage {
     warn "@_\n" if @_;
     die <<"USAGE";
 usage: $Script [OPTION] [PARAM]
-  Cache GridEngine 'qstat -f' information in xml format.
+  Cache GridEngine information in xml format.
 
 options:
   -d      daemonize
@@ -415,33 +439,4 @@ sub qhostCacher {
 
 1;
 
-# --------------------------------------------------------------------------
-
-## __DATA__
-##
-## =pod
-##
-## =head1 NAME
-##
-## xmlqstat-cacher.pl
-##
-## =head1 MORE
-##
-## see xmlqstat-cacher.pl -h
-##
-## * Skeleton code for this daemon process taken from
-## 	the "qlicserver" daemon written by Mark Olesen
-##
-##  * This is a derived work from Mark's "qlicserver" code
-##  * Modified by Chris Dagdigian (all mistakes are my own!)
-###
-##-----------------------------------------------------------
-##   NOTE:
-##         copyright (c) 2003-10 <Mark.Olesen\@faurecia.com>
-##
-##         Licensed and distributed under the Creative Commons
-##         Attribution-NonCommercial-ShareAlike 2.5 License.
-##         http://creativecommons.org/licenses/by-nc-sa/2.5
-##-----------------------------------------------------------
-##
-## =cut
+# ----------------------------------------------------------------- end-of-file

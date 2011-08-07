@@ -24,8 +24,11 @@
 #     Get and make HTTPi webserver with xmlqstat components
 #
 # -----------------------------------------------------------------------------
-packageDir=httpi-1.7
-urlBase=http://www.floodgap.com/httpi/
+# packageDir=httpi-1.7
+# downloadURL=http://www.floodgap.com/httpi/$packageDir.tar.gz
+
+packageDir=httpi-1.7b
+downloadURL=https://github.com/olesenm/httpi/tarball/v1.7b
 
 buildDir=build-httpi
 downloadDir=build-download
@@ -44,11 +47,14 @@ usage: $Script [OPTION]
 options:
   -clean             remove contents of build-httpi directory
   -rebuild SETTINGS  for repeated builds
-  -version VERSION   specify an alternative version (current value: $packageDir)
+  -curl              only use curl for downloads
+  -wget              only use wget for downloads
   -help
 
-Small helper script for getting/building HTTPi for xmlqstat.
-Currently only supports building the daemon-type.
+Small helper script for getting/building HTTPi (version $packageDir)
+for xmlqstat. Currently only supports building the daemon-type.
+
+Will try to use either curl or wget for downloads.
 
 USAGE
     exit 1
@@ -56,7 +62,7 @@ USAGE
 
 #------------------------------------------------------------------------------
 
-unset settings
+unset fetchCmd settings
 # parse options
 while [ "$#" -gt 0 ]
 do
@@ -75,18 +81,35 @@ do
         settings="$2"
         # make absolute
         [ "${settings##/}" = "$settings" ] && settings="$(/bin/pwd)/$settings"
-        shift 2
+        shift
         ;;
-    -version)
-        [ "$#" -ge 2 ] || usage "'$1' option requires an argument"
-        packageDir="$2"
-        shift 2
+    -curl | -wget)
+        fetchCmd="${1#-}"
         ;;
     *)
         usage "unknown option/argument: '$*'"
         ;;
     esac
+    shift
 done
+
+#
+# check curl/wget availability
+#
+if [ -n "$fetchCmd" ]
+then
+   type $fetchCmd >/dev/null 2>&1 || \
+       usage "specified '-$fetchCmd', but cannot find command '$fetchCmd'"
+else
+    for i in curl wget
+    do
+        if type $i >/dev/null 2>&1
+        then
+            fetchCmd=$i
+            break
+        fi
+    done
+fi
 
 # -----------------------------------------------------------------------------
 
@@ -115,50 +138,36 @@ checkSource()
 }
 
 #
-# download file $1 from url $2 into download/ directory
+# download from url $1 to file $2 in the current directory
 #
 # use curl or wget
 #
-unset fetchCmd
-downloadFile()
+getDownload()
 {
-    file="$1"
-    url="$2"
+    echo "downloading $1 -> $2"
 
-    if [ ! -e "$downloadDir/$file" ]
-    then
-        mkdir -p "$downloadDir"
-        echo "downloading $file from $url$file"
-
-        if [ -z "$fetchCmd" ]
-        then
-            fetchCmd="curl wget"
-            for i in $fetchCmd
-            do
-                if type $i >/dev/null 2>&1
-                then
-                    fetchCmd=$i
-                    break
-                fi
-            done
-        fi
-
-        case "$fetchCmd" in
-        curl)
-            ( cd "$downloadDir" && curl -k -O "$url$file" )
-            ;;
-        wget)
-            ( cd "$downloadDir" && wget --no-check-certificate "$url$file" )
-            ;;
-        *)
-            echo
-            echo "FATAL:"
-            echo "    no '$fetchCmd' available"
-            echo
-            exit 1
-            ;;
-        esac
-    fi
+    case "$fetchCmd" in
+    curl)
+        curl \
+            --insecure \
+            --location \
+            --output "$2" \
+            "$1"
+        ;;
+    wget)
+        wget \
+            --no-check-certificate \
+            --output-document "$2" \
+            "$1"
+        ;;
+    *)
+        echo
+        echo "FATAL:"
+        echo "    no '$fetchCmd' available"
+        echo
+        exit 1
+        ;;
+    esac
 }
 
 
@@ -172,14 +181,48 @@ echo fetch/unpack HTTPi $packageDir source
 echo ========================================
 if [ ! -d "build-httpi/$packageDir" ]
 then
-    tarFile=$packageDir.tar.gz
-    downloadFile $tarFile $urlBase
+    # extra prefix for github downloads, we need transform when extracting
+    case "$downloadURL" in
+    http*://github.com/*)
+        tarFile="github-$packageDir.tar.gz"
+        ;;
+    *)
+        tarFile="$packageDir.tar.gz"
+        ;;
+    esac
 
-    if [ -e "$downloadDir/$tarFile" ]
+    [ -f "$downloadDir/$tarFile" ] || (
+        mkdir -p $downloadDir
+        cd $downloadDir && getDownload $downloadURL $tarFile
+    )
+
+    if [ -f "$downloadDir/$tarFile" ]
     then
+    (
         echo "unpack $downloadDir/$tarFile -> $buildDir"
-        # needs relative directories
-        ( cd $buildDir && tar -xzf ../$downloadDir/$tarFile )
+        cd $buildDir || exit
+
+        # special transform for extracting github tarballs
+        case "$tarFile" in
+        github-*.tar.gz)
+            tar \
+                --transform="s@^[^/][^/]*\$@$packageDir/@" \
+                --transform="s@^[^/][^/]*/@$packageDir/@" \
+                --show-transformed-names \
+                --extract \
+                --gunzip --verbose \
+                --file ../$downloadDir/$tarFile
+            ;;
+        *)
+            tar \
+                --show-transformed-names \
+                --extract \
+                --gunzip --verbose \
+                --file ../$downloadDir/$tarFile
+
+            ;;
+        esac
+    )
     else
         echo "no $buildDir/$tarFile to unpack"
     fi
@@ -218,8 +261,7 @@ if [ -n "$settings" ]
 then
     [ -f "$settings" ] || {
         echo
-        echo "FATAL:"
-        echo "    specified settings files does not exist:"
+        echo "FATAL: specified settings file does not exist:"
         echo "    $settings"
         echo
         exit 1

@@ -3,16 +3,17 @@
 
 # get GridEngine arch/lib information
 print <<"PROMPT";
+###########################################################################
+BEGIN GridEngine configuration
+#####
 
-GridEngine configuration
-------------------------
 Trying to determine the architecture and library requirements
 PROMPT
 
 ( $DEF_SGE_ARCH, $DEF_LIBENV ) = ( '', '' );
 $DEF_SGE_ROOT = &detaint( $ENV{SGE_ROOT} || 'none' );
 
-$DEF_SGE_ROOT = &prompt( <<"PROMPT", $DEF_SGE_ROOT, 1 );
+$DEF_SGE_ROOT = &interprompt( <<"PROMPT", $DEF_SGE_ROOT, 1, \&inter_homedir );
 Define the default SGE_ROOT for GridEngine commands.
 
 Which value should be used for default GridEngine queries?
@@ -147,6 +148,13 @@ $DEF_XMLQSTAT_TIMEOUT = &prompt( <<"PROMPT", '20', 1 );
 ------------------------
 xml-qstat customization:
 Define the maximum timeout (seconds) when executing GridEngine commands
+PROMPT
+
+print <<"PROMPT";
+###
+END GridEngine configuration
+###########################################################################
+
 PROMPT
 
 1;    # loaded ok

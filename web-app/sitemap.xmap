@@ -153,10 +153,10 @@
   <map:match pattern="qlicserver~.xml">
     <map:generate  type="request"/>
     <map:transform src="xsl/cocoon/error404.xsl">
-    <!-- server information -->
-    <map:parameter name="server-info"
-       value="{cocoon-properties:name}-{cocoon-properties:version}"
-       />
+      <!-- server information -->
+      <map:parameter name="server-info"
+          value="{cocoon-properties:name}-{cocoon-properties:version}"
+          />
     </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>
@@ -174,10 +174,10 @@
     <map:otherwise>
       <map:generate  type="request"/>
       <map:transform src="xsl/cocoon/error404.xsl">
-      <!-- server information -->
-      <map:parameter name="server-info"
-         value="{cocoon-properties:name}-{cocoon-properties:version}"
-         />
+        <!-- server information -->
+        <map:parameter name="server-info"
+            value="{cocoon-properties:name}-{cocoon-properties:version}"
+            />
       </map:transform>
       <map:serialize type="xhtml"/>
     </map:otherwise>
@@ -346,10 +346,10 @@
   <map:match pattern="">
     <map:generate  src="cocoon:/cache-files" />
     <map:transform src="xsl/index-xhtml.xsl">
-    <!-- server information -->
-    <map:parameter name="server-info"
-      value="{cocoon-properties:name}-{cocoon-properties:version}"
-    />
+      <!-- server information -->
+      <map:parameter name="server-info"
+          value="{cocoon-properties:name}-{cocoon-properties:version}"
+      />
     </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>
@@ -359,7 +359,10 @@
        -->
   <map:match pattern="cache">
     <map:generate  src="cocoon:/cache-files" />
-    <map:serialize/>
+    <map:transform src="xsl/directory-xhtml.xsl">
+      <map:parameter name="dir" value="cache"/>
+    </map:transform>
+    <map:serialize type="xhtml"/>
   </map:match>
 
 
@@ -893,10 +896,10 @@
   <map:match pattern="**">
     <map:generate  type="request"/>
     <map:transform src="xsl/cocoon/error404.xsl">
-    <!-- server information -->
-    <map:parameter name="server-info"
-       value="{cocoon-properties:name}-{cocoon-properties:version}"
-       />
+      <!-- server information -->
+      <map:parameter name="server-info"
+          value="{cocoon-properties:name}-{cocoon-properties:version}"
+          />
     </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>

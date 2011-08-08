@@ -105,7 +105,7 @@ Description
       <xsl:sort select="@name"/>
       <xsl:apply-templates select="."/>
     </xsl:for-each>
-    <!--    <xsl:apply-templates select="/dir:directory" /> -->
+    <!-- <xsl:apply-templates select="/dir:directory" /> -->
   </xsl:when>
   <xsl:otherwise>
     <li>directory does not exist or is empty</li>
@@ -132,20 +132,58 @@ transformed by
 </xsl:template>
 
 
+<!--
+  display file name with href
+-->
+<xsl:template name="renderFile">
+  <xsl:param name="name" />
+  <xsl:param name="prefix" />
+
+  <xsl:element name="li">
+    <xsl:element name="a">
+      <xsl:attribute name="href">
+        <xsl:if test="$prefix"><xsl:value-of select="$prefix"/>/</xsl:if>
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+      <xsl:value-of select="@name"/>
+    </xsl:element>
+  </xsl:element>
+
+</xsl:template>
+
+
 <xsl:template match="/dir:directory">
+  <xsl:for-each select="dir:directory">
+    <!-- sort by name -->
+    <xsl:sort select="@name"/>
+    <xsl:variable
+        name="prefix"
+        select="@name"/>
+    <xsl:element name="li">
+      <xsl:attribute name="class">folder</xsl:attribute>
+      <xsl:value-of select="@name"/>
+    </xsl:element>
+    <ul>
+      <xsl:for-each select="dir:file">
+        <!-- sort by name -->
+        <xsl:sort select="@name"/>
+        <xsl:call-template name="renderFile">
+          <xsl:with-param name="name" select="@name"/>
+          <xsl:with-param name="prefix" select="$prefix"/>
+        </xsl:call-template>
+       </xsl:for-each>
+    </ul>
+  </xsl:for-each>
+
   <xsl:for-each select="dir:file">
     <!-- sort by name -->
     <xsl:sort select="@name"/>
-    <xsl:element name="li">
-      <xsl:element name="a">
-        <xsl:attribute name="href">
-          <xsl:if test="$prefix"><xsl:value-of select="$prefix"/>/</xsl:if>
-          <xsl:value-of select="@name"/>
-        </xsl:attribute>
-        <xsl:value-of select="@name"/>
-      </xsl:element>
-    </xsl:element>
+    <xsl:call-template name="renderFile">
+      <xsl:with-param name="name" select="@name"/>
+      <xsl:with-param name="prefix" select="$prefix"/>
+    </xsl:call-template>
   </xsl:for-each>
+
 </xsl:template>
 
 </xsl:stylesheet>

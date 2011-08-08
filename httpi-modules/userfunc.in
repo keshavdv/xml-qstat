@@ -811,7 +811,11 @@ CONTENT
         #
         if ( $::address =~ m{$webappRE/cache$} ) {
             returnXML(
-                xmlProlog(%xsltParam),    #
+                xmlProlog(
+                    %xsltParam,    #
+                    dir        => "cache",
+                    stylesheet => "xsl/directory-xhtml.xsl"
+                ),
                 directoryGeneratorCacheFiles()
             );
         }

@@ -1,0 +1,18 @@
+Development version of xml-qstat as pure CGI application.
+
+- appears okay, but needs more testing
+
+
+- For Apache, can use this type of setup:
+
+# /etc/apache2/conf.d/xmlqstat.conf
+
+ScriptAlias /grid "/export/home/mark/xml-qstat/cgi-bin/grid.cgi"
+<Location /grid>
+   Options +ExecCGI
+   AddHandler cgi-script .cgi
+   Order allow,deny
+   Allow from all
+</Location>
+
+2011-08-08

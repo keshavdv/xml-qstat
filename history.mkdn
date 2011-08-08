@@ -29,13 +29,13 @@ various Linux and Apple OS X systems. Since a design goal for this tool was
 easy installation across different hardware platforms and architectures,
 alternatives to the C++ XSLT engines were investigated.
 
-The 2nd generation xml-qstat programs and CGIs used the very nice Perl
+***Generation 2*** of xml-qstat programs and CGIs used the very nice Perl
 modules **XML::LibXML** and **XML::LibXSLT**. Those modules provided
 Perl interfaces to the Gnome Project's excellent
 **[libxml2](http://www.xmlsoft.org)** and
 **[libxslt](http://xmlsoft.org/XSLT)** code libraries.
 
-The 2nd generation code was abandoned when
+***Generation 2*** code was abandoned when
 [Apache Cocoon](http://cocoon.apache.org/2.1/) was discovered -- the Cocoon
 framework functions out-of-the-box on just about any Java-enabled system and
 there are no requirements to download and build various dependent XML
@@ -43,20 +43,20 @@ libraries and Perl modules. The XML-based publishing framework provided by
 Cocoon provides additional features and capabilities not found in standalone
 XSLT transformation engines.
 
-The 3rd generation of xml-qstat came after Chris Dagdigian effectively
+***Generation 3*** of xml-qstat came after Chris Dagdigian effectively
 abandoned the project and codebase for quite some time as his work took him
-in different directions. During this period, Mark Olesen made very
+in different directions. During this period, Mark Olesen made
 significant improvements both in cleaning up the XSLT framework as well as
 adding entirely new features such as support for multiple clusters.
 
-Generation 4 of this project is essentially Mark Olesen's fork, uploaded and
-imported into a new GIT repository hosted at [github](http://github.com). We
-plan to use the new git repository as the base for the long-delayed 1.0
+***Generation 4*** of this project is essentially Mark Olesen's fork, uploaded
+and imported into a new GIT repository hosted at [github](http://github.com).
+We plan to use the new git repository as the base for the long-delayed 1.0
 release. Chris Dagdigian is back as a contributor and the project is seeking
 new contributors, testers and developers.
 
-Generation 5 of this project now includes **HTTPi-xmlqstat** for client-side
-XSLT transformations. This webserver application is very small, has very few
-dependencies (Perl + GridEngine) which enables it be installed on any
-cluster node without any extra infrastructure.
+***Generation 5*** of this project now includes **HTTPi-xmlqstat** for
+client-side XSLT transformations. This webserver application is very
+small, has very few dependencies (Perl + GridEngine) which enables it
+be installed on any cluster node without any extra infrastructure.
 

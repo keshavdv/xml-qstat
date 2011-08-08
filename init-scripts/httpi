@@ -24,13 +24,13 @@
 #     Simple start/stop script for the httpi web-server
 # -----------------------------------------------------------------------------
 
-# 0. Define safe path
-PATH=/bin:/usr/bin
+# 0. Define safe path for older versions of HTTPi
+PATH=/usr/bin:/bin
 #
 ## CUSTOMIZE AS REQUIRED
 #
 # 1. Location of httpi server program
-HTTPI=/data/app/httpi/httpi
+HTTPI=/data/caeapp/local/www/httpi/httpi
 
 # 2. Downgrade to a non-root user account (adjust if required)
 runAs=nobody

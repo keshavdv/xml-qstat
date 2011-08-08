@@ -25,13 +25,13 @@
 # -----------------------------------------------------------------------------
 
 # 0. Define safe path
-PATH=/bin:/usr/bin
+PATH=/usr/bin:/bin
 #
 ## CUSTOMIZE AS REQUIRED
 #
 
 # 1. Location of cocoon server and java
-COCOON_HOME=/data/app/cocoon
+COCOON_HOME=/data/caeapp/local/www/cocoon
 JAVA_HOME=/usr/lib/jvm/java
 
 # 2. Downgrade to a non-root user account (adjust if required)

@@ -2,12 +2,16 @@ Files in this directory represent attempts to create basic system
 startup/boot scripts so that the xml-qstat web application starts
 automatically when systems are restarted.
 
+
+Server-Side XSLT
+~~~~~~~~~~~~~~~~
+For server-side xslt, Apache Cocoon is used.
 There are 1-3 systems that might need to be started:
 
   1. The Apache Cocoon application server.
      MUST be running!
 
-  2. The httpi web-server.
+  2. The HTTPi web-server.
      Might be required, depending on which extras you need or if you
      aren't using the Java Command-Generator.
 
@@ -16,15 +20,28 @@ There are 1-3 systems that might need to be started:
      and/or the qlicserver integration.
 
 
-Requirements
-~~~~~~~~~~~~
+Client-Side XSLT
+~~~~~~~~~~~~~~~~
+There are 1-2 systems that might need to be started:
+
+  1. A specially configured HTTPi web-server.
+
+  2. The perl daemon that caches XML status data.
+     Might be required if you are not using the Java Command-Generator
+     and/or the qlicserver integration.
+
+
+General Requirements
+~~~~~~~~~~~~~~~~~~~~
   - SGE should be up and running before some of these scripts are invoked
   - Apache HTTPD server should also probably be available as well
   - The scripts here will have to be edited to reflect local site conditions
 
+
 Weaknesses
 ~~~~~~~~~~
-  - Stopping/restarting is clunky, but should work
+  - Stopping/restarting is clunky, but generally works
+
 
 WARNING
 ~~~~~~~
@@ -35,4 +52,5 @@ WARNING
     account you pick for this should probably the account you have
     been installing the application with.
 
-2009-06-23
+
+2011-08-08

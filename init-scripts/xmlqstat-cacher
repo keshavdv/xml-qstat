@@ -18,7 +18,7 @@
 #     along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
 # ------------------------------------------------------------------------------
 # Script
-#     xmlqstat-cacher.sh
+#     xmlqstat-cacher
 #
 # Description
 #     Simple start/stop script for the perl daemon that caches
@@ -26,7 +26,7 @@
 # -----------------------------------------------------------------------------
 
 # 0. Define safe path
-PATH=/bin:/usr/bin
+PATH=/usr/bin:/bin
 #
 ## CUSTOMIZE AS NEEDED
 #

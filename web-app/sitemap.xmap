@@ -20,6 +20,14 @@
   <map:readers default="resource" />
 
   <map:serializers default="xml">
+    <!-- make default XML serializer UTF-8 -->
+    <map:serializer
+      name="xml"
+      src="org.apache.cocoon.serialization.XMLSerializer"
+      mime-type="text/xml"
+      >
+      <encoding>UTF-8</encoding>
+    </map:serializer>
     <!-- ATOM 1.0 Feed Serialzer -->
     <map:serializer
       name="atom-xml"

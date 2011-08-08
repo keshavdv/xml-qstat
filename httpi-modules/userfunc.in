@@ -503,7 +503,7 @@ CONTENT
     }
 
     #
-    # Execute <sge_root>/bin/<sge_arch>/cmd with a timeout.
+    # Execute <sge_root>/bin/<arch>/cmd with a timeout.
     # For security, only allow absolute paths.
     #
     # Prototype gridEngineCmd( clusterName, command => [command args] )
@@ -512,7 +512,7 @@ CONTENT
     # ---------------------------------------------
     sub gridEngineCmd {
         my ( $cluster, $cmd, @cmdArgs ) = @_;
-        my ( $root, $cell );
+        my ( $root, $cell, $arch );
 
         ## programming error
         $cmd or die "gridEngineCmd called without a command\n";
@@ -526,6 +526,7 @@ CONTENT
         {
             $root = $clusterPaths{$cluster}{root};
             $cell = $clusterPaths{$cluster}{cell};
+            $arch = $clusterPaths{$cluster}{arch};
         }
         elsif ( $cluster eq "default" )
         {
@@ -533,28 +534,40 @@ CONTENT
         }
         $root ||= '';
         $cell ||= "default";    # fallback
+        $arch ||= $sge_arch;    # fallback
 
         # need root + cell directory
         -d $root and $root =~ m{^/} and -d "$root/$cell"
           or &hterror404(<<"CONTENT");
 Resource <blockquote><pre>$::address</pre></blockquote>
 Root or Cell directory does not exist for cluster <em>$cluster</em>
-<blockquote><pre>SGE_ROOT="$root"<br/>SGE_CELL="$cell"</pre></blockquote>
+<blockquote><pre>
+SGE_ROOT="$root"
+SGE_CELL="$cell"
+arch="$arch"
+</pre></blockquote>
 while executing command:
 <blockquote><pre>$cmd @cmdArgs</pre></blockquote>
 CONTENT
 
         #
-        # resolve cmd in the <sge_root>/bin/<sge_arch>/ directory
+        # resolve cmd in the <sge_root>/bin/<arch>/ directory
         #
-        my $cmdPath = "$root/bin/$sge_arch/$cmd";
+        my $cmdPath = "$root/bin/$arch/$cmd";
 
         -f $cmdPath and -x _ or &hterror404(<<"CONTENT");
 Resource<blockquote><pre>$::address</pre></blockquote>
-for cluster <em>$cluster</em>
-<blockquote><pre>SGE_ROOT="$root"</pre></blockquote>
-Could not resolve command in <pre>$root/bin/$sge_arch/</pre>
-<blockquote><pre>$cmd @cmdArgs</pre></blockquote>
+For cluster <em>$cluster</em>
+<blockquote><pre>
+SGE_ROOT="$root"
+SGE_CELL="$cell"
+arch="$arch"
+</pre></blockquote>
+Could not resolve command
+<blockquote><pre>
+$root/bin/$arch/
+$cmd @cmdArgs
+</pre></blockquote>
 CONTENT
 
         # localizing should be okay, but seems to fail?!
@@ -563,16 +576,16 @@ CONTENT
         $ENV{SGE_ROOT} = $root;
         $ENV{SGE_CELL} = $cell;
 
-        my $libDir = "$root/lib/$sge_arch";
+        my $libDir = "$root/lib/$arch";
         if ( $libEnvName and -d $libDir ) {
             $ENV{$libEnvName} = $libDir;
         }
 
         # first argument is a currently just a dummy (OO-remnant)
-        my $x = shellCmd( "gridEngineCmd", $cmdPath, @cmdArgs );
+        my $content = shellCmd( "gridEngineCmd", $cmdPath, @cmdArgs );
 
-        $x =~ s{</*>\s*}{}g if $x;    # cleanup incorrect XML
-        $x;
+        $content =~ s{</*>\s*}{}g if $content;    # cleanup incorrect XML
+        $content;
     }
 
     #

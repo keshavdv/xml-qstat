@@ -64,6 +64,8 @@
    | @name - SGE_CLUSTER_NAME required for 'cluster' but not for 'default'
    | @root - SGE_ROOT required unless @baseURL is used
    | @cell - SGE_CELL optional, provided the downstream uses 'default'
+   | @arch - SGE architecture optional, assuming correct value was given at compile-time
+   |         not supported on Cocoon
    | @baseURL - optional means of getting at resources via http://
    |
    | If the 'default' entity exists in 'clusters' and has the attribute
@@ -75,6 +77,7 @@
       enabled="true"
       root="/opt/grid"
       cell="default"
+      arch="lx24-x86"
       />
 
   <cluster

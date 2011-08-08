@@ -131,10 +131,14 @@ sub hterror404 {
     # ideas from LWP::Simple but without IO::Socket.pm
     #
     sub get_http_source {
-        ( my $url = shift ) =~ m{^http://([^/:\@]+)(?::(\d+))?(/\S*)?$};
-        my ( $host, $port, $path ) = ( $1, $2, $3 );
+        my ($url) = @_;
 
-        $port ||= 80;
+        my ( $proto, $host, $port, $path ) =
+          ( $url =~ m{^(https?)://([^/:\@]+)(?::(\d+))?(/\S*)?$} )
+          or return undef;
+
+        $port or $port = $proto eq "https" ? 443 : 80;
+
         if ($path) {
             $path =~ s{//+}{/}g;
         }
@@ -145,13 +149,18 @@ sub hterror404 {
         my $ipaddr       = gethostbyname $host;
         my $serverIPaddr = gethostbyname $::server_host;
 
-        local *SOCK;
-
         # avoid internal loops
         if ( $port == $::server_port and $ipaddr eq $serverIPaddr ) {
-            &hterror404;
+            &hterror404(<<"ERROR");
+Potential circular reference in request
+<blockquote><pre>
+From: $::server_host:$::server_port
+To:   $host:$port
+</pre></blockquote>
+ERROR
         }
 
+        local *SOCK;
         # use httpi DEF_* constants:
         my $packaddr = pack $::sockaddr, DEF_AF_INET, $port, $ipaddr;
         socket SOCK, DEF_PF_INET, DEF_SOCK_STREAM, DEF_IPPROTO_TCP;
@@ -160,40 +169,48 @@ sub hterror404 {
         # use syswrite to avoid buffering
         syswrite SOCK,
           join(
-            "\015\012" => "GET $url HTTP/1.0",
+            "\015\012" => "GET $path HTTP/1.0",
+            "Host: $host",
             "User-Agent: HTTPi/$::VERSION",
             "",
             ""
           );
 
         ## get buffer, handle timeout too
-        my ( $buf, $n ) = ("");
+        my ( $buf, $n ) = ( "", undef );
         local $SIG{'__DIE__'} = sub { undef $n; };
         eval {
             local $SIG{ALRM} = sub { die "TIMEOUT\n"; };    # NB: '\n' required
             alarm DEF_XMLQSTAT_TIMEOUT;
 
             1 while $n = sysread( SOCK, $buf, 8 * 1024, length($buf) );
-
             alarm 0;
         };
 
         defined $n or return undef;
 
-        # only deal with good (200) values
-        $buf =~ s{^HTTP/\d+\.\d+\s+(2\d+)\s*([^\012\015]*)\015?\012}{}
+        $buf =~ s{^HTTP/(\d+\.\d+)\s+(\d+)\s*([^\012\015]*)\015?\012}{}
           or return undef;
 
-        my @response = ( $1, $2 );
-        my %header;
+        # http-version, status and message
+        my ( $ver, @response ) = ( $1, $2, $3 );
+
+        # only deal with status "200 OK"
+        $response[0] == 200 or return &hterror404(<<"ERROR");
+Remote server reported status
+<blockquote><pre>HTTP/$ver @response</pre></blockquote>
+on <blockquote><pre>GET $path</pre></blockquote>
+ERROR
+
 
         # remove header, but extract information too
         $buf =~ s{^(.+?)\015?\012\015?\012}{}s or return undef;
         my $head = $1;
 
         # extract Content-Type from header
+        my %header;
         for ( split /\015?\012/, $head ) {
-            if ( my ($v) = m{^Content-Type:\s*(.+?)\s*$} ) {
+            if ( my ($v) = m{^Content-Type:\s*(.+?)\s*$}i ) {
                 $header{'Content-Type'} = $v;
                 last;
             }
@@ -604,8 +621,7 @@ CONTENT
             ( my $url = "$clusterPaths{$cluster}{baseURL}" ) =~ s{/+$}{};
             $url .= "/$cacheName.xml";
 
-            my $got = $url =~ m{^http://.+} ? get_http_source($url) : undef;
-
+            my $got = get_http_source($url);
             if ( ref $got eq "ARRAY" ) {
                 $content = $got->[2];
             }

@@ -764,7 +764,7 @@ CONTENT
         #  /<webapp>/
         #  /<webapp>/index.xml
         #
-        if ( $::address =~ m{$webappRE/(?:index\.(xml))?$} ) {
+        if ( $::address =~ m{$webappRE/(?:index(\.xml))?$} ) {
             $xsltParam{urlExt} = $1 if $1;
 
             returnXML(

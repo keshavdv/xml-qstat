@@ -447,11 +447,8 @@ qq{<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0">\n};
 
         @command or die "$caller: Shell->cmd with an undefined query\n";
 
-        local ( *OLDERR, $@ );
         local $SIG{'__DIE__'} = sub {
-
-            # kill off truant child as well
-            kill 9, $pid if $pid;
+            kill 9, $pid if $pid;    # kill off truant child as well
 
             &hterror404(<<"CONTENT");
 Resource <blockquote><pre>$::address</pre></blockquote>
@@ -460,6 +457,8 @@ Timeout or error when executing command:
 CONTENT
         };
 
+        # command evaluation
+        local ( *OLDERR, $@ );
         eval {
             local $SIG{ALRM} = sub { die "TIMEOUT\n"; };    # NB: '\n' required
             alarm $shellCmdTimeout if $shellCmdTimeout;
@@ -473,6 +472,7 @@ CONTENT
             if ($pid) {
                 @lines = <PIPE>;
             }
+            close PIPE;
 
             die "(EE) ", @lines if $?;
             alarm 0;

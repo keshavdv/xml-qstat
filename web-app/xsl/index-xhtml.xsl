@@ -40,6 +40,7 @@ Description
 <!-- ======================= Imports / Includes =========================== -->
 <!-- Include our masthead and templates -->
 <xsl:include href="xmlqstat-masthead.xsl"/>
+<xsl:include href="xmlqstat-templates.xsl"/>
 <!-- Include processor-instruction parsing -->
 <xsl:include href="pi-param.xsl"/>
 
@@ -47,6 +48,11 @@ Description
 <xsl:param name="server-info">
   <xsl:call-template name="pi-param">
     <xsl:with-param  name="name"    select="'server-info'"/>
+  </xsl:call-template>
+</xsl:param>
+<xsl:param name="serverName">
+  <xsl:call-template name="pi-param">
+    <xsl:with-param  name="name"    select="'serverName'"/>
   </xsl:call-template>
 </xsl:param>
 <xsl:param name="urlExt">
@@ -58,10 +64,15 @@ Description
 
 <!-- ======================= Internal Parameters ========================== -->
 <!-- configuration parameters -->
+<xsl:variable name="serverName-short">
+  <xsl:call-template name="unqualifiedHost">
+    <xsl:with-param  name="host"    select="$serverName"/>
+  </xsl:call-template>
+</xsl:variable>
+
 <xsl:variable
     name="configFile"
     select="document('../config/config.xml')/config" />
-
 
 <xsl:variable name="qlicserverEnabled">
   <xsl:choose>

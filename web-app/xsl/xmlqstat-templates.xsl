@@ -35,6 +35,7 @@ Description
    -->
 <xsl:template name="cgi-params">
   <xsl:param name="clusterName"/>
+  <xsl:param name="serverName-short"/>
 
   <xsl:variable
       name="configFile"

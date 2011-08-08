@@ -42,6 +42,7 @@ Description
 
 <!-- ======================== Passed Parameters =========================== -->
 <xsl:param name="server-info" />
+<xsl:param name="serverName" />
 
 <!-- ======================= Internal Parameters ========================== -->
 <!-- NONE -->
@@ -72,7 +73,7 @@ Cannot resolve resource <b><xsl:value-of select="/h:request/@target"/></b>
 <br/>
 <hr/>
 &newline;
-<small><xsl:value-of select="$server-info"/></small>
+<xsl:value-of select="$serverName"/> (<xsl:value-of select="$server-info"/>)
 
 &newline;
 </body></html>

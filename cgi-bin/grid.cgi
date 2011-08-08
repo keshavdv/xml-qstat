@@ -156,6 +156,9 @@ sub reset {
     $self->{xslt}{timestamp} ||=
       POSIX::strftime( "%Y-%m-%d %H:%M:%S", localtime );
 
+    $self->{xslt}{serverName} =
+      $self->{cgi} ? $self->{cgi}->server_name() : "unknown";
+
     return $self;
 }
 

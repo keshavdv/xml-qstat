@@ -33,16 +33,24 @@ Description
 -->
 
 <!-- ======================= Imports / Includes =========================== -->
-<!-- NONE -->
+<!-- Include our templates -->
+<xsl:include href="xmlqstat-templates.xsl"/>
 
 <!-- ======================== Passed Parameters =========================== -->
 <xsl:param name="clusterName"/>
+<xsl:param name="serverName"/>
 <xsl:param name="request"/>
 <xsl:param name="resource" />
 <xsl:param name="baseURL" />
 
 <!-- ======================= Internal Parameters ========================== -->
 <!-- configuration parameters -->
+<xsl:variable name="serverName-short">
+  <xsl:call-template name="unqualifiedHost">
+    <xsl:with-param  name="host"    select="$serverName"/>
+  </xsl:call-template>
+</xsl:variable>
+
 <xsl:variable
     name="configFile"
     select="document('../../config/config.xml')/config" />

@@ -682,8 +682,10 @@ CONTENT
     sub resource_xmlqstat {
 
         # basic xslt parameters
-        my %xsltParam =
-          ( timestamp => POSIX::strftime( "%Y-%m-%d %H:%M:%S", localtime ), );
+        my %xsltParam = (
+            timestamp  => POSIX::strftime( "%Y-%m-%d %H:%M:%S", localtime ),
+            serverName => $::server_host,
+        );
 
         #
         # quick serving of qhost/qstat information

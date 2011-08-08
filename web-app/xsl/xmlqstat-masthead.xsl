@@ -40,10 +40,11 @@ Description
 -->
 <xsl:template name="topLogo">
   <xsl:param name="relPath" />
+  <xsl:param name="config-file" select="'../config/config.xml'"/>
 
   <xsl:variable
       name="topLogo"
-      select="document('../config/config.xml')/config/topLogo"
+      select="document($config-file)/config/topLogo"
       />
 
   &newline;

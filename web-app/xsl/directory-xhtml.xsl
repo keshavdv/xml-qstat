@@ -36,8 +36,9 @@ Description
 -->
 
 <!-- ======================= Imports / Includes =========================== -->
-<!-- Include our masthead -->
+<!-- Include our masthead and templates -->
 <xsl:include href="xmlqstat-masthead.xsl"/>
+<xsl:include href="xmlqstat-templates.xsl"/>
 <!-- Include processor-instruction parsing -->
 <xsl:include href="pi-param.xsl"/>
 
@@ -55,6 +56,21 @@ Description
     <xsl:with-param  name="default" select="$dir"/>
   </xsl:call-template>
 </xsl:param>
+<xsl:param name="serverName">
+  <xsl:call-template name="pi-param">
+    <xsl:with-param  name="name"    select="'serverName'"/>
+  </xsl:call-template>
+</xsl:param>
+
+
+<!-- ======================= Internal Parameters ========================== -->
+<!-- configuration parameters -->
+<xsl:variable name="serverName-short">
+  <xsl:call-template name="unqualifiedHost">
+    <xsl:with-param  name="host"    select="$serverName"/>
+  </xsl:call-template>
+</xsl:variable>
+
 
 
 <!-- ======================= Output Declaration =========================== -->

@@ -56,6 +56,11 @@ Description
     <xsl:with-param  name="name"    select="'clusterName'"/>
   </xsl:call-template>
 </xsl:param>
+<xsl:param name="serverName">
+  <xsl:call-template name="pi-param">
+    <xsl:with-param  name="name"    select="'serverName'"/>
+  </xsl:call-template>
+</xsl:param>
 <xsl:param name="timestamp">
   <xsl:call-template name="pi-param">
     <xsl:with-param  name="name"    select="'timestamp'"/>
@@ -75,6 +80,12 @@ Description
 
 <!-- ======================= Internal Parameters ========================== -->
 <!-- configuration parameters -->
+<xsl:variable name="serverName-short">
+  <xsl:call-template name="unqualifiedHost">
+    <xsl:with-param  name="host"    select="$serverName"/>
+  </xsl:call-template>
+</xsl:variable>
+
 <xsl:variable
     name="configFile"
     select="document('../config/config.xml')/config" />

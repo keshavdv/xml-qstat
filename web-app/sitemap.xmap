@@ -162,9 +162,11 @@
     <map:generate  type="request"/>
     <map:transform src="xsl/cocoon/error404.xsl">
       <!-- server information -->
-      <map:parameter name="server-info"
+      <map:parameter
+          name="server-info"
           value="{cocoon-properties:name}-{cocoon-properties:version}"
           />
+      <map:parameter name="serverName" value="{request:serverName}" />
     </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>
@@ -183,9 +185,11 @@
       <map:generate  type="request"/>
       <map:transform src="xsl/cocoon/error404.xsl">
         <!-- server information -->
-        <map:parameter name="server-info"
+        <map:parameter
+            name="server-info"
             value="{cocoon-properties:name}-{cocoon-properties:version}"
             />
+        <map:parameter name="serverName" value="{request:serverName}" />
       </map:transform>
       <map:serialize type="xhtml"/>
     </map:otherwise>
@@ -223,7 +227,7 @@
      |   2. xslt/cocoon/redirect-query to extract SGE_ROOT, SGE_CELL for default
      |      and rewrite the query as "/{Function}.xml/~{cell}/{root}".
      |
-     | "/Function~{NAME}.xml"
+     | "/{Function}~{NAME}.xml"
      | 'Function' for a particular cluster name
      |   1. check cache-{NAME}/{Function}.xml
      |   2. check cache/{Function}~{NAME}.xml
@@ -254,6 +258,7 @@
       <map:generate  type="request" />
       <map:transform src="xsl/cocoon/redirect-query.xsl">
         <map:parameter name="clusterName" value="default" />
+        <map:parameter name="serverName"  value="{request:serverName}" />
         <map:parameter name="resource"    value="qstatf.xml" />
         <map:parameter name="baseURL"
             value="http://{request:serverName}:{request:serverPort}/{request:sitemapURIPrefix}"
@@ -286,6 +291,7 @@
       <map:generate  type="request" />
       <map:transform src="xsl/cocoon/redirect-query.xsl">
         <map:parameter name="clusterName" value="{1}" />
+        <map:parameter name="serverName"  value="{request:serverName}" />
         <map:parameter name="resource"    value="qstatf.xml" />
         <map:parameter name="baseURL"
             value="http://{request:serverName}:{request:serverPort}/{request:sitemapURIPrefix}"
@@ -320,6 +326,7 @@
        -->
     <map:transform src="xsl/cocoon/redirect-query.xsl">
       <map:parameter name="clusterName" value="{1}" />
+      <map:parameter name="serverName"  value="{request:serverName}" />
       <map:parameter name="request"  value="{request:queryString}" />
       <map:parameter name="resource" value="qstatj.xml" />
       <map:parameter name="baseURL"
@@ -355,9 +362,11 @@
     <map:generate  src="cocoon:/cache-files" />
     <map:transform src="xsl/index-xhtml.xsl">
       <!-- server information -->
-      <map:parameter name="server-info"
+      <map:parameter
+          name="server-info"
           value="{cocoon-properties:name}-{cocoon-properties:version}"
       />
+      <map:parameter name="serverName" value="{request:serverName}" />
     </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>
@@ -369,6 +378,7 @@
     <map:generate  src="cocoon:/cache-files" />
     <map:transform src="xsl/directory-xhtml.xsl">
       <map:parameter name="dir" value="cache"/>
+      <map:parameter name="serverName" value="{request:serverName}" />
     </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>
@@ -408,6 +418,7 @@
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
+          serverName="{request:serverName}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
       '/>
       <map:parameter name="rawxml" value="{request-param:rawxml}" />
@@ -435,7 +446,8 @@
   <map:match pattern="feed/*">
     <map:generate  src="cocoon:/qstatf~default.xml"/>
     <map:transform src="xsl/feed-atom-{1}.xsl">
-      <map:parameter name="timestamp" value="{date:yyyy-MM-dd'T'HH:mm:ssZ}"/>
+      <map:parameter name="serverName" value="{request:serverName}" />
+      <map:parameter name="timestamp"  value="{date:yyyy-MM-dd'T'HH:mm:ssZ}"/>
       <map:parameter name="baseURL"
           value="http://{request:serverName}:{request:serverPort}/{request:sitemapURIPrefix}"
           />
@@ -483,6 +495,7 @@
     </map:select>
     <map:transform src="xsl/directory-xhtml.xsl">
       <map:parameter name="prefix" value="" />
+      <map:parameter name="serverName" value="{request:serverName}" />
     </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>
@@ -501,6 +514,7 @@
     </map:select>
     <map:transform src="xsl/directory-xhtml.xsl">
       <map:parameter name="prefix" value="" />
+      <map:parameter name="serverName" value="{request:serverName}" />
     </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>
@@ -520,6 +534,7 @@
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
+          serverName="{request:serverName}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
           filterByUser="{request-param:user}"
           urlExt=".xml"
@@ -536,6 +551,7 @@
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
+          serverName="{request:serverName}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
           renderMode="{request:queryString}"
           urlExt=".xml"
@@ -557,6 +573,7 @@
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
+          serverName="{request:serverName}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
           urlExt=".xml"
       '/>
@@ -572,6 +589,7 @@
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
+          serverName="{request:serverName}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
           urlExt=".xml"
       '/>
@@ -623,6 +641,7 @@
     <map:generate src="cocoon:/cluster/{1}/qstat.xml"/>
     <map:transform src="xsl/qstat-xhtml.xsl">
       <map:parameter name="clusterName"   value="{1}" />
+      <map:parameter name="serverName"    value="{request:serverName}"/>
       <map:parameter name="timestamp"     value="{date:yyyy-MM-dd_HH:mm:ss}"/>
       <map:parameter name="filterByUser"  value="{request-param:user}"/>
     </map:transform>
@@ -636,6 +655,7 @@
     <map:generate src="cocoon:/cluster/{1}/qhost.xml"/>
     <map:transform src="xsl/qhost-xhtml.xsl">
       <map:parameter name="clusterName" value="{1}" />
+      <map:parameter name="serverName"  value="{request:serverName}"/>
       <map:parameter name="timestamp"   value="{date:yyyy-MM-dd_HH:mm:ss}"/>
       <map:parameter name="renderMode"  value="{request:queryString}"/>
     </map:transform>
@@ -656,6 +676,7 @@
     <map:generate src="cocoon:/cluster/{1}/qlicserver.xml"/>
     <map:transform src="xsl/qlic-xhtml.xsl">
       <map:parameter name="clusterName" value="{1}" />
+      <map:parameter name="serverName"  value="{request:serverName}"/>
       <map:parameter name="timestamp"   value="{date:yyyy-MM-dd_HH:mm:ss}"/>
     </map:transform>
     <map:serialize type="xhtml"/>
@@ -668,6 +689,7 @@
     <map:generate  src="cocoon:/cluster/{1}/qstatj.xml"/>
     <map:transform src="xsl/qstatj-xhtml.xsl">
       <map:parameter name="clusterName" value="{1}" />
+      <map:parameter name="serverName"  value="{request:serverName}"/>
       <map:parameter name="timestamp"   value="{date:yyyy-MM-dd_HH:mm:ss}"/>
     </map:transform>
     <map:serialize type="xhtml"/>
@@ -683,7 +705,9 @@
       <map:parameter name="depth"   value="1"/>
       <map:parameter name="include" value="\.(png|xml|xsl)$"/>
     </map:generate>
-    <map:transform src="xsl/directory-xhtml.xsl"/>
+    <map:transform src="xsl/directory-xhtml.xsl">
+      <map:parameter name="serverName" value="{request:serverName}" />
+    </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>
 
@@ -693,6 +717,7 @@
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <!-- server information -->
       <map:parameter name="xslt-parameters" value='
+          serverName="{request:serverName}"
           server-info="{cocoon-properties:name}-{cocoon-properties:version}"
           urlExt=".xml"
       '/>
@@ -709,6 +734,7 @@
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
+          serverName="{request:serverName}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
           filterByUser="{request-param:user}"
           renderMode="jobs"
@@ -727,6 +753,7 @@
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
+          serverName="{request:serverName}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
           menuMode="qstatf"
           urlExt=".xml"
@@ -743,6 +770,7 @@
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
+          serverName="{request:serverName}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
           renderMode="{request:queryString}"
           menuMode="qstatf"
@@ -760,6 +788,7 @@
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
+          serverName="{request:serverName}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
           menuMode="qstatf"
           urlExt=".xml"
@@ -776,6 +805,7 @@
     <map:transform src="xsl/cocoon/attach-stylesheet.xsl">
       <map:parameter name="xslt-parameters" value='
           clusterName="{1}"
+          serverName="{request:serverName}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
           renderMode="report"
           menuMode="qstatf"
@@ -796,6 +826,7 @@
     <map:generate  src="cocoon:/qstatf~{1}.xml" />
     <map:transform src="xsl/qstatf-xhtml.xsl">
       <map:parameter name="clusterName"   value="{1}" />
+      <map:parameter name="serverName"    value="{request:serverName}"/>
       <map:parameter name="timestamp"     value="{date:yyyy-MM-dd_HH:mm:ss}"/>
       <map:parameter name="filterByUser"  value="{request-param:user}"/>
       <map:parameter name="menuMode"      value="qstatf"/>
@@ -811,6 +842,7 @@
     <map:generate  src="cocoon:/qstatj~{1}.xml" />
     <map:transform src="xsl/qstatj-xhtml.xsl">
       <map:parameter name="clusterName"  value="{1}" />
+      <map:parameter name="serverName"   value="{request:serverName}"/>
       <map:parameter name="timestamp"    value="{date:yyyy-MM-dd_HH:mm:ss}"/>
       <map:parameter name="menuMode"     value="qstatf"/>
     </map:transform>
@@ -825,6 +857,7 @@
     <map:generate  src="cocoon:/qstatf~{1}.xml"/>
     <map:transform src="xsl/qstatf-xhtml.xsl">
       <map:parameter name="clusterName"  value="{1}" />
+      <map:parameter name="serverName"   value="{request:serverName}"/>
       <map:parameter name="timestamp"    value="{date:yyyy-MM-dd_HH:mm:ss}"/>
       <map:parameter name="renderMode"   value="{request:queryString}"/>
       <map:parameter name="menuMode"     value="qstatf"/>
@@ -843,6 +876,7 @@
     <map:generate src="cocoon:/qlicserver~{1}.xml"/>
     <map:transform src="xsl/qlic-xhtml.xsl">
       <map:parameter name="clusterName"  value="{1}" />
+      <map:parameter name="serverName"   value="{request:serverName}"/>
       <map:parameter name="timestamp"    value="{date:yyyy-MM-dd_HH:mm:ss}"/>
       <map:parameter name="menuMode"     value="qstatf"/>
     </map:transform>
@@ -857,6 +891,7 @@
     <map:generate  src="cocoon:/qstatf~{1}.xml" />
     <map:transform src="xsl/qstatf-xhtml.xsl">
       <map:parameter name="clusterName"  value="{1}" />
+      <map:parameter name="serverName"   value="{request:serverName}"/>
       <map:parameter name="timestamp"    value="{date:yyyy-MM-dd_HH:mm:ss}"/>
       <map:parameter name="renderMode"   value="report"/>
       <map:parameter name="menuMode"     value="qstatf"/>
@@ -908,6 +943,7 @@
       <map:parameter name="server-info"
           value="{cocoon-properties:name}-{cocoon-properties:version}"
           />
+      <map:parameter name="serverName" value="{request:serverName}" />
     </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>

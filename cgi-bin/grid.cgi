@@ -506,7 +506,7 @@ sub xmlProlog {
 
     if ($stylesheet) {
         $prolog .=
-qq{<?${disabled}xml-stylesheet type="text/xml" href="$stylesheet"?>\n};
+qq{<?${disabled}xml-stylesheet type="$contentTypes{xsl}" href="$stylesheet"?>\n};
     }
 
     $prolog;

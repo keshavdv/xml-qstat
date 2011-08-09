@@ -546,7 +546,7 @@ Description
         <xsl:attribute name="title">view stdout</xsl:attribute>
         <xsl:attribute name="href"><xsl:value-of
             select="$viewfile"/>?jobid=<xsl:value-of
-            select="JB_job_number"/><xsl:text>&amp;</xsl:text>file=<xsl:choose>
+            select="JB_job_number"/>;file=<xsl:choose>
             <xsl:when test='starts-with($PN_path,"/")' >
               <!-- absolute path -->
               <xsl:value-of select="$PN_path"/>
@@ -877,41 +877,44 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
 <xsl:if test="count(qstat_l_requests/CE_name)">
   &newline;
 
+  <!-- comma-separated list of resources -->
   <xsl:variable name="resources">
     <xsl:for-each
         select="qstat_l_requests/CE_name"><xsl:value-of
-        select="."/>,</xsl:for-each>
+        select="."/>
+        <xsl:if test="not(position() = last())">,</xsl:if>
+    </xsl:for-each>
   </xsl:variable>
   <xsl:variable name="request">jobid=<xsl:value-of
-        select="../JB_job_number"/><xsl:text>&amp;</xsl:text>resources=<xsl:value-of
+        select="../JB_job_number"/>;resources=<xsl:value-of
         select="$resources"/>
   </xsl:variable>
 
-  <!-- url viewlog?jobid=...&resources={resources} -->
+  <!-- url viewlog?jobid=...;resources={resources} -->
   <xsl:element name="a">
     <xsl:attribute name="title">viewlog</xsl:attribute>
     <xsl:attribute name="href"><xsl:value-of
         select="$viewlog"/>?<xsl:value-of
-        select="$request"/><xsl:value-of select="$cgi-params"/></xsl:attribute>
+        select="$request"/>;<xsl:value-of select="$cgi-params"/></xsl:attribute>
     <img alt="[v]" src="css/screen/icons/page_find.png" border="0" />
   </xsl:element>
 
-  <!-- url viewlog?action=plot&jobid=...&resources={resources} -->
+  <!-- url viewlog?action=plot;jobid=...;resources={resources} -->
   <xsl:element name="a">
     <xsl:attribute name="title">plotlog</xsl:attribute>
     <xsl:attribute name="href"><xsl:value-of
-        select="$viewlog"/>?action=plot<xsl:text>&amp;</xsl:text><xsl:value-of
-        select="$request"/><xsl:value-of select="$cgi-params"/></xsl:attribute>
+        select="$viewlog"/>?action=plot;<xsl:value-of
+        select="$request"/>;<xsl:value-of select="$cgi-params"/></xsl:attribute>
     <img alt="[p]" src="css/screen/icons/chart_curve.png" border="0" />
   </xsl:element>
 
-  <!-- url viewlog?action=plot&owner=...&resources={resources} -->
+  <!-- url viewlog?action=plot;owner=...;resources={resources} -->
   <xsl:element name="a">
     <xsl:attribute name="title">plotlogs</xsl:attribute>
     <xsl:attribute name="href"><xsl:value-of
-        select="$viewlog"/>?action=plot<xsl:text>&amp;</xsl:text>owner=<xsl:value-of
-        select="../JB_owner"/><xsl:text>&amp;</xsl:text>resources=<xsl:value-of
-        select="$resources"/><xsl:value-of select="$cgi-params"/></xsl:attribute>
+        select="$viewlog"/>?action=plot;owner=<xsl:value-of
+        select="../JB_owner"/>;resources=<xsl:value-of
+        select="$resources"/>;<xsl:value-of select="$cgi-params"/></xsl:attribute>
     <img alt="[P]" src="css/screen/icons/chart_curve_add.png" border="0" />
   </xsl:element>
 </xsl:if>

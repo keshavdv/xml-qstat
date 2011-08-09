@@ -86,12 +86,19 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable
-    name="configFile"
-    select="document('../config/config.xml')/config" />
+<!-- site-specific or generic config -->
+<xsl:variable name="config-file">
+  <xsl:call-template name="config-file">
+    <xsl:with-param  name="dir"   select="'../config/'" />
+    <xsl:with-param  name="site"  select="$serverName-short" />
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="config" select="document($config-file)/config"/>
+
 <xsl:variable
     name="clusterNode"
-    select="$configFile/clusters/cluster[@name=$clusterName]" />
+    select="$config/clusters/cluster[@name=$clusterName]" />
 
 <!-- the date according to the processing-instruction -->
 <xsl:variable name="piDate">
@@ -178,7 +185,9 @@ Description
 
 <div id="main">
 <!-- Topomost Logo Div -->
-<xsl:call-template name="topLogo"/>
+<xsl:call-template name="topLogo">
+  <xsl:with-param name="config-file" select="$config-file" />
+</xsl:call-template>
 &newline;
 <!-- Top Menu Bar -->
 <xsl:call-template name="topMenu">

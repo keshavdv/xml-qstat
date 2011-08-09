@@ -85,18 +85,25 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable
-    name="configFile"
-    select="document('../config/config.xml')/config" />
+<!-- site-specific or generic config -->
+<xsl:variable name="config-file">
+  <xsl:call-template name="config-file">
+    <xsl:with-param  name="dir"   select="'../config/'" />
+    <xsl:with-param  name="site"  select="$serverName-short" />
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="config" select="document($config-file)/config"/>
+
 <xsl:variable
     name="viewfile"
-    select="$configFile/programs/viewfile" />
+    select="$config/programs/viewfile" />
 <xsl:variable
     name="viewlog"
-    select="$configFile/programs/viewlog" />
+    select="$config/programs/viewlog" />
 <xsl:variable
     name="clusterNode"
-    select="$configFile/clusters/cluster[@name=$clusterName]"/>
+    select="$config/clusters/cluster[@name=$clusterName]"/>
 
 <!-- possibly append ~{clusterName} to urls -->
 <xsl:variable name="clusterSuffix">
@@ -145,8 +152,11 @@ Description
 &newline;<xsl:comment> Main body content </xsl:comment>&newline;
 
 <div id="main">
-<!-- Topomost Logo Div and Top Menu Bar -->
-<xsl:call-template name="topLogo"/>
+<!-- Topomost Logo Div -->
+<xsl:call-template name="topLogo">
+  <xsl:with-param name="config-file" select="$config-file" />
+</xsl:call-template>
+<!-- Top Menu Bar -->
 <xsl:choose>
 <xsl:when test="$menuMode = 'qstatf'">
   <xsl:call-template name="qstatfMenu">

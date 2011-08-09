@@ -98,15 +98,22 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable
-    name="configFile"
-    select="document('../config/config.xml')/config" />
+<!-- site-specific or generic config -->
+<xsl:variable name="config-file">
+  <xsl:call-template name="config-file">
+    <xsl:with-param  name="dir"   select="'../config/'" />
+    <xsl:with-param  name="site"  select="$serverName-short" />
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="config" select="document($config-file)/config"/>
+
 <xsl:variable
     name="alarmFile"
     select="document('../config/alarm-threshold.xml')" />
 <xsl:variable name="sortByQueueEnabled">
   <xsl:choose>
-  <xsl:when test="$configFile/sortByQueue/@enabled = 'true'">
+  <xsl:when test="$config/sortByQueue/@enabled = 'true'">
     <xsl:text>true</xsl:text>
   </xsl:when>
   <xsl:otherwise>
@@ -380,7 +387,9 @@ Description
 
 <div id="main">
 <!-- Topomost Logo Div and Top Menu Bar -->
-<xsl:call-template name="topLogo"/>
+<xsl:call-template name="topLogo">
+  <xsl:with-param name="config-file" select="$config-file" />
+</xsl:call-template>
 <xsl:choose>
 <xsl:when test="$menuMode = 'qstatf'">
   <xsl:call-template name="qstatfMenu">

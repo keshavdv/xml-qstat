@@ -70,13 +70,19 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable
-    name="configFile"
-    select="document('../config/config.xml')/config" />
+<!-- site-specific or generic config -->
+<xsl:variable name="config-file">
+  <xsl:call-template name="config-file">
+    <xsl:with-param  name="dir"   select="'../config/'" />
+    <xsl:with-param  name="site"  select="$serverName-short" />
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="config" select="document($config-file)/config"/>
 
 <xsl:variable name="qlicserverEnabled">
   <xsl:choose>
-  <xsl:when test="$configFile/qlicserver/@enabled = 'true'">
+  <xsl:when test="$config/qlicserver/@enabled = 'true'">
     <xsl:text>true</xsl:text>
   </xsl:when>
   <xsl:otherwise>
@@ -87,7 +93,7 @@ Description
 
 <xsl:variable name="defaultClusterAllowed">
   <xsl:choose>
-  <xsl:when test="$configFile/clusters/default/@enabled = 'false'">
+  <xsl:when test="$config/clusters/default/@enabled = 'false'">
     <xsl:text>false</xsl:text>
   </xsl:when>
   <xsl:otherwise>
@@ -131,7 +137,9 @@ Description
 
 <div id="main">
 <!-- Topomost Logo Div -->
-<xsl:call-template name="topLogo"/>
+<xsl:call-template name="topLogo">
+  <xsl:with-param name="config-file" select="$config-file" />
+</xsl:call-template>
 
 <!-- Top Menu Bar -->
 &newline; <xsl:comment> Top Menu Bar </xsl:comment> &newline;
@@ -218,7 +226,7 @@ Description
   <th>cell</th>
 </tr>
 
-<xsl:for-each select="$configFile/clusters/cluster">
+<xsl:for-each select="$config/clusters/cluster">
   <!-- sorted by cluster name -->
   <xsl:sort select="name"/>
   <xsl:apply-templates select="."/>
@@ -227,8 +235,8 @@ Description
 <!-- add default cluster -->
 <xsl:if test="$defaultClusterAllowed = 'true'">
   <xsl:choose>
-  <xsl:when test="$configFile/clusters/default">
-    <xsl:apply-templates select="$configFile/clusters/default"/>
+  <xsl:when test="$config/clusters/default">
+    <xsl:apply-templates select="$config/clusters/default"/>
   </xsl:when>
   <xsl:otherwise>
     <xsl:call-template name="addClusterLinks">

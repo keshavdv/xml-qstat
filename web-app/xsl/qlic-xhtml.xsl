@@ -73,6 +73,14 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
+<!-- site-specific or generic config -->
+<xsl:variable name="config-file">
+  <xsl:call-template name="config-file">
+    <xsl:with-param  name="dir"   select="'../config/'" />
+    <xsl:with-param  name="site"  select="$serverName-short" />
+  </xsl:call-template>
+</xsl:variable>
+
 <!-- get clusterNode from the query results -->
 <xsl:variable name="clusterNode" select="//query/cluster"/>
 <xsl:variable name="clusterName" select="$clusterNode/@name"/>
@@ -115,8 +123,11 @@ Description
 &newline;
 
 <div id="main">
-<!-- Topomost Logo Div and Top Menu Bar -->
-<xsl:call-template name="topLogo"/>
+<!-- Topomost Logo Div -->
+<xsl:call-template name="topLogo">
+  <xsl:with-param name="config-file" select="$config-file" />
+</xsl:call-template>
+<!-- Top Menu Bar -->
 <xsl:choose>
 <xsl:when test="$menuMode = 'qstatf'">
   <xsl:call-template name="qstatfMenu">

@@ -71,6 +71,13 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
+<!-- site-specific or generic config -->
+<xsl:variable name="config-file">
+  <xsl:call-template name="config-file">
+    <xsl:with-param  name="dir"   select="'../config/'" />
+    <xsl:with-param  name="site"  select="$serverName-short" />
+  </xsl:call-template>
+</xsl:variable>
 
 
 <!-- ======================= Output Declaration =========================== -->
@@ -103,8 +110,9 @@ Description
 &newline;
 <div id="main">
 <!-- Topomost Logo Div -->
-<xsl:call-template name="topLogo"/>
-
+<xsl:call-template name="topLogo">
+  <xsl:with-param name="config-file" select="$config-file" />
+</xsl:call-template>
 <!-- Top Menu Bar -->
 &newline;
 <div id="menu">

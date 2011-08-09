@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE stylesheet [
 <!ENTITY  newline "<xsl:text>&#x0a;</xsl:text>">
-<!ENTITY  space   "<xsl:text> </xsl:text>">
-<!ENTITY  nbsp    "&#xa0;">
+<!ENTITY  space   "<xsl:text>&#x20;</xsl:text>">
 ]>
 <xsl:stylesheet version="1.0"
     xmlns="http://www.w3.org/1999/xhtml"
@@ -64,17 +63,12 @@ Description
 
 <!-- ======================= Internal Parameters ========================== -->
 <!-- configuration parameters -->
-<xsl:variable name="serverName-short">
-  <xsl:call-template name="unqualifiedHost">
-    <xsl:with-param  name="host"    select="$serverName"/>
-  </xsl:call-template>
-</xsl:variable>
 
 <!-- site-specific or generic config -->
 <xsl:variable name="config-file">
   <xsl:call-template name="config-file">
     <xsl:with-param  name="dir"   select="'../config/'" />
-    <xsl:with-param  name="site"  select="$serverName-short" />
+    <xsl:with-param  name="site"  select="$serverName" />
   </xsl:call-template>
 </xsl:variable>
 

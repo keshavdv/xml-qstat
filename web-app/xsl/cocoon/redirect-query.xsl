@@ -45,17 +45,12 @@ Description
 
 <!-- ======================= Internal Parameters ========================== -->
 <!-- configuration parameters -->
-<xsl:variable name="serverName-short">
-  <xsl:call-template name="unqualifiedHost">
-    <xsl:with-param  name="host"    select="$serverName"/>
-  </xsl:call-template>
-</xsl:variable>
 
 <!-- site-specific or generic config -->
 <xsl:variable name="config-file">
   <xsl:call-template name="config-file">
     <xsl:with-param  name="dir"   select="'../../config/'" />
-    <xsl:with-param  name="site"  select="$serverName-short" />
+    <xsl:with-param  name="site"  select="$serverName" />
   </xsl:call-template>
 </xsl:variable>
 

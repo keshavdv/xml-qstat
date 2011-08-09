@@ -33,14 +33,31 @@ Description
    | return the config name (site-specific or generic config) to be used
    | 1. config/config-{SITE}.xml
    | 2. config/config.xml
+   |
+   | The {SITE} will always be reduced to a short name (w/o domain)
+   | for consistent behaviour regardless of the original URL
    -->
 <xsl:template name="config-file">
-  <xsl:param name="dir" />
+  <xsl:param name="dir" select="'../config/'" />
   <xsl:param name="site" />
 
+  <!-- config-{SITE}.xml with unqualified hostname -->
+  <xsl:variable name="config-site-xml">
+    <xsl:text>config-</xsl:text>
+    <xsl:choose>
+    <xsl:when test="contains($site, '.')">
+      <xsl:value-of select="substring-before($site,'.')"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$site"/>
+    </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>.xml</xsl:text>
+  </xsl:variable>
+
   <xsl:choose>
-  <xsl:when test="count(document(concat($dir, 'config-', $site, '.xml'))/config) &gt; 0">
-    <xsl:value-of select="concat($dir, 'config-', $site, '.xml')"/>
+  <xsl:when test="count(document(concat($dir, $config-site-xml))/config) &gt; 0">
+    <xsl:value-of select="concat($dir, $config-site-xml)"/>
   </xsl:when>
   <xsl:otherwise>
     <xsl:value-of select="concat($dir, 'config.xml')"/>
@@ -51,20 +68,13 @@ Description
 
 <!--
    |
-   | extract @root @cell from clusterNode
+   | extract @root @cell for clusterNode from the config-file
+   |
    | format into "root=@root;cell=@cell;" for cgi queries
    -->
 <xsl:template name="cgi-params">
-  <xsl:param name="clusterName"/>
-  <xsl:param name="serverName-short"/>
-
-  <!-- site-specific or generic config -->
-  <xsl:variable name="config-file">
-    <xsl:call-template name="config-file">
-      <xsl:with-param  name="dir"   select="'../config/'" />
-      <xsl:with-param  name="site"  select="$serverName-short" />
-    </xsl:call-template>
-  </xsl:variable>
+  <xsl:param name="clusterName" />
+  <xsl:param name="config-file" select="'../config/config.xml'" />
 
   <!-- choose site-specific or generic config -->
   <xsl:variable name="config" select="document($config-file)/config"/>
@@ -143,8 +153,8 @@ Description
    |
    -->
 <xsl:template name="count-tokens">
-  <xsl:param name="string"/>
-  <xsl:param name="delim"/>
+  <xsl:param name="string" />
+  <xsl:param name="delim" />
 
   <xsl:choose>
   <xsl:when test="contains($string, $delim)">
@@ -167,7 +177,7 @@ Description
    |
    -->
 <xsl:template name="count-jobs">
-  <xsl:param name="nodeList"/>
+  <xsl:param name="nodeList" />
 
   <xsl:variable name="count">
     <xsl:for-each select="$nodeList">
@@ -189,7 +199,7 @@ Description
    |
    -->
 <xsl:template name="count-slots">
-  <xsl:param name="nodeList"/>
+  <xsl:param name="nodeList" />
 
   <xsl:choose>
   <xsl:when test="count($nodeList)">
@@ -459,7 +469,7 @@ Description
     change the style (background color, font) based on the queue status
 -->
 <xsl:template name="queue-state-style">
-  <xsl:param name="state"/>
+  <xsl:param name="state" />
 
   <xsl:choose>
   <xsl:when test="contains($state, 'u')">
@@ -482,10 +492,10 @@ Description
 
 
 <!--
-   choose an appropriate icon based on the status of queues
--->
+   | choose an appropriate icon based on the status of queues
+   -->
 <xsl:template name="queue-state-icon">
-  <xsl:param name="state"/>
+  <xsl:param name="state" />
 
   <xsl:element name="img">
     <xsl:attribute name="title"><xsl:value-of select="$state"/></xsl:attribute>
@@ -505,10 +515,10 @@ Description
 
 
 <!--
-    display the queue status with brief explanation
--->
+   | display the queue status with brief explanation
+   -->
 <xsl:template name="queue-state-explain">
-  <xsl:param name="state"/>
+  <xsl:param name="state" />
 
   <xsl:choose>
   <xsl:when test="contains($state, 'u')" >
@@ -550,40 +560,8 @@ Description
 
 
 <!--
-    transform 'queue@host.domain.name' to 'queue@hostname'
--->
-<xsl:template name="unqualifiedQueue">
-  <xsl:param name="queue" />
-
-  <xsl:choose>
-  <xsl:when test="contains($queue, '@@')">
-    <!-- change queue@@hostgroup untouched -->
-    <xsl:value-of select="$queue"/>
-  </xsl:when>
-  <xsl:when test="contains($queue, '@')">
-    <!-- change queue@host.domain.name to queue@host -->
-    <xsl:value-of select="substring-before($queue, '@')"/>
-    <xsl:text>@</xsl:text>
-    <xsl:variable name="trailing" select="substring-after($queue,'@')"/>
-    <xsl:choose>
-    <xsl:when test="contains($trailing, '.')">
-      <xsl:value-of select="substring-before($trailing,'.')"/>
-    </xsl:when>
-    <xsl:otherwise>
-       <xsl:value-of select="$trailing"/>
-    </xsl:otherwise>
-    </xsl:choose>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:value-of select="$queue"/>
-  </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-
-<!--
-    transform 'host.domain.name' to 'hostname'
--->
+   | transform 'host.domain.name' to 'hostname'
+   -->
 <xsl:template name="unqualifiedHost">
   <xsl:param name="host" />
 
@@ -598,11 +576,37 @@ Description
 </xsl:template>
 
 <!--
-  display a shorter name with the longer name via mouseover
--->
+   | transform 'queue@host.domain.name' to 'queue@hostname'
+   -->
+<xsl:template name="unqualifiedQueue">
+  <xsl:param name="queue" />
+
+  <xsl:choose>
+  <xsl:when test="contains($queue, '@@')">
+    <!-- leave queue@@hostgroup untouched -->
+    <xsl:value-of select="$queue"/>
+  </xsl:when>
+  <xsl:when test="contains($queue, '@')">
+    <!-- change queue@host.domain.name to queue@host -->
+    <xsl:value-of select="substring-before($queue, '@')"/>
+    <xsl:text>@</xsl:text>
+    <xsl:call-template name="unqualifiedHost">
+      <xsl:with-param name="host" select="substring-after($queue, '@')" />
+    </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$queue"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
+<!--
+   | display a shorter name with the longer name via mouseover
+   -->
 <xsl:template name="shortName">
   <xsl:param name="name" />
-  <xsl:param name="length" select="32"/>
+  <xsl:param name="length" select="32" />
 
   <xsl:choose>
   <xsl:when test="string-length($name) &gt; $length">

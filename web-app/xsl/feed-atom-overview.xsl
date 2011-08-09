@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE stylesheet [
 <!ENTITY  newline "<xsl:text>&#x0a;</xsl:text>">
-<!ENTITY  space   "<xsl:text> </xsl:text>">
+<!ENTITY  space   "<xsl:text>&#x20;</xsl:text>">
 ]>
 <xsl:stylesheet version="1.0"
     xmlns="http://www.w3.org/2005/Atom"

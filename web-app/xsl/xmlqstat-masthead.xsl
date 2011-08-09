@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE stylesheet [
 <!ENTITY  newline "<xsl:text>&#x0a;</xsl:text>">
-<!ENTITY  space   "<xsl:text> </xsl:text>">
-<!ENTITY  nbsp    "&#xa0;">
+<!ENTITY  space   "<xsl:text>&#x20;</xsl:text>">
 ]>
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

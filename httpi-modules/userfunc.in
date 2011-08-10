@@ -237,7 +237,7 @@ ERROR
         %$switch = ();
 
         if ( defined $::variables ) {
-            for ( grep { defined and length } split /\&/, $::variables ) {
+            for ( grep { defined and length } split /[\&;]/, $::variables ) {
                 ## decode chars, eg %20 -> space etc
                 s{%([\dA-Fa-f]{2})}{chr hex $1}eg;
 
@@ -458,7 +458,7 @@ qq{<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0">\n};
     #
     # ---------------------------------------------
     sub shellCmd {
-        my $timeout = 5;
+        my $timeout = $timeout{shell} || 5;
         my ( $caller, @command ) = @_;
         my ( @lines, $redirected, $pid );
 
@@ -478,7 +478,7 @@ CONTENT
         local ( *OLDERR, $@ );
         eval {
             local $SIG{ALRM} = sub { die "TIMEOUT\n"; };    # NB: '\n' required
-            alarm $shellCmdTimeout if $shellCmdTimeout;
+            alarm $timeout;
 
             local *PIPE;
             open OLDERR, ">&", \*STDERR and $redirected++;

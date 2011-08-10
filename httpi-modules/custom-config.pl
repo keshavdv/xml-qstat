@@ -143,13 +143,6 @@ PROMPT
     }
 }
 
-$DEF_XMLQSTAT_TIMEOUT = &prompt( <<"PROMPT", '20', 1 );
-
-------------------------
-xml-qstat customization:
-Define the maximum timeout (seconds) when executing GridEngine commands
-PROMPT
-
 print <<"PROMPT";
 ###
 END GridEngine configuration

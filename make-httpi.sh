@@ -27,8 +27,8 @@
 # packageDir=httpi-1.7
 # downloadURL=http://www.floodgap.com/httpi/$packageDir.tar.gz
 
-packageDir=httpi-1.7b
-downloadURL=https://github.com/olesenm/httpi/tarball/v1.7b
+packageDir=httpi-1.7c
+downloadURL=https://github.com/olesenm/httpi/tarball/v1.7c
 
 buildDir=build-httpi
 downloadDir=build-download

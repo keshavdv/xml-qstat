@@ -4,22 +4,22 @@ use strict;
 # CUSTOMIZE THIS TO MATCH YOUR REQUIREMENTS:
 #
 
-# physical location of the web-app directory:
+# physical location of the web-app directory
 my $webappPath = "/export/home/mark/xml-qstat/web-app";
 
-# the default GridEngine root (SGE_ROOT):
+# name of the system library environment, for systems where runpath won't work
+my $libEnvName = "";
+
+# fallback: the default GridEngine root (SGE_ROOT)
 my $sge_root = "/export/home/mark/xml-qstat/sge_root";
 
-# name of the GridEngine architecture:
+# fallback: name of the GridEngine architecture
 my $sge_arch = "lx-fake";
 
-# name of the system library environment, for systems where runpath won't work:
-my $libEnvName = 0;
-
-# timeout (seconds)
+# fallback: timeout (seconds)
 my %timeout = (
-    http  => 20,    # timeout for external http requests
-    shell => 5,     # timeout for system commands like 'qstat -j', etc.
+    http  => 10,     # timeout for external http requests
+    shell => 5,      # timeout for system commands like 'qstat -j', etc.
 );
 
 #
@@ -55,13 +55,6 @@ use CGI qw( :standard -nosticky );
 my $whichCGI = "CGI";
 
 # -----------------------------------------------------------------------------
-#
-# maintain information about last modification time of the CGI script itself
-# and of the config/config.xml file
-my %mtime = ( cgi => 0, config => 0 );
-
-# hashed values of cluster configuration, extracted from config/config.xml
-my %clusterPaths;
 
 #
 # basic types for static content
@@ -121,6 +114,18 @@ use POSIX qw();
 use Socket qw();
 
 # GridResource - handle xml-qstat requests
+
+#
+# hashed values of the configuration,
+# extracted from config/config-{SITE}.xml or config/config.xml
+#
+my %config = (
+    cluster => {},    # known cluster configurations
+    timeout => {},    # timeouts (http | shell)
+    name    => '',    # name of the config file used (site or generic)
+    mtime   => 0,     # modification time of the config file
+);
+
 
 #
 # create and reset new GridResource object
@@ -193,6 +198,32 @@ sub setError {
 }
 
 #
+# Resource not found error handler
+# - does not exit, since this would not work with FastCGI
+#
+# Return: SELF
+#
+sub httpError404 {
+    my $self = shift;
+    my $cgi  = $self->{cgi};
+
+    print $cgi->header(
+        -type    => 'text/html',
+        -charset => 'utf-8',
+        -status  => 404
+    );
+    print qq{<h1>Not Found</h1>\n},    #
+      qq{Resource <blockquote><pre>}, $cgi->request_uri(),
+      qq{</pre></blockquote>\n};
+
+    print @{ $self->{error} || [] };
+    print @_ if @_;
+    print "<hr/>";
+
+    return $self;
+}
+
+#
 # Parse request string utility function
 # Prototype: ->parseRequestString( QUERY_STRING )
 #
@@ -229,14 +260,15 @@ sub parseRequestString {
 }
 
 #
-# Parse XML attributes utility function
+# internal utility FUNCTION
+# Parse XML attributes function
 #
 # extract attrib="value" ... attrib="value"
 #
 # Return: hash of attributes
 #
-sub parseXMLattrib {
-    my ( $self, $str ) = @_;
+sub _Func_parseXMLattrib {
+    my ($str) = @_;
     defined $str or $str = '';
 
     my %attr;
@@ -250,29 +282,87 @@ sub parseXMLattrib {
 }
 
 #
-# Resource not found error handler
-# - does not exit, since this would not work with FastCGI
+# internal FUNCTION
+# reset %config
 #
-# Return: SELF
-#
-sub httpError404 {
-    my $self = shift;
-    my $cgi  = $self->{cgi};
-
-    print $cgi->header(
-        -type    => 'text/html',
-        -charset => 'utf-8',
-        -status  => 404
+sub _Func_resetConfig {
+    %config = (
+        cluster => {},
+        timeout => {},
+        name    => '',
+        mtime   => 0,
+        @_
     );
-    print qq{<h1>Not Found</h1>\n},    #
-      qq{Resource <blockquote><pre>}, $cgi->request_uri(),
-      qq{</pre></blockquote>\n};
+}
 
-    print @{ $self->{error} || [] };
-    print @_ if @_;
-    print "<hr/>";
+#
+# internal FUNCTION
+# Populate %config by parsing config file XML contents (passed via $_)
+#
+sub _Func_populateConfig {
+    s{<!--.*?-->\s*}{}sg;    # strip XML comments
 
-    return $self;
+    # parse <timeout> .. </timeout>
+    # ignore top-level attributes
+    if (s{<timeout \s* (?:[^<>]*) > (.+?) </timeout \s*>}{}sx) {
+        my ($parse) = ($1);
+
+        for ($parse) {
+            ## get integer value from
+            #   - <http> .. </http>
+            #   - <shell> .. </shell>
+            # ignoring any attributes
+            while (s{<(http|shell) \s* (?:[^<>]*) >\s* (\d+) \s*</\1\s*>}{}sx) {
+                my ( $name, $value ) = ( $1, $2 );
+                $config{timeout}{$name} = $value;
+            }
+        }
+    }
+
+    # parse <clusters> .. </clusters>
+    # store top-level attributes as '#cluster'
+    if (s{<clusters \s* ([^<>]*) > (.+?) </clusters \s*>}{}sx) {
+        my ( $attr, $parse ) = ( $1, $2 );
+        my %attr = _Func_parseXMLattrib($attr);
+        $config{"#cluster"} = {%attr};
+
+        for ($parse) {
+            ## process <cluster .../> and <cluster ...> .. </cluster>
+            while (s{<cluster \s+([^<>]+?) />}{}sx
+                or s{<cluster \s+([^<>]+) > (.*?) </cluster>}{}sx )
+            {
+                my ( $attr, $content ) = ( $1, $2 );
+
+                my %attr = _Func_parseXMLattrib($attr);
+                my $name = delete $attr{name};
+
+                if ( defined $name ) {
+                    $config{cluster}{$name} = {%attr};
+                }
+            }
+
+            ## handle <default ... /> separately
+            my ( $name, %attr ) = ("default");
+
+            if (   s{<default \s+([^<>]+?) />}{}sx
+                or s{<default \s+([^<>]+) > (.*?) </default>}{}sx )
+            {
+                my ( $attr, $content ) = ( $1, $2 );
+                %attr = _Func_parseXMLattrib($attr);
+
+                # remove unneed/unwanted attributes
+                delete $attr{name};
+            }
+
+            my $enabled = delete $attr{enabled};
+            if ( $enabled and $enabled eq "false" ) {
+                %attr = ();
+            }
+            else {
+                $config{cluster}{default} = {%attr};
+            }
+        }
+    }
 }
 
 #
@@ -285,8 +375,9 @@ sub setErrorUnknownCluster {
 
     $clusterName ||= "undef";
 
-    my $count = scalar keys %clusterPaths;
-    my $known = join( "\n" => sort keys %clusterPaths );
+    my @clusters = sort keys %{ $config{cluster} };
+    my $count    = @clusters;
+    my $known    = join( "\n" => @clusters );
 
     $self->setError(<<"ERROR");
 Unknown cluster configuration
@@ -303,6 +394,94 @@ ERROR
     return $self;
 }
 
+
+#
+# get cluster settings from one of these files:
+# 1. config/config-{SITE}.xml
+# 2. config/config.xml
+#
+# Return: SELF
+#
+sub updateConfig {
+    my ($self) = @_;
+    ( my $site = $self->{cgi}->server_name() ) =~ s{\..*$}{};
+
+    my @config = ( "config-$site", "config" );
+    shift @config if not $site;
+
+    my ( $mtime, $whichConfig );
+
+    for my $config (@config) {
+        my $configFile = "$webappPath/config/$config.xml";
+
+        ($mtime) = ( lstat $configFile )[9] || 0;
+        if ( $mtime and -f $configFile ) {
+            $whichConfig = $config;    # can use this config file
+
+            # handle name change from previous
+            _Func_resetConfig() if $config{name} ne "$config";
+            last;
+        }
+        else {
+            ## can NOT use this config file
+            _Func_resetConfig() if $config{name} eq "$config";
+        }
+    }
+
+    # mtime is correct only when whichConfig is also set
+    if ( $mtime and $whichConfig ) {
+        my $configFile = "$webappPath/config/$whichConfig.xml";
+
+        if ( $mtime > $config{mtime} ) {
+            _Func_resetConfig( name => $whichConfig, mtime => $mtime );
+
+            local ( *CONFIG, $_, $/ );    ## use slurp mode
+            if ( open CONFIG, $configFile ) {
+                $_ = <CONFIG>;
+                _Func_populateConfig();
+            }
+        }
+    }
+    else {
+        _Func_resetConfig();
+    }
+
+    return $self;
+}
+
+#
+# output <?xml .. ?> processing-instruction
+# with mozilla-style <?xslt-param name=.. ?> processing-instructions
+# and  <?stylesheet ... ?> processing-instruction
+#
+# Prototype ->xmlProlog( param => value, ... )
+#
+# Return: String
+#
+sub xmlProlog {
+    my $self  = shift;
+    my %param = ( %{ $self->{xslt} }, @_ );
+
+    # special treatment for these
+    my $encoding = delete $param{encoding} || "utf-8";
+    my $disabled   = delete $param{rawxml} ? "no-" : "";
+    my $stylesheet = delete $param{stylesheet};
+
+    my $prolog = qq{<?xml version="1.0" encoding="$encoding"?>\n};
+    for ( keys %param ) {
+        if ( defined $param{$_} and length $param{$_} ) {
+            $prolog .= qq{<?xslt-param name="$_" value="$param{$_}"?>\n};
+        }
+    }
+
+    if ($stylesheet) {
+        $prolog .=
+qq{<?${disabled}xml-stylesheet type="$contentTypes{xsl}" href="$stylesheet"?>\n};
+    }
+
+    $prolog;
+}
+
 #
 # get a xml/html etc via HTTP
 # - ideas taken from LWP::Simple
@@ -311,7 +490,7 @@ ERROR
 #
 sub getHTTP {
     my ( $self, $url ) = @_;
-    my $timeout = $timeout{http} || 20;
+    my $timeout = $config{timeout}{http} || $timeout{http} || 15;
 
     my ( $proto, $host, $port, $path ) =
       ( $url =~ m{^(https?)://([^/:\@]+)(?::(\d+))?(/\S*)?$} )
@@ -411,106 +590,6 @@ ERROR
     return [ \@response, \%header, $buf ];
 }
 
-#
-# get cluster settings from config/config.xml file
-#
-# Return: SELF
-#
-sub updateClusterConfig {
-    my ($self) = @_;
-    my $configFile = "$webappPath/config/config.xml";
-
-    my ($mtime) = ( lstat $configFile )[9] || 0;
-
-    local ( *CONFIG, $_, $/ );    ## slurp mode
-    if (    $mtime
-        and $mtime > ( $mtime{config} ||= 0 )
-        and -f $configFile
-        and open CONFIG, $configFile )
-    {
-
-        # reset paths, assign new modification time
-        $mtime{config} = $mtime;
-        %clusterPaths = ();
-
-        # slurp file and strip out all xml comments
-        $_ = <CONFIG>;
-        s{<!--.*?-->\s*}{}sg;
-
-        # only retain content of <clusters> .. </clusters> bit
-        s{^.*<clusters>|</clusters>.*$}{}sg;
-
-        ## process <cluster .../> and <cluster ...> .. </cluster>
-        while (s{<cluster \s+([^<>]+?) />}{}sx
-            or s{<cluster \s+([^<>]+) > (.*?) </cluster>}{}sx )
-        {
-            my ( $attr, $content ) = ( $1, $2 );
-
-            my %attr = $self->parseXMLattrib($attr);
-            my $name = delete $attr{name};
-
-            if ( defined $name ) {
-                $clusterPaths{$name} = {%attr};
-            }
-        }
-
-        ## handle <default ... />
-        my ( $name, %attr ) = ("default");
-
-        if (   s{<default \s+([^<>]+?) />}{}sx
-            or s{<default \s+([^<>]+) > (.*?) </default>}{}sx )
-        {
-            my ( $attr, $content ) = ( $1, $2 );
-            %attr = $self->parseXMLattrib($attr);
-
-            # remove unneed/unwanted attributes
-            delete $attr{name};
-        }
-
-        my $enabled = delete $attr{enabled};
-        if ( $enabled and $enabled eq "false" ) {
-            %attr = ();
-        }
-        else {
-            $clusterPaths{default} = {%attr};
-        }
-    }
-
-    return $self;
-}
-
-#
-# output <?xml .. ?> processing-instruction
-# with mozilla-style <?xslt-param name=.. ?> processing-instructions
-# and  <?stylesheet ... ?> processing-instruction
-#
-# Prototype ->xmlProlog( param => value, ... )
-#
-# Return: String
-#
-sub xmlProlog {
-    my $self  = shift;
-    my %param = ( %{ $self->{xslt} }, @_ );
-
-    # special treatment for these
-    my $encoding = delete $param{encoding} || "utf-8";
-    my $disabled   = delete $param{rawxml} ? "no-" : "";
-    my $stylesheet = delete $param{stylesheet};
-
-    my $prolog = qq{<?xml version="1.0" encoding="$encoding"?>\n};
-    for ( keys %param ) {
-        if ( defined $param{$_} and length $param{$_} ) {
-            $prolog .= qq{<?xslt-param name="$_" value="$param{$_}"?>\n};
-        }
-    }
-
-    if ($stylesheet) {
-        $prolog .=
-qq{<?${disabled}xml-stylesheet type="$contentTypes{xsl}" href="$stylesheet"?>\n};
-    }
-
-    $prolog;
-}
 
 #
 # execute a shell-type of command with a error 404 on timeout or other error
@@ -519,13 +598,13 @@ qq{<?${disabled}xml-stylesheet type="$contentTypes{xsl}" href="$stylesheet"?>\n}
 #
 sub shellCmd {
     my ( $self, @command ) = @_;
-    my $timeout = $timeout{shell} || 5;
+    my $timeout = $config{timeout}{shell} || $timeout{shell} || 5;
 
     if ( not @command ) {
         my ( $line, $sub ) = ( caller(1) )[ 2, 3 ];
 
         return $self->setError(<<"ERROR");
-$sub (line $line): Shell->cmd with an undefined query
+$sub (line $line): shell-cmd with an undefined query
 ERROR
     }
 
@@ -575,7 +654,7 @@ ERROR
 #
 # Prototype ->gridEngineCmd(clusterName, command => [command args] )
 #
-# %clusterPaths must be up-to-date before calling
+# %config must be up-to-date before calling
 #
 # Return: String (of content)
 #
@@ -592,19 +671,23 @@ ERROR
 
     # get root/cell from config information,
     # allow 'default' to use pre-configured value
-    if (    exists $clusterPaths{$cluster}
-        and exists $clusterPaths{$cluster}{root} )
+    if (    exists $config{cluster}{$cluster}
+        and exists $config{cluster}{$cluster}{root} )
     {
-        $root = $clusterPaths{$cluster}{root};
-        $cell = $clusterPaths{$cluster}{cell};
-        $arch = $clusterPaths{$cluster}{arch};
+        $root = $config{cluster}{$cluster}{root};
+        $cell = $config{cluster}{$cluster}{cell};
+        $arch = $config{cluster}{$cluster}{arch};
     }
     elsif ( $cluster eq "default" ) {
         $root = $sge_root;
+        $cell = $config{cluster}{$cluster}{cell};
+        $arch = $config{cluster}{$cluster}{arch};
     }
+
+    # fallbacks, from <clusters> attributes or hard-coded values
     $root ||= '';
-    $cell ||= "default";    # fallback
-    $arch ||= $sge_arch;    # fallback
+    $cell ||= $config{"#cluster"}{cell} || "default";
+    $arch ||= $config{"#cluster"}{arch} || $sge_arch;
 
     # need root + cell directory
     -d $root and $root =~ m{^/} and -d "$root/$cell"
@@ -693,11 +776,11 @@ sub xmlFromCache {
         }
     }
     elsif ( $cluster
-        and exists $clusterPaths{$cluster}
-        and exists $clusterPaths{$cluster}{baseURL} )
+        and exists $config{cluster}{$cluster}
+        and exists $config{cluster}{$cluster}{baseURL} )
     {
         ## url may or may not have trailing slash
-        ( my $url = "$clusterPaths{$cluster}{baseURL}" ) =~ s{/+$}{};
+        ( my $url = "$config{cluster}{$cluster}{baseURL}" ) =~ s{/+$}{};
         $url .= "/$cacheName.xml";
 
         # getHTTP returns [ \@response, \%header, $buf ]
@@ -831,10 +914,8 @@ sub xmlFromFile {
 sub directoryGenerator {
     my ( $self, $dir ) = @_;
 
-    my $content =
-qq{<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0" name="$dir">\n};
-
-    local ( *DIR, *SUBDIR );
+    my $content = '';
+    local (*DIR);
     if ( opendir DIR, "$webappPath/$dir" ) {
         while ( my $f = readdir DIR ) {
             if ( -f "$webappPath/$dir/$f" and $f =~ /^.+\.(png|xml|xsl)$/ ) {
@@ -843,7 +924,12 @@ qq{<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0" name="$dir"
         }
     }
 
-    qq{$content</dir:directory>\n};
+    return <<"CONTENT";
+<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0"
+    name="$dir">
+$content
+</dir:directory>
+CONTENT
 }
 
 # special purpose Directory Generator
@@ -855,18 +941,16 @@ qq{<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0" name="$dir"
 # ---------------------------------------------
 sub directoryGeneratorCacheFiles {
     my ($self) = @_;
-    my $content =
-qq{<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0" name="cache">\n};
 
-#      qq{<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0">\n};
-
-    local ( *DIR, *SUBDIR );
+    my $content = '';
+    local (*DIR);
     if ( opendir DIR, $webappPath ) {
         while ( my $subDir = readdir DIR ) {
             my $thisDir = "$webappPath/$subDir";
             if ( $subDir =~ /^cache(-.+)?$/ and -d $thisDir ) {
                 $content .= qq{<dir:directory name="$subDir">\n};
 
+                local (*SUBDIR);
                 if ( opendir SUBDIR, $thisDir ) {
                     while ( my $f = readdir SUBDIR ) {
                         if ( $f =~ /^.+\.xml$/ and -f "$thisDir/$f" ) {
@@ -879,9 +963,17 @@ qq{<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0" name="cache
         }
     }
 
-    qq{$content</dir:directory>\n};
+    return <<"CONTENT";
+<dir:directory xmlns:dir="http://apache.org/cocoon/directory/2.0"
+    name="cache">
+$content
+</dir:directory>
+CONTENT
 }
 
+
+#
+# resource handler for /<webapp> path
 #
 # main handler can also be called directly without an initial 'new'
 #
@@ -896,11 +988,6 @@ sub process {
 
     $self->reset( cgi => $cgi );
     $self->parseRequestString( $ENV{QUERY_STRING} );
-
-    # stylesheet can be disabled upon request
-    if ( exists $self->{switch}{rawxml} or delete $self->{param}{rawxml} ) {
-        $self->{xslt}{rawxml} = "true";
-    }
 
     #
     # Fundamental re-direct rules first
@@ -919,7 +1006,8 @@ sub process {
     # give diagnosis of what is missing or mis-configured:
     -d $webappPath
       or return $self->httpError404(<<"ERROR");
-Possible installation error for handler <blockquote><pre>$prefix</pre></blockquote>
+Possible installation error for handler
+<blockquote><pre>$prefix</pre></blockquote>
 The underlying web-app path:
 <blockquote>$webappPath</blockquote>
 does not seem to exist.
@@ -930,13 +1018,14 @@ ERROR
         print STDERR "resource handler: $pathInfo\n";
     }
 
-    #
-    # resource handler for /<webapp> path
-    #
-    # ------------------------------
+    # silently disable stylesheets if the xsl/ directory is missing
+    # this can help with minimal installations
+    -d "$webappPath/xsl" or $self->{xslt}{rawxml} = "true";
 
-    # update what we know about the cluster configuration
-    $self->updateClusterConfig();
+    # stylesheets can also be disabled upon request
+    if ( exists $self->{switch}{rawxml} or delete $self->{param}{rawxml} ) {
+        $self->{xslt}{rawxml} = "true";
+    }
 
     #
     # direct serving of qhost/qstat information
@@ -960,6 +1049,9 @@ ERROR
                 warn "gridEngineQuery { $function }\n";
             }
 
+            # update - could be useful for caching
+            $self->updateConfig();
+
             $self->serveXMLwithProlog(    #
                 -content => $self->xmlFromCache(    #
                     $clusterName,                   #
@@ -972,10 +1064,6 @@ ERROR
         return;
     }
 
-    # silently disable stylesheets if the xsl/ directory is missing
-    # this can help with minimal installations
-    -d "$webappPath/xsl" or $self->{xslt}{rawxml} = "true";
-
     #
     # re-direct rules first
     # ---------------------
@@ -983,16 +1071,10 @@ ERROR
     #    /<webapp>/cluster/{clusterName}
     # -> /<webapp>/cluster/{clusterName}/jobs
     if ( $pathInfo =~ m{^/cluster/([^\s/]+?)/*$} ) {
-        my ($clusterName) = ($1);
         $pathInfo =~ s{/+$}{};
 
-        # redirect for known clusters (excluding "default")
-        if ( exists $clusterPaths{$clusterName} ) {
-            print $cgi->redirect("$prefix$pathInfo/jobs");
-        }
-        else {
-            $self->setErrorUnknownCluster($clusterName)->httpError404();
-        }
+        # redirect everything, let the target catch any errors
+        print $cgi->redirect("$prefix$pathInfo/jobs");
         return;
     }
 
@@ -1006,11 +1088,16 @@ ERROR
     #    /<webapp>/..../xsl/*.xsl
     # etc
     # -> /<webapp>/css/.../*.(css|png) etc
+    #
+    # or serve cache file directly
+    #
     if (
            $pathInfo =~ m{/xsl/((?:css|javascript)/.+\.(css|js|png))$}x
         or $pathInfo =~ m{/(
             (?:config|css|javascript|x[ms]l)/.+\.(css|js|png|x[ms]l))
               $}x
+        or $pathInfo =~ m{^/(cache/[^\s/]+\.(xml))$}
+        or $pathInfo =~ m{^/(cache-[^\s/]+/[^\s/]+\.(xml))$}
       )
     {
         $self->serveFile( "$webappPath/$1", -type => $contentTypes{$2} );
@@ -1037,6 +1124,7 @@ ERROR
     }
 
     #
+    # create directory listing
     #  /<webapp>/cache
     #
     if ( $pathInfo =~ m{^/cache$} ) {
@@ -1052,7 +1140,7 @@ ERROR
     }
 
     #
-    # create directory listings
+    # create directory listing
     #  /<webapp>/config
     #  /<webapp>/xsl
     #
@@ -1085,6 +1173,9 @@ ERROR
         return;
     }
 
+    # update what we know about the cluster configuration
+    $self->updateConfig();
+
     #
     # /<webapp>/cluster/{clusterName}/{function}(.xml)
     #
@@ -1095,7 +1186,7 @@ ERROR
         $self->{xslt}{clusterName} = $clusterName;
 
         # redirect for known clusters (excluding "default")
-        exists $clusterPaths{$clusterName}
+        exists $config{cluster}{$clusterName}
           or return $self->setErrorUnknownCluster($clusterName)->httpError404();
 
         #
@@ -1242,17 +1333,6 @@ ERROR
             return;
 
         }
-    }
-
-    if (   $pathInfo =~ m{^/cache/[^\s/]+\.xml$}
-        or $pathInfo =~ m{^/cache-[^\s/]+/[^\s/]+\.xml$} )
-    {
-        ( my $file = $pathInfo ) =~ s{^/}{};
-        $self->serveXMLwithProlog(    #
-            -content => $self->xmlFromFile($file)
-        );
-
-        return;
     }
 
     #

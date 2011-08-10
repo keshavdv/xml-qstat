@@ -93,22 +93,22 @@ Demonic feature only; xinetd/inetd/etc. need not apply.
 # CUSTOMIZE THIS TO MATCH YOUR REQUIREMENTS:
 #
 
-# resource name for the web-app:
+# resource name for the web-app
 my $webappName = "DEF_XMLQSTAT_WEBAPPNAME" || "xmlqstat";
 
-# physical location of the web-app directory:
+# physical location of the web-app directory
 my $webappPath = "DEF_XMLQSTAT_ROOT/web-app";
 
-# the default GridEngine root (SGE_ROOT):
-my $sge_root = "DEF_SGE_ROOT";
-
-# name of the GridEngine architecture:
-my $sge_arch = "DEF_SGE_ARCH";
-
-# name of the system library environment, for systems where runpath won't work:
+# name of the system library environment, for systems where runpath won't work
 my $libEnvName = "DEF_LIBENV";
 
-# timeout (seconds)
+# fallback: the default GridEngine root (SGE_ROOT)
+my $sge_root = "DEF_SGE_ROOT";
+
+# fallback: name of the GridEngine architecture
+my $sge_arch = "DEF_SGE_ARCH";
+
+# fallback: timeout (seconds)
 my %timeout = (
     http  => 10,     # timeout for external http requests
     shell => 5,      # timeout for system commands like 'qstat -j', etc.

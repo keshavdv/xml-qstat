@@ -72,11 +72,11 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable name="config" select="document($config-file)/config"/>
+<xsl:variable name="configNode" select="document($config-file)/config"/>
 
 <xsl:variable name="qlicserverEnabled">
   <xsl:choose>
-  <xsl:when test="$config/qlicserver/@enabled = 'true'">
+  <xsl:when test="$configNode/qlicserver/@enabled = 'true'">
     <xsl:text>true</xsl:text>
   </xsl:when>
   <xsl:otherwise>
@@ -87,7 +87,7 @@ Description
 
 <xsl:variable name="defaultClusterAllowed">
   <xsl:choose>
-  <xsl:when test="$config/clusters/default/@enabled = 'false'">
+  <xsl:when test="$configNode/clusters/default/@enabled = 'false'">
     <xsl:text>false</xsl:text>
   </xsl:when>
   <xsl:otherwise>
@@ -220,7 +220,7 @@ Description
   <th>cell</th>
 </tr>
 
-<xsl:for-each select="$config/clusters/cluster">
+<xsl:for-each select="$configNode/clusters/cluster">
   <!-- sorted by cluster name -->
   <xsl:sort select="name"/>
   <xsl:apply-templates select="."/>
@@ -229,8 +229,8 @@ Description
 <!-- add default cluster -->
 <xsl:if test="$defaultClusterAllowed = 'true'">
   <xsl:choose>
-  <xsl:when test="$config/clusters/default">
-    <xsl:apply-templates select="$config/clusters/default"/>
+  <xsl:when test="$configNode/clusters/default">
+    <xsl:apply-templates select="$configNode/clusters/default"/>
   </xsl:when>
   <xsl:otherwise>
     <xsl:call-template name="addClusterLinks">

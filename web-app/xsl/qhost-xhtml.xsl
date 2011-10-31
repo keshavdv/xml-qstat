@@ -88,11 +88,11 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable name="config" select="document($config-file)/config"/>
+<xsl:variable name="configNode" select="document($config-file)/config"/>
 
 <xsl:variable
     name="clusterNode"
-    select="$config/clusters/cluster[@name=$clusterName]" />
+    select="$configNode/clusters/cluster[@name=$clusterName]" />
 
 <!-- the date according to the processing-instruction -->
 <xsl:variable name="piDate">

@@ -87,17 +87,17 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable name="config" select="document($config-file)/config"/>
+<xsl:variable name="configNode" select="document($config-file)/config"/>
 
 <xsl:variable
     name="viewfile"
-    select="$config/programs/viewfile" />
+    select="$configNode/programs/viewfile" />
 <xsl:variable
     name="viewlog"
-    select="$config/programs/viewlog" />
+    select="$configNode/programs/viewlog" />
 <xsl:variable
     name="clusterNode"
-    select="$config/clusters/cluster[@name=$clusterName]"/>
+    select="$configNode/clusters/cluster[@name=$clusterName]"/>
 
 <!-- possibly append ~{clusterName} to urls -->
 <xsl:variable name="clusterSuffix">

@@ -100,14 +100,14 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable name="config" select="document($config-file)/config"/>
+<xsl:variable name="configNode" select="document($config-file)/config"/>
 
 <xsl:variable
     name="alarmFile"
     select="document('../config/alarm-threshold.xml')" />
 <xsl:variable name="sortByQueueEnabled">
   <xsl:choose>
-  <xsl:when test="$config/sortByQueue/@enabled = 'true'">
+  <xsl:when test="$configNode/sortByQueue/@enabled = 'true'">
     <xsl:text>true</xsl:text>
   </xsl:when>
   <xsl:otherwise>

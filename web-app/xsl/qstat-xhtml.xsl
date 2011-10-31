@@ -82,14 +82,14 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable name="config" select="document($config-file)/config"/>
+<xsl:variable name="configNode" select="document($config-file)/config"/>
 
 <xsl:variable
     name="viewlog"
-    select="$config/programs/viewlog" />
+    select="$configNode/programs/viewlog" />
 <xsl:variable
     name="clusterNode"
-    select="$config/clusters/cluster[@name=$clusterName]" />
+    select="$configNode/clusters/cluster[@name=$clusterName]" />
 
 <xsl:variable name="cgi-params">
   <xsl:call-template name="cgi-params">

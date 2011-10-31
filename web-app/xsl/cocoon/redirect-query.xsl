@@ -54,7 +54,7 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable name="config" select="document($config-file)/config"/>
+<xsl:variable name="configNode" select="document($config-file)/config"/>
 
 <!-- treat a bad clusterName as 'default' -->
 <xsl:variable name="name">
@@ -69,8 +69,8 @@ Description
 </xsl:variable>
 
 
-<xsl:variable name="defaultNode" select="$config/clusters/default"/>
-<xsl:variable name="clusterNode" select="$config/clusters/cluster[@name=$name]" />
+<xsl:variable name="defaultNode" select="$configNode/clusters/default"/>
+<xsl:variable name="clusterNode" select="$configNode/clusters/cluster[@name=$name]" />
 
 
 <!-- the cell, a missing value is treated as 'default' -->

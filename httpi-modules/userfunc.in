@@ -39,7 +39,7 @@ sub hterror {
 <body>
 <h1>$errstr</h1>
 @expl
-<hr/>
+<hr />
 <address><a href = "http://httpi.floodgap.com/">httpi/$VERSION</a>
 by Cameron Kaiser</address>
 </body>

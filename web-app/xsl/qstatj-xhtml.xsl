@@ -665,9 +665,9 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
     <th>posix</th>
     <td>
       uid = <xsl:value-of select="JB_uid"/>
-      <br/>
+      <br />
       gid = <xsl:value-of select="JB_gid"/>
-      <br/>
+      <br />
       group = <xsl:value-of select="JB_group"/>
     </td>
   </tr>
@@ -749,12 +749,12 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
 <!-- (scaled) usage -->
 <xsl:template match="JAT_usage_list/element|JAT_scaled_usage_list/scaled">
   <xsl:value-of select="UA_name"/> = <xsl:value-of select="UA_value"/>
-  <br/>
+  <br />
 </xsl:template>
 
 <xsl:template match="JB_env_list/job_sublist">
   <xsl:value-of select="VA_variable"/> = <xsl:value-of select="VA_value"/>
-  <br/>
+  <br />
 </xsl:template>
 
 <!-- path aliases -->
@@ -766,7 +766,7 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
   <xsl:value-of select="PA_exec_host"/>
 &newline;
   <xsl:value-of select="PA_translation"/>
-  <br/>
+  <br />
 </xsl:template>
 
 <xsl:template
@@ -800,12 +800,12 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
 </xsl:template>
 
 <xsl:template match="context_list">
-  <xsl:value-of select="VA_variable"/>=<xsl:value-of select="VA_value"/><br/>
+  <xsl:value-of select="VA_variable"/>=<xsl:value-of select="VA_value"/><br />
 </xsl:template>
 
 <xsl:template match="JB_job_args">
   <xsl:for-each select="element">
-    <xsl:value-of select="./ST_name"/><br/>
+    <xsl:value-of select="./ST_name"/><br />
   </xsl:for-each>
 </xsl:template>
 
@@ -843,7 +843,7 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
 <xsl:template match="SME_message_list/element|SME_global_message_list/element">
   <xsl:for-each select="MES_message">
     <xsl:value-of select="."/>
-    <br/>
+    <br />
   </xsl:for-each>
 </xsl:template>
 
@@ -860,7 +860,7 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
 
 <xsl:template match="JB_hard_resource_list/qstat_l_requests">
   <xsl:value-of select="CE_name"/>=<xsl:value-of select="CE_stringval"/>
-  <br/>
+  <br />
 </xsl:template>
 
 

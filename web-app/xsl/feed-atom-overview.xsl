@@ -269,7 +269,8 @@ Slots Available/Unavailable: <xsl:value-of select="$slotsTotal - $unusableSlotCo
 Click here for <xsl:element name="a">
 <xsl:attribute name="href"><xsl:value-of select="$baseURL"/>jobs</xsl:attribute>
 Detailed information.
-</xsl:element><br/>
+</xsl:element>
+<br />
 </div>
 
 <div class="sentence">

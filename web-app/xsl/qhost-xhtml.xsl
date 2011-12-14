@@ -207,7 +207,7 @@ Description
 </xsl:choose>
 <!-- replace 'T' in dateTime for easier reading -->
 &space; <xsl:value-of select="translate($piDate, 'T', '_')"/>
-<br/>
+<br />
 <xsl:choose>
 <xsl:when test="$AJ_slots &gt; 0">
   <!-- active jobs: -->
@@ -576,7 +576,7 @@ Description
         </xsl:attribute>
         <xsl:value-of select="@name"/>
       </xsl:element>
-      <br/>
+      <br />
     </xsl:for-each>
   </td>
 

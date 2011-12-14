@@ -1114,7 +1114,7 @@ $valueTotal0)*100"/>
 
 <xsl:template match="Queue-List/resource">
   <xsl:value-of select="@name"/>=<xsl:value-of select="."/>
-  <br/>
+  <br />
 </xsl:template>
 
 

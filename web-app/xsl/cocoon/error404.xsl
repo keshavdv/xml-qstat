@@ -69,8 +69,8 @@ Description
 
 <h1>Resource Not Found</h1>
 Cannot resolve resource <b><xsl:value-of select="/h:request/@target"/></b>
-<br/>
-<hr/>
+<br />
+<hr />
 &newline;
 <xsl:value-of select="$serverName"/> (<xsl:value-of select="$server-info"/>)
 

@@ -218,7 +218,7 @@ sub httpError404 {
 
     print @{ $self->{error} || [] };
     print @_ if @_;
-    print "<hr/>";
+    print "<hr />";
 
     return $self;
 }
@@ -790,7 +790,7 @@ sub xmlFromCache {
         }
         else {
             return $self->setError(<<"ERROR");
-<br/>Error while fetching <blockquote><pre>$url</pre></blockquote>
+<br />Error while fetching <blockquote><pre>$url</pre></blockquote>
 ERROR
         }
     }

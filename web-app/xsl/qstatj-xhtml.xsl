@@ -87,17 +87,13 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable name="configNode" select="document($config-file)/config"/>
-
 <xsl:variable
-    name="viewfile"
-    select="$configNode/programs/viewfile" />
-<xsl:variable
-    name="viewlog"
-    select="$configNode/programs/viewlog" />
+    name="configNode"
+    select="document($config-file)/config" />
 <xsl:variable
     name="clusterNode"
-    select="$configNode/clusters/cluster[@name=$clusterName]"/>
+    select="$configNode/clusters/cluster[@name=$clusterName]" />
+
 
 <!-- possibly append ~{clusterName} to urls -->
 <xsl:variable name="clusterSuffix">
@@ -115,6 +111,51 @@ Description
 <xsl:variable
     name="statusCodes"
     select="document('../config/status-codes.xml')/statusCodes" />
+
+
+<!-- enable viewfile depending on local/global settings -->
+<xsl:variable name="viewfile">
+  <xsl:choose>
+  <xsl:when test="$clusterNode/viewfile">
+    <!-- local setting exists, check enabled -->
+    <xsl:if test="
+        not(string-length($clusterNode/viewfile/@enabled))
+        or $clusterNode/viewfile/@enabled = 'true'">
+      <xsl:value-of select="$clusterNode/viewfile" />
+    </xsl:if>
+  </xsl:when>
+  <xsl:when test="$configNode/programs/viewfile">
+    <!-- global setting exists, check enabled -->
+    <xsl:if test="
+        not(string-length($configNode/programs/viewfile/@enabled))
+        or $configNode/programs/viewfile/@enabled = 'true'">
+      <xsl:value-of select="$configNode/programs/viewfile" />
+    </xsl:if>
+  </xsl:when>
+  </xsl:choose>
+</xsl:variable>
+
+<!-- enable viewlog depending on local/global settings -->
+<xsl:variable name="viewlog">
+  <xsl:choose>
+  <xsl:when test="$clusterNode/viewlog">
+    <!-- local setting exists, check enabled -->
+    <xsl:if test="
+        not(string-length($clusterNode/viewlog/@enabled))
+        or $clusterNode/viewlog/@enabled = 'true'">
+      <xsl:value-of select="$clusterNode/viewlog" />
+    </xsl:if>
+  </xsl:when>
+  <xsl:when test="$configNode/programs/viewlog">
+    <!-- global setting exists, check enabled -->
+    <xsl:if test="
+        not(string-length($configNode/programs/viewlog/@enabled))
+        or $configNode/programs/viewlog/@enabled = 'true'">
+      <xsl:value-of select="$configNode/programs/viewlog" />
+    </xsl:if>
+  </xsl:when>
+  </xsl:choose>
+</xsl:variable>
 
 
 <!-- ======================= Output Declaration =========================== -->
@@ -161,6 +202,7 @@ Description
 </xsl:when>
 <xsl:otherwise>
   <xsl:call-template name="topMenu">
+    <xsl:with-param name="clusterName" select="$clusterName" />
     <xsl:with-param name="jobinfo" select="'less'"/>
     <xsl:with-param name="urlExt"  select="$urlExt"/>
   </xsl:call-template>

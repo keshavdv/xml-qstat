@@ -131,6 +131,7 @@ Description
 </xsl:when>
 <xsl:otherwise>
   <xsl:call-template name="topMenu">
+    <xsl:with-param name="clusterName"   select="$clusterName"/>
     <xsl:with-param name="urlExt" select="$urlExt"/>
   </xsl:call-template>
 </xsl:otherwise>

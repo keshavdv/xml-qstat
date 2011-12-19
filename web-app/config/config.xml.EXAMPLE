@@ -3,19 +3,20 @@
 <config>
 
 <!--
-   | If the 'qlicserver' entity exists and has the attribute enabled="true",
-   | the viewing of the resource allocation reported by the qlicserver program
-   | will be enabled.
-   | Other values (or a missing entry) are interpreted as enabled="false".
+   | The viewing of the resource allocation reported by the qlicserver program
+   | will be enabled if the 'qlicserver' entity exists.
+   | A missing 'enabled' attribute is interpreted as "true".
+   | Other values are interpreted as enabled="false".
    -->
 <qlicserver enabled="true"/>
 
 <!--
-   | If the 'sortByQueue' entity exists and has the attribute enabled="true",
-   | the queue instances in the 'qstat -f' rendering will be sorted by
-   | the queue name.
-   | Other values (or a missing entry) are interpreted as enabled="false"
-   | meaning the values are used as they come from the 'qstat -f' output,
+   | The queue instances in the 'qstat -f' rendering will be sorted by
+   | the queue name if the 'sortByQueue' entity exists.
+   | 'enabled' is not "false".
+   | A missing 'enabled' attribute is interpreted as "true".
+   | Other values are interpreted as enabled="false", which means the
+   | values are used as they come from the 'qstat -f' output,
    | which should correspond to the seqno.
    -->
 <sortByQueue enabled="true"/>
@@ -30,7 +31,7 @@
 
 <!--
    | Optional external programs
-   | Leave empty (or remove) if you don't have such a programs
+   | Leave empty (or remove) if you don't have such programs
    -->
 <programs>
   <!--
@@ -99,12 +100,17 @@
       name="augsburg02"
       root="/data/app/grid02"
       cell="default"
-      />
+      >
+  </cluster>
 
   <cluster
       name="github-demo"
       baseURL="http://olesenm.github.com/xml-qstat/web-app/"
-      />
+      >
+      <qlicserver enabled="false" />
+      <viewlog    enabled="false" />
+      <viewfile   enabled="false" />
+  </cluster>
 
 </clusters>
 

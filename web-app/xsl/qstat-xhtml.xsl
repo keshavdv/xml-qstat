@@ -82,11 +82,9 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable name="configNode" select="document($config-file)/config"/>
-
 <xsl:variable
-    name="viewlog"
-    select="$configNode/programs/viewlog" />
+    name="configNode"
+    select="document($config-file)/config" />
 <xsl:variable
     name="clusterNode"
     select="$configNode/clusters/cluster[@name=$clusterName]" />
@@ -104,6 +102,28 @@ Description
     <xsl:with-param  name="pis"  select="processing-instruction('qstat')" />
     <xsl:with-param  name="name" select="'date'"/>
   </xsl:call-template>
+</xsl:variable>
+
+<!-- enable viewlog depending on local/global settings -->
+<xsl:variable name="viewlog">
+  <xsl:choose>
+  <xsl:when test="$clusterNode/viewlog">
+    <!-- local setting exists, check enabled -->
+    <xsl:if test="
+        not(string-length($clusterNode/viewlog/@enabled))
+        or $clusterNode/viewlog/@enabled = 'true'">
+      <xsl:value-of select="$clusterNode/viewlog" />
+    </xsl:if>
+  </xsl:when>
+  <xsl:when test="$configNode/programs/viewlog">
+    <!-- global setting exists, check enabled -->
+    <xsl:if test="
+        not(string-length($configNode/programs/viewlog/@enabled))
+        or $configNode/programs/viewlog/@enabled = 'true'">
+      <xsl:value-of select="$configNode/programs/viewlog" />
+    </xsl:if>
+  </xsl:when>
+  </xsl:choose>
 </xsl:variable>
 
 
@@ -165,6 +185,7 @@ Description
 </xsl:call-template>
 <!-- Top Menu Bar -->
 <xsl:call-template name="topMenu">
+  <xsl:with-param name="clusterName"   select="$clusterName"/>
   <xsl:with-param name="urlExt" select="$urlExt"/>
 </xsl:call-template>
 

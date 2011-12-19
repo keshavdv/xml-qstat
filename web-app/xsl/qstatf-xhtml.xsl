@@ -100,17 +100,44 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
-<xsl:variable name="configNode" select="document($config-file)/config"/>
+<xsl:variable name="configNode"  select="document($config-file)/config"/>
+<xsl:variable name="clusterNode" select="$configNode/clusters/cluster[@name=$clusterName]" />
 
 <xsl:variable
     name="alarmFile"
     select="document('../config/alarm-threshold.xml')" />
+
+<!-- enable sort-by-queue depending on local/global settings -->
 <xsl:variable name="sortByQueueEnabled">
   <xsl:choose>
-  <xsl:when test="$configNode/sortByQueue/@enabled = 'true'">
-    <xsl:text>true</xsl:text>
+  <xsl:when test="$clusterNode/sortByQueue">
+    <!-- local setting exists -->
+    <xsl:choose>
+    <xsl:when test="
+        not(string-length($clusterNode/sortByQueue/@enabled))
+        or $clusterNode/sortByQueue/@enabled = 'true'">
+      <xsl:text>true</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>false</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:when test="$configNode/sortByQueue">
+    <!-- global setting exists -->
+    <xsl:choose>
+    <xsl:when test="
+        not(string-length($configNode/sortByQueue/@enabled))
+        or $configNode/sortByQueue/@enabled = 'true'">
+      <xsl:text>true</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>false</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
   </xsl:when>
   <xsl:otherwise>
+    <!-- no setting exists -->
     <xsl:text>false</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
@@ -387,12 +414,14 @@ Description
 <xsl:choose>
 <xsl:when test="$menuMode = 'qstatf'">
   <xsl:call-template name="qstatfMenu">
+    <xsl:with-param name="clusterName"   select="$clusterName"/>
     <xsl:with-param name="clusterSuffix" select="$clusterSuffix"/>
     <xsl:with-param name="urlExt" select="$urlExt"/>
   </xsl:call-template>
 </xsl:when>
 <xsl:otherwise>
   <xsl:call-template name="topMenu">
+    <xsl:with-param name="clusterName"  select="$clusterName"/>
     <xsl:with-param name="urlExt" select="$urlExt"/>
   </xsl:call-template>
 </xsl:otherwise>

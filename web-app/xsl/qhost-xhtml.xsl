@@ -185,6 +185,7 @@ Description
 &newline;
 <!-- Top Menu Bar -->
 <xsl:call-template name="topMenu">
+  <xsl:with-param name="clusterName" select="$clusterName"/>
   <xsl:with-param name="urlExt" select="$urlExt"/>
 </xsl:call-template>
 &newline;

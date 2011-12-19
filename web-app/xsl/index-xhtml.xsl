@@ -74,17 +74,6 @@ Description
 
 <xsl:variable name="configNode" select="document($config-file)/config"/>
 
-<xsl:variable name="qlicserverEnabled">
-  <xsl:choose>
-  <xsl:when test="$configNode/qlicserver/@enabled = 'true'">
-    <xsl:text>true</xsl:text>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:text>false</xsl:text>
-  </xsl:otherwise>
-  </xsl:choose>
-</xsl:variable>
-
 <xsl:variable name="defaultClusterAllowed">
   <xsl:choose>
   <xsl:when test="$configNode/clusters/default/@enabled = 'false'">
@@ -259,12 +248,15 @@ Description
 
 
 <xsl:template match="cluster">
-  <xsl:call-template name="addClusterLinks">
-    <xsl:with-param name="name" select="@name"/>
-    <xsl:with-param name="root" select="@root"/>
-    <xsl:with-param name="cell" select="@cell"/>
-    <xsl:with-param name="base" select="@baseURL"/>
-  </xsl:call-template>
+  <!-- enabled if @enabled does not exist or is 'true' -->
+  <xsl:if test="not(string-length(@enabled)) or @enabled = 'true'" >
+    <xsl:call-template name="addClusterLinks">
+      <xsl:with-param name="name" select="@name"/>
+      <xsl:with-param name="root" select="@root"/>
+      <xsl:with-param name="cell" select="@cell"/>
+      <xsl:with-param name="base" select="@baseURL"/>
+    </xsl:call-template>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="default">
@@ -312,6 +304,8 @@ Description
   <xsl:param name="cell" />
   <xsl:param name="base" />
 
+  <xsl:variable name="clusterNode" select="$configNode/clusters/cluster[@name=$name]" />
+
   <!-- cache dir qualified with cluster name -->
   <xsl:variable name="fqCacheDir">
     <xsl:choose>
@@ -350,6 +344,41 @@ Description
       <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
       <xsl:with-param name="fileBase"      select="'qhost'"/>
     </xsl:call-template>
+  </xsl:variable>
+
+  <!-- enable qlicserver button depending on local/global settings -->
+  <xsl:variable name="qlicserverEnabled">
+    <xsl:choose>
+    <xsl:when test="$clusterNode/qlicserver">
+      <!-- local setting exists -->
+      <xsl:choose>
+      <xsl:when test="
+          not(string-length($clusterNode/qlicserver/@enabled))
+          or $clusterNode/qlicserver/@enabled = 'true'">
+        <xsl:text>true</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>false</xsl:text>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="$configNode/qlicserver">
+      <!-- global setting exists -->
+      <xsl:choose>
+      <xsl:when test="
+          not(string-length($configNode/qlicserver/@enabled))
+          or $configNode/qlicserver/@enabled = 'true'">
+        <xsl:text>true</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>false</xsl:text>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>false</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
 
   <xsl:variable name="qlicserver_exists">

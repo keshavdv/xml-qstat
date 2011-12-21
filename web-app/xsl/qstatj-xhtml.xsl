@@ -158,6 +158,14 @@ Description
 </xsl:variable>
 
 
+<!-- enable/disable some things for LSF output -->
+<xsl:variable name="isLSF">
+  <xsl:if test="/detailed_job_info[@type = 'lsf']">
+    <xsl:text>true</xsl:text>
+  </xsl:if>
+</xsl:variable>
+
+
 <!-- ======================= Output Declaration =========================== -->
 <xsl:output method="xml" indent="yes" version="1.0" encoding="UTF-8"
     doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -594,7 +602,12 @@ Description
               <xsl:value-of select="$PN_path"/>
             </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>;jobid=</xsl:text><xsl:value-of select="JB_job_number"/>
+            <!-- do not add jobid for LSF output
+                 (TODO: handle LSF/GridEngine in cgi)
+                 -->
+            <xsl:if test="$isLSF != 'true'">
+              <xsl:text>;jobid=</xsl:text><xsl:value-of select="JB_job_number"/>
+            </xsl:if>
         </xsl:attribute>
         <xsl:value-of select="$PN_path"/>
         </xsl:element>
@@ -919,38 +932,45 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
         <xsl:if test="not(position() = last())">,</xsl:if>
     </xsl:for-each>
   </xsl:variable>
-  <xsl:variable name="request">jobid=<xsl:value-of
-        select="../JB_job_number"/>;resources=<xsl:value-of
-        select="$resources"/>
+  <xsl:variable name="request">
+    <xsl:text>dir=</xsl:text><xsl:value-of select="../JB_cwd"/>
+    <xsl:text>;jobid=</xsl:text><xsl:value-of select="../JB_job_number"/>
+    <xsl:text>;resources=</xsl:text><xsl:value-of select="$resources"/>
   </xsl:variable>
 
-  <!-- url viewlog?jobid=...;resources={resources} -->
+  <!-- url viewlog?dir={};jobid={};resources={} -->
   <xsl:element name="a">
     <xsl:attribute name="title">viewlog</xsl:attribute>
     <xsl:attribute name="href"><xsl:value-of
         select="$viewlog"/>?<xsl:value-of
-        select="$request"/>;<xsl:value-of select="$cgi-params"/></xsl:attribute>
+        select="$request"/>;<xsl:value-of select="$cgi-params"/>
+    </xsl:attribute>
     <img alt="[v]" src="css/screen/icons/page_find.png" border="0" />
   </xsl:element>
 
-  <!-- url viewlog?action=plot;jobid=...;resources={resources} -->
+  <!-- url viewlog?action=plot;jobid={};resources={} -->
   <xsl:element name="a">
     <xsl:attribute name="title">plotlog</xsl:attribute>
     <xsl:attribute name="href"><xsl:value-of
         select="$viewlog"/>?action=plot;<xsl:value-of
-        select="$request"/>;<xsl:value-of select="$cgi-params"/></xsl:attribute>
+        select="$request"/>;<xsl:value-of select="$cgi-params"/>
+    </xsl:attribute>
     <img alt="[p]" src="css/screen/icons/chart_curve.png" border="0" />
   </xsl:element>
 
-  <!-- url viewlog?action=plot;owner=...;resources={resources} -->
-  <xsl:element name="a">
-    <xsl:attribute name="title">plotlogs</xsl:attribute>
-    <xsl:attribute name="href"><xsl:value-of
-        select="$viewlog"/>?action=plot;owner=<xsl:value-of
-        select="../JB_owner"/>;resources=<xsl:value-of
-        select="$resources"/>;<xsl:value-of select="$cgi-params"/></xsl:attribute>
-    <img alt="[P]" src="css/screen/icons/chart_curve_add.png" border="0" />
-  </xsl:element>
+  <!-- url viewlog?action=plot;owner={};resources={} -->
+  <!-- disable for LSF output -->
+  <xsl:if test="$isLSF != 'true'">
+    <xsl:element name="a">
+      <xsl:attribute name="title">plotlogs</xsl:attribute>
+      <xsl:attribute name="href"><xsl:value-of
+          select="$viewlog"/>?action=plot;owner=<xsl:value-of select="../JB_owner"/>
+          <xsl:text>;resources=</xsl:text><xsl:value-of select="$resources"/>
+          <xsl:text>;</xsl:text><xsl:value-of select="$cgi-params"/>
+      </xsl:attribute>
+      <img alt="[P]" src="css/screen/icons/chart_curve_add.png" border="0" />
+    </xsl:element>
+  </xsl:if>
 </xsl:if>
 </xsl:template>
 

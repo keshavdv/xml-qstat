@@ -571,7 +571,7 @@ Description
     <td><xsl:value-of select="JB_cwd"/></td>
   </tr>
 
-  <!-- url viewfile?jobid=...&file={stdout} -->
+  <!-- url viewfile?dir={};file={};jobid={} -->
   <tr>
     <th>stdout</th>
     <td>
@@ -581,22 +581,20 @@ Description
         <xsl:element name="a">
         <xsl:attribute name="title">view stdout</xsl:attribute>
         <xsl:attribute name="href"><xsl:value-of
-            select="$viewfile"/>?jobid=<xsl:value-of
-            select="JB_job_number"/>;file=<xsl:choose>
-            <xsl:when test='starts-with($PN_path,"/")' >
-              <!-- absolute path -->
-              <xsl:value-of select="$PN_path"/>
-            </xsl:when>
+            select="$viewfile"/>?dir=<xsl:value-of select="JB_cwd"/>
+            <xsl:text>;file=</xsl:text>
+            <xsl:choose>
             <xsl:when test='starts-with($PN_path,"$HOME/")' >
               <!-- $HOME/path -->
               <xsl:value-of select="JB_env_list/job_sublist[VA_variable='__SGE_PREFIX__O_HOME']/VA_value" />
               <xsl:value-of select='substring($PN_path, 6)' />
             </xsl:when>
             <xsl:otherwise>
-              <!-- relative path -->
-            <xsl:value-of select="JB_cwd"/>/<xsl:value-of select="$PN_path"/>
-          </xsl:otherwise>
-          </xsl:choose>
+              <!-- absolute or relative path -->
+              <xsl:value-of select="$PN_path"/>
+            </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>;jobid=</xsl:text><xsl:value-of select="JB_job_number"/>
         </xsl:attribute>
         <xsl:value-of select="$PN_path"/>
         </xsl:element>

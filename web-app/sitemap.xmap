@@ -224,14 +224,14 @@
      | "/{Function}~default.xml"
      | '{Function}' w/o cluster name
      |   1. check cache/{Function}.xml
-     |   2. xslt/cocoon/redirect-query to extract SGE_ROOT, SGE_CELL for default
+     |   2. xslt/cocoon-redirect-query to extract SGE_ROOT, SGE_CELL for default
      |      and rewrite the query as "/{Function}.xml/~{cell}/{root}".
      |
      | "/{Function}~{NAME}.xml"
      | 'Function' for a particular cluster name
      |   1. check cache-{NAME}/{Function}.xml
      |   2. check cache/{Function}~{NAME}.xml
-     |   3. use xslt/cocoon/redirect-query to extract SGE_ROOT, SGE_CELL for NAME
+     |   3. use xslt/cocoon-redirect-query to extract SGE_ROOT, SGE_CELL for NAME
      |      and rewrite the query as "/{Function}.xml/~{cell}/{root}".
      |
      | Note:
@@ -256,7 +256,7 @@
          | (Note: the input xml is irrelevant)
          -->
       <map:generate  type="request" />
-      <map:transform src="xsl/cocoon/redirect-query.xsl">
+      <map:transform src="xsl/cocoon-redirect-query.xsl">
         <map:parameter name="clusterName" value="default" />
         <map:parameter name="serverName"  value="{request:serverName}" />
         <map:parameter name="resource"    value="qstatf.xml" />
@@ -289,7 +289,7 @@
          | (Note: the input xml is irrelevant)
          -->
       <map:generate  type="request" />
-      <map:transform src="xsl/cocoon/redirect-query.xsl">
+      <map:transform src="xsl/cocoon-redirect-query.xsl">
         <map:parameter name="clusterName" value="{1}" />
         <map:parameter name="serverName"  value="{request:serverName}" />
         <map:parameter name="resource"    value="qstatf.xml" />
@@ -324,11 +324,11 @@
        | fetch from "/<webapp>/qstatj.xml/~{sge_cell}/{sge_root}" via xinclude
        | (Note: the input xml is irrelevant)
        -->
-    <map:transform src="xsl/cocoon/redirect-query.xsl">
+    <map:transform src="xsl/cocoon-redirect-query.xsl">
       <map:parameter name="clusterName" value="{1}" />
       <map:parameter name="serverName"  value="{request:serverName}" />
-      <map:parameter name="request"  value="{request:queryString}" />
-      <map:parameter name="resource" value="qstatj.xml" />
+      <map:parameter name="request"     value="{request:queryString}" />
+      <map:parameter name="resource"    value="qstatj.xml" />
       <map:parameter name="baseURL"
           value="http://{request:serverName}:{request:serverPort}/{request:sitemapURIPrefix}"
           />

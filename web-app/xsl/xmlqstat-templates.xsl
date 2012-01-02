@@ -119,7 +119,7 @@ Description
   </xsl:variable>
 
 
-  <!-- the root, a missing value is treated as '/bin/false' for some safety -->
+  <!-- the root, a missing value is treated as 'false' for some safety -->
   <xsl:variable name="root">
     <xsl:variable name="value">
       <xsl:choose>
@@ -137,7 +137,7 @@ Description
       <xsl:value-of select="$value" />
     </xsl:when>
     <xsl:otherwise>
-      <xsl:text>/bin/false</xsl:text>
+      <xsl:text>false</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>

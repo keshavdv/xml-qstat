@@ -34,15 +34,15 @@ Utility templates (likely cocoon-only)
   * cocoon/error404.xsl
     a simpler error page than getting a cocoon stack trace
 
-  * cocoon/redirect-query.xsl
-    extract cluster root/cell from config.xml and redirect to another url
-
   * cocoon/prune-cachedir-listing.xsl
     prune directory listing to retain
     cache/*.xml, cache-{clusterName}/*.xml files
 
   * cocoon/attach-stylesheet.xsl
     add <?xslt-param ..?> and <?xml-stylesheet .. ?> to an xml file
+
+  * cocoon-redirect-query.xsl
+    extract cluster root/cell from config.xml and redirect to another url
 
 
 Utility templates

@@ -37,9 +37,9 @@ Description
 <xsl:include href="xmlqstat-templates.xsl"/>
 
 <!-- ======================== Passed Parameters =========================== -->
-<xsl:param name="clusterName"/>
-<xsl:param name="serverName"/>
-<xsl:param name="request"/>
+<xsl:param name="clusterName" />
+<xsl:param name="serverName" />
+<xsl:param name="request" />
 <xsl:param name="resource" />
 <xsl:param name="baseURL" />
 
@@ -49,7 +49,7 @@ Description
 <!-- site-specific or generic config -->
 <xsl:variable name="config-file">
   <xsl:call-template name="config-file">
-    <xsl:with-param  name="dir"   select="'../../config/'" />
+    <xsl:with-param  name="dir"   select="'../config/'" />
     <xsl:with-param  name="site"  select="$serverName" />
   </xsl:call-template>
 </xsl:variable>
@@ -97,7 +97,7 @@ Description
 </xsl:variable>
 
 
-<!-- the root, a missing value is treated as '/bin/false' for some safety -->
+<!-- the root, a missing value is treated as 'false' for some safety -->
 <xsl:variable name="root">
   <xsl:variable name="value">
     <xsl:choose>
@@ -115,7 +115,7 @@ Description
     <xsl:value-of select="$value" />
   </xsl:when>
   <xsl:otherwise>
-    <xsl:text>/bin/false</xsl:text>
+    <xsl:text>false</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:variable>

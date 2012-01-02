@@ -1,7 +1,9 @@
 #!/bin/sh
 # -----------------------------------------------------------------------------
-# Copyright 2006-2007 Chris Dagdigian (dag@sonsorol.org)
-#
+# Copyright (c) 2006-2007 Chris Dagdigian (dag@sonsorol.org)
+# Copyright (c) 2009-2012 Mark Olesen
+# -----------------------------------------------------------------------------
+# License
 #     This file is part of xml-qstat.
 #
 #     xml-qstat is free software: you can redistribute it and/or modify it under
@@ -16,7 +18,7 @@
 #
 #     You should have received a copy of the GNU Affero General Public License
 #     along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
-# ------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Script
 #     cocoon
 #
@@ -30,9 +32,10 @@ PATH=/usr/bin:/bin
 ## CUSTOMIZE AS REQUIRED
 #
 
-# 1. Location of cocoon server and java
+# 1. Location of cocoon server (contains cocoon.sh) and
+#    of java home (contains bin/java)
 COCOON_HOME=/data/caeapp/local/www/cocoon
-JAVA_HOME=/usr/lib/jvm/java
+JAVA_HOME=/usr/lib/jvm/jre
 
 # 2. Downgrade to a non-root user account (adjust if required)
 runAs=nobody
@@ -40,7 +43,7 @@ runAs=nobody
 export COCOON_HOME JAVA_HOME PATH
 unset  DISPLAY    # extra safety
 
-#---------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # The following lines provide the necessary info for adding a startup script
 # according to the Linux Standard Base Specification (LSB).
 #
@@ -53,7 +56,7 @@ unset  DISPLAY    # extra safety
 # Default-Stop: 0 1 2 6
 # Description:  start cocoon for xmlqstat
 ### END INIT INFO
-#---------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 # this script should never run as root
 if [ "$UID" -eq 0 -a "${runAs:=nobody}" != root ]
@@ -77,35 +80,50 @@ LOG=/dev/null
 
 #
 # check that the daemon program is installed
+# and that java is available
 #
-[ -f $daemon -a -x $daemon ] || {
-    echo "$daemon not found"
-    exit 5      # LSB compliant exit status - program is not installed
+check_installed()
+{
+    [ -f $daemon -a -x $daemon ] || {
+        echo "$daemon not found"
+        exit 5      # LSB exit status - program is not installed
+    }
+
+    [ -f $JAVA_HOME/bin/java -a -x $JAVA_HOME/bin/java ] || {
+        echo "java not found"
+        exit 6      # LSB exit status - program not configured
+    }
 }
+
 
 set -e
 case "$1" in
 start)
+    check_installed
+
     echo -n "Starting $desc: "
     $daemon servlet >> $LOG 2>&1 &
-    echo "$name"
+    echo "$name ($COCOON_HOME)"
     ;;
 
 stop)
-    echo -n "Stopping $desc: "
     # get pid
-    pid=$(ps aux | awk '{if (/java/ && /cocoon/ && !/awk/) print $2}')
+    pid=$(/bin/ps ax -o pid,command | /bin/awk '{if ($2 ~ /java$/ && $0 ~ /org\.apache\.cocoon/) {print $1}}')
+
+    echo -n "Stopping $desc: "
     if [ -z "$pid" ]
     then
         echo "process not found"
     else
-        echo "sending TERM signal"
+        echo "sending TERM signal ($pid)"
         kill -15 $pid
     fi
     ;;
 
 restart)
     ## Stop (if running) and start anew
+    shift
+    check_installed
     $0 stop
     $0 start $@
     ;;
@@ -117,4 +135,4 @@ restart)
 esac
 
 exit 0
-# -------------------------------------------------------------- end-of-file
+# ----------------------------------------------------------------- end-of-file

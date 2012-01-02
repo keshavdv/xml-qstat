@@ -1,7 +1,8 @@
 #!/bin/sh
 # -----------------------------------------------------------------------------
-# Copyright 2009-2011 Mark Olesen
-#
+# Copyright (c) 2009-2012 Mark Olesen
+# -----------------------------------------------------------------------------
+# License
 #     This file is part of xml-qstat.
 #
 #     xml-qstat is free software: you can redistribute it and/or modify it under
@@ -16,7 +17,7 @@
 #
 #     You should have received a copy of the GNU Affero General Public License
 #     along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
-# ------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Script
 #     httpi
 #
@@ -38,7 +39,7 @@ runAs=nobody
 export PATH
 unset DISPLAY SGE_ARCH SGE_CELL SGE_ROOT # extra safety
 
-#---------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # The following lines provide the necessary info for adding a startup script
 # according to the Linux Standard Base Specification (LSB).
 #
@@ -51,7 +52,7 @@ unset DISPLAY SGE_ARCH SGE_CELL SGE_ROOT # extra safety
 # Default-Stop: 0 1 2 6
 # Description:  start httpi for xmlqstat
 ### END INIT INFO
-#---------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 # this script should never run as root
 if [ "$UID" -eq 0 -a "${runAs:=nobody}" != root ]
@@ -79,7 +80,7 @@ check_installed()
 {
     [ -f $daemon -a -x $daemon ] || {
         echo "$daemon not found"
-        exit 5      # LSB compliant exit status - program is not installed
+        exit 5      # LSB exit status - program is not installed
     }
 }
 
@@ -103,14 +104,15 @@ start)
     ;;
 
 stop)
-    echo -n "Stopping $desc: "
     # get pid
-    pid=$(ps aux | awk '{if (/dhttpi:/ && !/awk/) print $2}')
+    pid=$(/bin/ps ax -o pid,command | /bin/awk '{if ($2 ~ /^dhttpi:/) {print $1}}')
+
+    echo -n "Stopping $desc: "
     if [ -z "$pid" ]
     then
         echo "process not found"
     else
-        echo "sending TERM signal"
+        echo "sending TERM signal ($pid)"
         kill -15 $pid
     fi
     ;;
@@ -130,4 +132,4 @@ restart)
 esac
 
 exit 0
-# -------------------------------------------------------------- end-of-file
+# ----------------------------------------------------------------- end-of-file

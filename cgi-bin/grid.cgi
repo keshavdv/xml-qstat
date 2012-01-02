@@ -18,8 +18,8 @@ my $sge_arch = "lx-fake";
 
 # fallback: timeout (seconds)
 my %timeout = (
-    http  => 10,     # timeout for external http requests
-    shell => 5,      # timeout for system commands like 'qstat -j', etc.
+    http  => 10,    # timeout for external http requests
+    shell => 5,     # timeout for system commands like 'qstat -j', etc.
 );
 
 #
@@ -102,7 +102,7 @@ my %gridEngineQuery = (
         $jobid and $jobid =~ /^\d+(,\d+)*$/ or $jobid = '*';
 
         $self->gridEngineCmd(
-            $cluster,    #
+            $cluster,                     #
             qstat => qw( -xml -j ),
             $jobid
         );
@@ -127,7 +127,6 @@ my %config = (
     mtime   => 0,     # modification time of the config file
 );
 
-
 #
 # create and reset new GridResource object
 # - can also use 'process' method directly
@@ -150,12 +149,10 @@ sub new {
 sub reset {
     my ( $self, %param ) = @_;
     %{$self} = (
-        cgi    => 0,     # the cgi
-        param  => {},    # named request parameters
-        switch => {},    # unnamed request parameters
-        xslt   => {},    # xslt parameters
+        cgi   => 0,     # the cgi
+        xslt  => {},    # xslt parameters
         %param,
-        error => [],     # error stack
+        error => [],    # error stack
     );
 
     # basic xslt parameters
@@ -220,42 +217,6 @@ sub httpError404 {
     print @{ $self->{error} || [] };
     print @_ if @_;
     print "<hr />";
-
-    return $self;
-}
-
-#
-# Parse request string utility function
-# Prototype: ->parseRequestString( QUERY_STRING )
-#
-# - place named parameters in \%param and unnamed parameters in \%switch
-#
-# Return: SELF
-#
-sub parseRequestString {
-    my ( $self, $str ) = @_;
-
-    $self->{param}  ||= {};
-    $self->{switch} ||= {};
-
-    defined $str or $str = '';
-    for ( grep { defined and length } split /[\&;]/, $str ) {
-        ## decode chars, eg %20 -> space etc
-        s{%([\dA-Fa-f]{2})}{chr hex $1}eg;
-
-        ## remove shell meta-chars
-        s{[*?&<>{}\[\]\\\`]}{}g;
-
-        if (/=/) {
-            my ( $k, $v ) = split /=/;
-            ## remove leading/trailing commas
-            $v =~ s{^,+|,+$}{}g;
-            $self->{param}{$k} = $v;
-        }
-        else {
-            $self->{switch}{$_}++;
-        }
-    }
 
     return $self;
 }
@@ -394,7 +355,6 @@ ERROR
 
     return $self;
 }
-
 
 #
 # get cluster settings from one of these files:
@@ -590,7 +550,6 @@ ERROR
 
     return [ \@response, \%header, $buf ];
 }
-
 
 #
 # execute a shell-type of command with a error 404 on timeout or other error
@@ -972,7 +931,6 @@ $content
 CONTENT
 }
 
-
 #
 # resource handler for /<webapp> path
 #
@@ -988,7 +946,6 @@ sub process {
     my ( $prefix, $pathInfo ) = ( $cgi->script_name(), $cgi->path_info(), );
 
     $self->reset( cgi => $cgi );
-    $self->parseRequestString( $ENV{QUERY_STRING} );
 
     #
     # Fundamental re-direct rules first
@@ -1023,8 +980,8 @@ ERROR
     # this can help with minimal installations
     -d "$webappPath/xsl" or $self->{xslt}{rawxml} = "true";
 
-    # stylesheets can also be disabled upon request
-    if ( exists $self->{param}{rawxml} and $self->{param}{rawxml} eq "true" ) {
+    # stylesheets can be disabled upon request
+    if ( $cgi->param("rawxml") and $cgi->param("rawxml") eq "true" ) {
         $self->{xslt}{rawxml} = "true";
     }
 
@@ -1194,10 +1151,8 @@ ERROR
         # job : with optional user=... filter
         #
         if ( $function eq "jobs" ) {
-            if ( defined $self->{param}{user}
-                and $self->{param}{user} =~ m{^\w+$} )
-            {
-                $self->{xslt}{filterByUser} = $self->{param}{user};
+            if ( $cgi->param("user") and $self->param("user") =~ m{^\w+$} ) {
+                $self->{xslt}{filterByUser} = $cgi->param("user");
             }
 
             $self->serveXMLwithProlog(    #
@@ -1217,7 +1172,7 @@ ERROR
         # jobinfo : with optional jobid
         #
         if ( $function eq "jobinfo" ) {
-            my $jobid = $self->{param}{jobid};
+            my $jobid = $cgi->param("jobid");
 
             $self->serveXMLwithProlog(    #
                 -prolog => {              #
@@ -1237,7 +1192,7 @@ ERROR
         #
         if ( $function eq "queues" ) {
             ( $self->{xslt}{renderMode} ) =
-              grep { $_ and m{^(summary|free|warn)$} } $self->{param}{view};
+              grep { $_ and m{^(summary|free|warn)$} } $cgi->param("view");
 
             $self->serveXMLwithProlog(    #
                 -prolog => {              #
@@ -1358,10 +1313,8 @@ ERROR
         # job : with optional user=... filter
         #
         if ( $function eq "jobs" ) {
-            if ( defined $self->{param}{user}
-                and $self->{param}{user} =~ m{^\w+$} )
-            {
-                $self->{xslt}{filterByUser} = $self->{param}{user};
+            if ( $cgi->param("user") and $self->param("user") =~ m{^\w+$} ) {
+                $self->{xslt}{filterByUser} = $cgi->param("user");
             }
 
             $self->serveXMLwithProlog(    #
@@ -1382,7 +1335,7 @@ ERROR
         # jobinfo : with optional jobid
         #
         if ( $function eq "jobinfo" ) {
-            my $jobid = $self->{param}{jobid};
+            my $jobid = $cgi->param("jobid");
 
             $self->serveXMLwithProlog(    #
                 -prolog => {              #
@@ -1403,7 +1356,7 @@ ERROR
         #
         if ( $function eq "queues" ) {
             ( $self->{xslt}{renderMode} ) =
-              grep { $_ and m{^(summary|free|warn)$} } $self->{param}{view};
+              grep { $_ and m{^(summary|free|warn)$} } $self->param("view");
 
             # default is "queues", but state it explicitly anyhow
             $self->{xslt}{renderMode} ||= "queues";

@@ -124,10 +124,10 @@ sub hterror404 {
     # extracted from config/config-{SITE}.xml or config/config.xml
     #
     my %config = (
-        cluster => {},    # known cluster configurations
-        timeout => {},    # timeouts (http | shell)
-        name    => '',    # name of the config file used (site or generic)
-        mtime   => 0,     # modification time of the config file
+        cluster => {},       # known cluster configurations
+        timeout => {},       # timeouts (http | shell)
+        name    => '',       # name of the config file used (site or generic)
+        mtime   => 0,        # modification time of the config file
     );
 
     #
@@ -167,17 +167,13 @@ sub hterror404 {
     }
 
     #
-    # parse request string
-    # placed named parameters in \%param and unnamed parameters in \%switch
+    # parse request string for named parameters
     #
-    # Prototype parseRequestString( \%param, \%switch )
+    # Prototype parseRequestString(query-string)
     # -------------------------------------------------
     sub parseRequestString {
-        my ( $str, $param, $switch ) = @_;
-
-        # reset
-        %$param  = ();
-        %$switch = ();
+        my ($str) = @_;
+        my %param;
 
         defined $str or $str = '';
         for ( grep { defined and length } split /[\&;]/, $str ) {
@@ -191,12 +187,11 @@ sub hterror404 {
                 my ( $k, $v ) = split /=/;
                 ## remove leading/trailing commas
                 $v =~ s{^,+|,+$}{}g;
-                $param->{$k} = $v;
-            }
-            else {
-                $switch->{$_}++;
+                $param{$k} = $v;
             }
         }
+
+        return %param;
     }
 
     #
@@ -792,9 +787,8 @@ ERROR
     # ------------------------------
     sub resource_xmlqstat {
 
-        # place named parameters in %param and unnamed parameters in %switch
-        my ( %param, %switch );
-        parseRequestString( $::variables, \%param, \%switch );
+        # retrieve named parameters, place in %param
+        my %param = parseRequestString($::variables);
 
         # basic xslt parameters
         my %xsltParam = (
@@ -860,8 +854,8 @@ ERROR
         # this can help with minimal installations
         -d "$webappPath/xsl" or $xsltParam{rawxml} = "true";
 
-        # stylesheets can also be disabled upon request
-        if ( exists $param{rawxml} and $param{rawxml} eq "true" ) {
+        # stylesheets can be disabled upon request
+        if ( defined $param{rawxml} and $param{rawxml} eq "true" ) {
             $xsltParam{rawxml} = "true";
         }
 

@@ -25,9 +25,9 @@ my %timeout = (
 #
 # END OF CUSTOMIZE SETTINGS
 ################################################################################
+# Copyright (c) 2009-2012 Mark Olesen
 # ------------------------------------------------------------------------------
-# Copyright 2009-2011 Mark Olesen
-#
+# License
 #     This file is part of xml-qstat.
 #
 #     xml-qstat is free software: you can redistribute it and/or modify it under
@@ -1023,7 +1023,7 @@ ERROR
     -d "$webappPath/xsl" or $self->{xslt}{rawxml} = "true";
 
     # stylesheets can also be disabled upon request
-    if ( exists $self->{switch}{rawxml} or delete $self->{param}{rawxml} ) {
+    if ( exists $self->{param}{rawxml} and $self->{param}{rawxml} eq "true" ) {
         $self->{xslt}{rawxml} = "true";
     }
 

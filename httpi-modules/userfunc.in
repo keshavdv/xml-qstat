@@ -9,8 +9,9 @@ you can also change hterror301 and hterror404. However, hterror's arguments
 should not be changed as other subroutines call it for their error handling.
 
 # ------------------------------------------------------------------------------
-# Copyright 2009-2011 Mark Olesen
-#
+# Copyright (c) 2009-2012 Mark Olesen
+# ------------------------------------------------------------------------------
+# License
 #     This file is part of xml-qstat.
 #
 #     xml-qstat is free software: you can redistribute it and/or modify it under
@@ -850,7 +851,7 @@ ERROR
         -d "$webappPath/xsl" or $xsltParam{rawxml} = "true";
 
         # stylesheets can also be disabled upon request
-        if ( exists $switch{rawxml} or delete $param{rawxml} ) {
+        if ( exists $param{rawxml} and $param{rawxml} eq "true" ) {
             $xsltParam{rawxml} = "true";
         }
 

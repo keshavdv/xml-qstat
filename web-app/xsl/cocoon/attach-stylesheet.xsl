@@ -8,7 +8,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >
 <!--
-Copyright 2009-2011 Mark Olesen
+Copyright (c) 2009-2012 Mark Olesen
 
     This file is part of xml-qstat.
 
@@ -62,7 +62,7 @@ Description
   <!-- add stylesheet -->
   <xsl:if test="$stylesheet">
     <xsl:choose>
-    <xsl:when test="$rawxml">
+    <xsl:when test="$rawxml = 'true'">
       <xsl:processing-instruction name="disabled-xml-stylesheet">
         <xsl:text>type="text/xml" href="</xsl:text>
         <xsl:value-of select="$stylesheet"/><xsl:text>"</xsl:text>

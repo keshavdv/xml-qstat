@@ -8,8 +8,9 @@
     xmlns="http://www.w3.org/1999/xhtml"
 >
 <!--
-Copyright 2009-2011 Mark Olesen
+Copyright (c) 2009-2012 Mark Olesen
 
+License
     This file is part of xml-qstat.
 
     xml-qstat is free software: you can redistribute it and/or modify it under
@@ -156,36 +157,36 @@ Description
       />
     </xsl:element>
 
-    <!-- queues?summary -->
+    <!-- queues?view=summary -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
       <xsl:attribute name="title">queue summary</xsl:attribute>
       <xsl:attribute name="href">queues<xsl:value-of
-        select="$urlExt"/>?summary</xsl:attribute>
+        select="$urlExt"/>?view=summary</xsl:attribute>
       <img
         src="css/screen/icons/sum.png"
         alt="[queues summary]"
       />
     </xsl:element>
 
-    <!-- queues?free -->
+    <!-- queues?view=free -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
       <xsl:attribute name="title">queue free</xsl:attribute>
       <xsl:attribute name="href">queues<xsl:value-of
-        select="$urlExt"/>?free</xsl:attribute>
+        select="$urlExt"/>?view=free</xsl:attribute>
       <img
         src="css/screen/icons/tick.png"
         alt="[queues free]"
       />
     </xsl:element>
 
-    <!-- queues?warn -->
+    <!-- queues?view=warn -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
       <xsl:attribute name="title">queue warn</xsl:attribute>
       <xsl:attribute name="href">queues<xsl:value-of
-        select="$urlExt"/>?warn</xsl:attribute>
+        select="$urlExt"/>?view=warn</xsl:attribute>
       <img
         src="css/screen/icons/error.png"
         alt="[warn queues]"
@@ -321,36 +322,36 @@ Description
       />
     </xsl:element>
 
-    <!-- queues?summary -->
+    <!-- queues?view=summary -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
       <xsl:attribute name="title">queue summary</xsl:attribute>
       <xsl:attribute name="href">queues<xsl:value-of select="$clusterSuffix"/>
-        <xsl:value-of select="$urlExt"/>?summary</xsl:attribute>
+        <xsl:value-of select="$urlExt"/>?view=summary</xsl:attribute>
       <img
         src="css/screen/icons/sum.png"
         alt="[queues summary]"
       />
     </xsl:element>
 
-    <!-- queues?free -->
+    <!-- queues?view=free -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
       <xsl:attribute name="title">queue free</xsl:attribute>
       <xsl:attribute name="href">queues<xsl:value-of select="$clusterSuffix"/>
-        <xsl:value-of select="$urlExt"/>?free</xsl:attribute>
+        <xsl:value-of select="$urlExt"/>?view=free</xsl:attribute>
       <img
         src="css/screen/icons/tick.png"
         alt="[queues free]"
       />
     </xsl:element>
 
-    <!-- queues?warn -->
+    <!-- queues?view=warn -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
       <xsl:attribute name="title">queue warn</xsl:attribute>
       <xsl:attribute name="href">queues<xsl:value-of select="$clusterSuffix"/>
-        <xsl:value-of select="$urlExt"/>?warn</xsl:attribute>
+        <xsl:value-of select="$urlExt"/>?view=warn</xsl:attribute>
       <img
         src="css/screen/icons/error.png"
         alt="[warn queues]"

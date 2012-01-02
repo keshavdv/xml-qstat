@@ -1237,7 +1237,7 @@ ERROR
         #
         if ( $function eq "queues" ) {
             ( $self->{xslt}{renderMode} ) =
-              grep { m{^(summary|free|warn)$} } keys %{ $self->{switch} };
+              grep { $_ and m{^(summary|free|warn)$} } $self->{param}{view};
 
             $self->serveXMLwithProlog(    #
                 -prolog => {              #
@@ -1403,7 +1403,7 @@ ERROR
         #
         if ( $function eq "queues" ) {
             ( $self->{xslt}{renderMode} ) =
-              grep { m{^(summary|free|warn)$} } keys %{ $self->{switch} };
+              grep { $_ and m{^(summary|free|warn)$} } $self->{param}{view};
 
             # default is "queues", but state it explicitly anyhow
             $self->{xslt}{renderMode} ||= "queues";

@@ -553,7 +553,7 @@
           clusterName="{1}"
           serverName="{request:serverName}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
-          renderMode="{request:queryString}"
+          renderMode="{request-param:view}"
           urlExt=".xml"
       '/>
       <map:parameter name="rawxml" value="{request-param:rawxml}" />
@@ -648,7 +648,7 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/<webapp>/cluster/{clusterName}/queues?renderMode"
+  <!-- url: "/<webapp>/cluster/{clusterName}/queues?view=renderMode"
        display all the queue instances or just a summary
        -->
   <map:match pattern="cluster/*/queues">
@@ -657,16 +657,16 @@
       <map:parameter name="clusterName" value="{1}" />
       <map:parameter name="serverName"  value="{request:serverName}"/>
       <map:parameter name="timestamp"   value="{date:yyyy-MM-dd_HH:mm:ss}"/>
-      <map:parameter name="renderMode"  value="{request:queryString}"/>
+      <map:parameter name="renderMode"  value="{request-param:view}"/>
     </map:transform>
     <map:serialize type="xhtml"/>
   </map:match>
 
   <!-- redirect: "/<webapp>/cluster/{clusterName}/summary"
-       to queues?summary
+       to queues?view=summary
        -->
   <map:match pattern="cluster/*/summary">
-    <map:redirect-to uri="queues?summary"/>
+    <map:redirect-to uri="queues?view=summary"/>
   </map:match>
 
   <!-- url: "/<webapp>/cluster/{clusterName}/resources"
@@ -772,7 +772,7 @@
           clusterName="{1}"
           serverName="{request:serverName}"
           timestamp="{date:yyyy-MM-dd_HH:mm:ss}"
-          renderMode="{request:queryString}"
+          renderMode="{request-param:view}"
           menuMode="qstatf"
           urlExt=".xml"
       '/>
@@ -859,7 +859,7 @@
       <map:parameter name="clusterName"  value="{1}" />
       <map:parameter name="serverName"   value="{request:serverName}"/>
       <map:parameter name="timestamp"    value="{date:yyyy-MM-dd_HH:mm:ss}"/>
-      <map:parameter name="renderMode"   value="{request:queryString}"/>
+      <map:parameter name="renderMode"   value="{request-param:view}"/>
       <map:parameter name="menuMode"     value="qstatf"/>
     </map:transform>
     <map:serialize type="xhtml"/>

@@ -1039,7 +1039,7 @@ ERROR
             #
             if ( $function eq "queues" ) {
                 ( $xsltParam{renderMode} ) =
-                  grep { m{^(summary|free|warn)$} } keys %switch;
+                  grep { $_ and m{^(summary|free|warn)$} } $param{view};
 
                 returnXML(
                     xmlProlog(
@@ -1185,7 +1185,7 @@ ERROR
             #
             if ( $function eq "queues" ) {
                 ( $xsltParam{renderMode} ) =
-                  grep { m{^(summary|free|warn)$} } keys %switch;
+                  grep { $_ and m{^(summary|free|warn)$} } $param{view};
 
                 # default is "queues", but state it explicitly anyhow
                 $xsltParam{renderMode} ||= "queues";

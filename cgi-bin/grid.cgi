@@ -98,12 +98,13 @@ my %gridEngineQuery = (
         );
     },
     qstatj => sub {
-        my ( $self, $cluster, $jobId ) = @_;
-        $jobId and $jobId =~ /^\d+$/ or $jobId = '*';
+        my ( $self, $cluster, $jobid ) = @_;
+        $jobid and $jobid =~ /^\d+(,\d+)*$/ or $jobid = '*';
+
         $self->gridEngineCmd(
-            $cluster,                     #
+            $cluster,    #
             qstat => qw( -xml -j ),
-            $jobId
+            $jobid
         );
     },
 );
@@ -1213,10 +1214,10 @@ ERROR
         }
 
         #
-        # jobinfo : with optional jobId
+        # jobinfo : with optional jobid
         #
         if ( $function eq "jobinfo" ) {
-            my ($jobId) = grep { $_ and /^\d+/ } keys %{ $self->{switch} };
+            my $jobid = $self->{param}{jobid};
 
             $self->serveXMLwithProlog(    #
                 -prolog => {              #
@@ -1225,7 +1226,7 @@ ERROR
                 -content => $self->xmlFromCache(    #
                     $clusterName,                   #
                     qstatj =>
-                      [ $gridEngineQuery{qstatj}, $self, $clusterName, $jobId ]
+                      [ $gridEngineQuery{qstatj}, $self, $clusterName, $jobid ]
                 ),
             );
             return;
@@ -1378,10 +1379,10 @@ ERROR
         }
 
         #
-        # jobinfo : with optional jobId
+        # jobinfo : with optional jobid
         #
         if ( $function eq "jobinfo" ) {
-            my ($jobId) = grep { $_ and /^\d+/ } keys %{ $self->{switch} };
+            my $jobid = $self->{param}{jobid};
 
             $self->serveXMLwithProlog(    #
                 -prolog => {              #
@@ -1390,7 +1391,7 @@ ERROR
                 -content => $self->xmlFromCache(    #
                     $clusterName,                   #
                     qstatj =>
-                      [ $gridEngineQuery{qstatj}, $self, $clusterName, $jobId ]
+                      [ $gridEngineQuery{qstatj}, $self, $clusterName, $jobid ]
                 ),
             );
 

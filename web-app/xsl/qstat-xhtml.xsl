@@ -427,7 +427,7 @@ Description
 
   <tr>
   <!-- jobId with resource requests -->
-  <!-- link jobId to details: "jobinfo?{jobId}" -->
+  <!-- link jobId to details: "jobinfo?jobid={jobId}" -->
   <td>
     <xsl:element name="a">
       <xsl:attribute name="title">
@@ -438,7 +438,7 @@ Description
       </xsl:attribute>
       <xsl:attribute name="href">
         <xsl:text>jobinfo</xsl:text>
-        <xsl:value-of select="$urlExt"/>?<xsl:value-of select="JB_job_number"/>
+        <xsl:value-of select="$urlExt"/>?jobid=<xsl:value-of select="JB_job_number"/>
       </xsl:attribute>
       <xsl:value-of select="JB_job_number" />
     </xsl:element>
@@ -532,7 +532,7 @@ Description
 
   <tr>
   <!-- jobId with resource requests -->
-  <!-- link jobId to details: "jobinfo?{jobId}" -->
+  <!-- link jobId to details: "jobinfo?jobid={jobId}" -->
   <td>
     <xsl:element name="a">
       <xsl:attribute name="title">
@@ -543,7 +543,7 @@ Description
       </xsl:attribute>
       <xsl:attribute name="href">
         <xsl:text>jobinfo</xsl:text>
-        <xsl:value-of select="$urlExt"/>?<xsl:value-of select="JB_job_number"/>
+        <xsl:value-of select="$urlExt"/>?jobid=<xsl:value-of select="JB_job_number"/>
       </xsl:attribute>
       <xsl:value-of select="JB_job_number" />
     </xsl:element>

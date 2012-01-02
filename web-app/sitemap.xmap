@@ -314,7 +314,7 @@
   </map:match>
 
 
-  <!-- url: "/<webapp>/qstatj~{clusterName}.xml?jobId"
+  <!-- url: "/<webapp>/qstatj~{clusterName}.xml?jobid={jobid}"
      | qstatj for a particular cluster name
      | See notes above
      -->
@@ -337,12 +337,12 @@
     <map:serialize/>
   </map:match>
 
-  <!-- url: "/<webapp>/qstatj.xml/~{sge_cell}/{sge_root}?jobId"
+  <!-- url: "/<webapp>/qstatj.xml/~{sge_cell}/{sge_root}?jobid={jobid}"
        qstatj for a particular SGE_CELL, SGE_ROOT combination
        -->
   <map:match pattern="qstatj.xml/~*/**">
     <map:generate type="commandGenerator"
-        src="{contextpath:../scripts/}qstat.sh CELL={1} ROOT=/{2} JOB={request:queryString} -xml"
+        src="{contextpath:../scripts/}qstat.sh CELL={1} ROOT=/{2} JOB={request-param:jobid} -xml"
     />
     <map:serialize/>
   </map:match>
@@ -519,8 +519,8 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/<webapp>/cluster/{clusterName}/qstatj.xml?jobId"
-       generate job details via second webserver (handles empty query strings)
+  <!-- url: "/<webapp>/cluster/{clusterName}/qstatj.xml?jobid={jobid}"
+       generate job details via qstat.sh (handles empty query strings)
        -->
   <map:match pattern="cluster/*/qstatj.xml">
     <map:generate  src="cocoon:/qstatj~{1}.xml" />
@@ -682,8 +682,8 @@
     <map:serialize type="xhtml"/>
   </map:match>
 
-  <!-- url: "/<webapp>/cluster/{clusterName}/jobinfo?jobNumber"
-       generate job details via second webserver (handles empty query strings)
+  <!-- url: "/<webapp>/cluster/{clusterName}/jobinfo?jobid={jobid}"
+       generate job details via qstat.sh script (handles empty query strings)
        -->
   <map:match pattern="cluster/*/jobinfo">
     <map:generate  src="cocoon:/cluster/{1}/qstatj.xml"/>

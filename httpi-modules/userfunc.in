@@ -87,25 +87,35 @@ sub hterror404 {
     my %gridEngineQuery = (
         qhost => sub {
             my ($cluster) = @_;
-            gridEngineCmd( $cluster, qhost => qw( -xml -q -j ) );
+            gridEngineCmd(
+                $cluster,    #
+                qhost => qw( -xml -q -j )
+            );
         },
         qstat => sub {
             my ($cluster) = @_;
-            gridEngineCmd( $cluster, qstat => qw( -xml -u * -r -s prs ) );
+            gridEngineCmd(
+                $cluster,    #
+                qstat => qw( -xml -u * -r -s prs )
+            );
         },
         qstatf => sub {
             my ($cluster) = @_;
             gridEngineCmd(
-                $cluster,
+                $cluster,    #
                 qstat => qw( -xml -u * -r -f -explain aAcE ),
                 ( -F => "load_avg,num_proc" )
             );
         },
         qstatj => sub {
-            my ( $cluster, $jobId ) = @_;
-            $jobId and $jobId =~ /^\d+$/ or $jobId = '*';
+            my ( $cluster, $jobid ) = @_;
+            $jobid and $jobid =~ /^\d+(,\d+)*$/ or $jobid = '*';
 
-            gridEngineCmd( $cluster, qstat => qw( -xml -j ), $jobId );
+            gridEngineCmd(
+                $cluster,    #
+                qstat => qw( -xml -j ),
+                $jobid
+            );
         },
     );
 
@@ -1006,10 +1016,10 @@ ERROR
             }
 
             #
-            # jobinfo : with optional jobId
+            # jobinfo : with optional jobid
             #
             if ( $function eq "jobinfo" ) {
-                my ($jobId) = grep { $_ and /^\d+/ } keys %switch;
+                my $jobid = $param{jobid};
 
                 returnXML(
                     xmlProlog(
@@ -1019,7 +1029,7 @@ ERROR
                     xmlFromCache(
                         $clusterName,    #
                         qstatj =>
-                          [ $gridEngineQuery{qstatj}, $clusterName, $jobId ]
+                          [ $gridEngineQuery{qstatj}, $clusterName, $jobid ]
                     ),
                 );
             }
@@ -1152,10 +1162,10 @@ ERROR
             }
 
             #
-            # jobinfo : with optional jobId
+            # jobinfo : with optional jobid
             #
             if ( $function eq "jobinfo" ) {
-                my ($jobId) = grep { $_ and /^\d+/ } keys %switch;
+                my $jobid = $param{jobid};
 
                 returnXML(
                     xmlProlog(
@@ -1165,7 +1175,7 @@ ERROR
                     xmlFromCache(      #
                         $clusterName,    #
                         qstatj =>
-                          [ $gridEngineQuery{qstatj}, $clusterName, $jobId ]
+                          [ $gridEngineQuery{qstatj}, $clusterName, $jobid ]
                     ),
                 );
             }

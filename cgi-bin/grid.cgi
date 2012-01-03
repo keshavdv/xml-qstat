@@ -747,6 +747,12 @@ sub xmlFromCache {
         ( my $url = "$config{cluster}{$cluster}{baseURL}" ) =~ s{/+$}{};
         $url .= "/$cacheName.xml";
 
+        ## also pass through the query string
+        my $queryString = $self->{cgi}->query_string();
+        if ($queryString) {
+            $url .= "?$queryString";
+        }
+
         # getHTTP returns [ \@response, \%header, $buf ]
         my $got = $self->getHTTP("$url");
         if ( ref $got eq "ARRAY" ) {

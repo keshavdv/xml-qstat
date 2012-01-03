@@ -740,6 +740,11 @@ ERROR
             ( my $url = "$config{cluster}{$cluster}{baseURL}" ) =~ s{/+$}{};
             $url .= "/$cacheName.xml";
 
+            ## also pass through the query string
+            if ($::variables) {
+                $url .= "?$::variables";
+            }
+
             my $got = getHTTP($url);
             if ( ref $got eq "ARRAY" ) {
                 $content = $got->[2];

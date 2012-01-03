@@ -4,6 +4,10 @@ use strict;
 # CUSTOMIZE THIS TO MATCH YOUR REQUIREMENTS:
 #
 
+# if the CGI should always provide Non-Parsed Headers
+# otherwise rely on 'nph-' prefix or detect HTTPi for Non-Parsed Headers
+my $useNPH;
+
 # physical location of the web-app directory
 my $webappPath = "/export/home/mark/xml-qstat/web-app";
 
@@ -1421,10 +1425,11 @@ package main;
 
 while ( my $cgiObj = $whichCGI->new() ) {
 
-    # no-parsed-headers
+    # Non-Parsed Headers
     # * when the script has a 'nph-' prefix
-    # * or when using HTTPi, which only supports no-parsed-headers
-    if ( $0 =~ m{/nph-[^/]*$}
+    # * or when using HTTPi, which currently only supports Non-Parsed Headers
+    if (   $useNPH
+        or $0 =~ m{/nph-[^/]*$}
         or ( $cgiObj->server_software() || '' ) =~ m{^HTTPi/}i )
     {
         $cgiObj->nph(1);

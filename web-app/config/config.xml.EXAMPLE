@@ -101,6 +101,10 @@
       root="/data/app/grid02"
       cell="default"
       >
+      <qstatf_xml enabled="false"/>
+      <qlicserver enabled="false" />
+      <viewlog    enabled="false" />
+      <viewfile   enabled="false" />
   </cluster>
 
   <cluster

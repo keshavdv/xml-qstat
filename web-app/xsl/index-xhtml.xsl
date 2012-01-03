@@ -343,6 +343,27 @@ Description
     </xsl:choose>
   </xsl:variable>
 
+  <!-- can disable full query (qstatf output) depending on local settings -->
+  <xsl:variable name="fullqueryEnabled">
+    <xsl:choose>
+    <xsl:when test="$clusterNode/qstatf_xml">
+      <xsl:choose>
+      <xsl:when test="
+          not(string-length($clusterNode/qstatf_xml/@enabled))
+          or $clusterNode/qstatf_xml/@enabled = 'true'">
+        <xsl:text>true</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>false</xsl:text>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>true</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:variable name="qhost_exists">
     <xsl:call-template name="hasCacheFile">
       <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
@@ -397,11 +418,18 @@ Description
   </xsl:variable>
 
   <xsl:variable name="qstat_exists">
-    <xsl:call-template name="hasCacheFile">
-      <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
-      <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
-      <xsl:with-param name="fileBase"      select="'qstat'"/>
-    </xsl:call-template>
+    <xsl:choose>
+    <xsl:when test="string-length($base)">
+      <xsl:text>true</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="hasCacheFile">
+        <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
+        <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
+        <xsl:with-param name="fileBase"      select="'qstat'"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
 
   <xsl:variable name="qstatf_exists">
@@ -411,7 +439,6 @@ Description
       <xsl:with-param name="fileBase"      select="'qstatf'"/>
     </xsl:call-template>
   </xsl:variable>
-
 
 
   &newline;
@@ -595,120 +622,123 @@ Description
   </td>
 
   <td>
-    <!-- jobs: using qstat -f output (cached or direct) -->
-    &space;
-    <xsl:element name="a">
-      <xsl:attribute name="title">jobs</xsl:attribute>
-      <xsl:attribute name="href">jobs~<xsl:value-of select="$name"/>
-        <xsl:value-of select="$urlExt"/>
-      </xsl:attribute>
-      <img border="0"
-          src="css/screen/icons/lorry.png"
-          alt="[xmlqstat]"
-      />
-    </xsl:element>
-
-    <!-- queues?view=summary -->
-    &space;
-    <xsl:element name="a">
-      <xsl:attribute name="title">queue summary</xsl:attribute>
-      <xsl:attribute name="href">queues~<xsl:value-of select="$name"/>
-        <xsl:value-of select="$urlExt"/>?view=summary</xsl:attribute>
-      <img border="0"
-          src="css/screen/icons/sum.png"
-          alt="[queue instances]"
-      />
-    </xsl:element>
-
-    <!-- queues?view=free -->
-    &space;
-    <xsl:element name="a">
-      <xsl:attribute name="title">queues free</xsl:attribute>
-      <xsl:attribute name="href">queues~<xsl:value-of select="$name"/>
-        <xsl:value-of select="$urlExt"/>?view=free</xsl:attribute>
-      <img border="0"
-          src="css/screen/icons/tick.png"
-          alt="[queues free]"
-      />
-    </xsl:element>
-
-    <!-- queues?view=warn -->
-    &space;
-    <xsl:element name="a">
-      <xsl:attribute name="title">queue warnings</xsl:attribute>
-      <xsl:attribute name="href">queues~<xsl:value-of select="$name"/>
-        <xsl:value-of select="$urlExt"/>?view=warn</xsl:attribute>
-      <img border="0"
-          src="css/screen/icons/error.png"
-          alt="[warn queue]"
-      />
-    </xsl:element>
-
-    <!-- queues: using qstat -f output (cached or direct) -->
-    &space;
-    <xsl:element name="a">
-      <xsl:attribute name="title">queue listing</xsl:attribute>
-      <xsl:attribute name="href">queues~<xsl:value-of select="$name"/>
-        <xsl:value-of select="$urlExt"/>
-      </xsl:attribute>
-      <img border="0"
-          src="css/screen/icons/shape_align_left.png"
-          alt="[queue instances]"
-      />
-    </xsl:element>
-
-    <!-- report: using qstat -f output (cached or direct) -->
-    &space;
-    <xsl:element name="a">
-      <xsl:attribute name="title">cluster report</xsl:attribute>
-      <xsl:attribute name="href">report~<xsl:value-of select="$name"/>
-        <xsl:value-of select="$urlExt"/>
-      </xsl:attribute>
-      <img border="0"
-          src="css/screen/icons/report.png"
-          alt="[cluster report]"
-      />
-    </xsl:element>
-
-    <!-- resources -->
-    <xsl:if test="string-length($qlicserver_exists)">
+    <!-- everything using qstat -f output (cached or direct) -->
+    <xsl:if test="$fullqueryEnabled = 'true'">
+      <!-- jobs -->
       &space;
       <xsl:element name="a">
-        <xsl:attribute name="title">resources</xsl:attribute>
-        <xsl:attribute name="href">resources~<xsl:value-of select="$name"/>
+        <xsl:attribute name="title">jobs</xsl:attribute>
+        <xsl:attribute name="href">jobs~<xsl:value-of select="$name"/>
           <xsl:value-of select="$urlExt"/>
         </xsl:attribute>
         <img border="0"
-            src="css/screen/icons/database_key.png"
-            alt="[resources]"
+            src="css/screen/icons/lorry.png"
+            alt="[xmlqstat]"
         />
       </xsl:element>
-    </xsl:if>
 
-    <!-- view qstat -f xml : (cached or direct) -->
-    &space;
-    <xsl:choose>
-    <xsl:when test="string-length($qstatf_exists)">
+      <!-- queues?view=summary -->
+      &space;
       <xsl:element name="a">
-        <xsl:attribute name="title">cached qstat -f query</xsl:attribute>
-        <xsl:attribute name="href">qstatf~<xsl:value-of select="$name"/>.xml</xsl:attribute>
+        <xsl:attribute name="title">queue summary</xsl:attribute>
+        <xsl:attribute name="href">queues~<xsl:value-of select="$name"/>
+          <xsl:value-of select="$urlExt"/>?view=summary</xsl:attribute>
         <img border="0"
-            src="css/screen/icons/folder_page.png"
-            alt="[cached qstat -f]"
+            src="css/screen/icons/sum.png"
+            alt="[queue instances]"
         />
       </xsl:element>
-    </xsl:when>
-    <xsl:otherwise>
+
+      <!-- queues?view=free -->
+      &space;
       <xsl:element name="a">
-        <xsl:attribute name="title">qstat -f -xml</xsl:attribute>
-        <xsl:attribute name="href">qstatf~<xsl:value-of select="$name"/>.xml</xsl:attribute>
+        <xsl:attribute name="title">queues free</xsl:attribute>
+        <xsl:attribute name="href">queues~<xsl:value-of select="$name"/>
+          <xsl:value-of select="$urlExt"/>?view=free</xsl:attribute>
         <img border="0"
-            src="css/screen/icons/tag.png"
-            alt="[qstat -f -xml]"
+            src="css/screen/icons/tick.png"
+            alt="[queues free]"
         />
       </xsl:element>
-    </xsl:otherwise>
-    </xsl:choose>
+
+      <!-- queues?view=warn -->
+      &space;
+      <xsl:element name="a">
+        <xsl:attribute name="title">queue warnings</xsl:attribute>
+        <xsl:attribute name="href">queues~<xsl:value-of select="$name"/>
+          <xsl:value-of select="$urlExt"/>?view=warn</xsl:attribute>
+        <img border="0"
+            src="css/screen/icons/error.png"
+            alt="[warn queue]"
+        />
+      </xsl:element>
+
+      <!-- queues: using qstat -f output (cached or direct) -->
+      &space;
+      <xsl:element name="a">
+        <xsl:attribute name="title">queue listing</xsl:attribute>
+        <xsl:attribute name="href">queues~<xsl:value-of select="$name"/>
+          <xsl:value-of select="$urlExt"/>
+        </xsl:attribute>
+        <img border="0"
+            src="css/screen/icons/shape_align_left.png"
+            alt="[queue instances]"
+        />
+      </xsl:element>
+
+      <!-- report: using qstat -f output (cached or direct) -->
+      &space;
+      <xsl:element name="a">
+        <xsl:attribute name="title">cluster report</xsl:attribute>
+        <xsl:attribute name="href">report~<xsl:value-of select="$name"/>
+          <xsl:value-of select="$urlExt"/>
+        </xsl:attribute>
+        <img border="0"
+            src="css/screen/icons/report.png"
+            alt="[cluster report]"
+        />
+      </xsl:element>
+
+      <!-- resources -->
+      <xsl:if test="string-length($qlicserver_exists)">
+        &space;
+        <xsl:element name="a">
+          <xsl:attribute name="title">resources</xsl:attribute>
+          <xsl:attribute name="href">resources~<xsl:value-of select="$name"/>
+            <xsl:value-of select="$urlExt"/>
+          </xsl:attribute>
+          <img border="0"
+              src="css/screen/icons/database_key.png"
+              alt="[resources]"
+          />
+        </xsl:element>
+      </xsl:if>
+
+      <!-- view qstat -f xml : (cached or direct) -->
+      &space;
+      <xsl:choose>
+      <xsl:when test="string-length($qstatf_exists)">
+        <xsl:element name="a">
+          <xsl:attribute name="title">cached qstat -f query</xsl:attribute>
+          <xsl:attribute name="href">qstatf~<xsl:value-of select="$name"/>.xml</xsl:attribute>
+          <img border="0"
+              src="css/screen/icons/folder_page.png"
+              alt="[cached qstat -f]"
+          />
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:element name="a">
+          <xsl:attribute name="title">qstat -f -xml</xsl:attribute>
+          <xsl:attribute name="href">qstatf~<xsl:value-of select="$name"/>.xml</xsl:attribute>
+          <img border="0"
+              src="css/screen/icons/tag.png"
+              alt="[qstat -f -xml]"
+          />
+        </xsl:element>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
 
   </td>
 

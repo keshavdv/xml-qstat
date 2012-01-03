@@ -9,8 +9,9 @@
     xmlns:dir="http://apache.org/cocoon/directory/2.0"
 >
 <!--
-Copyright 2009-2011 Mark Olesen
+Copyright (c) 2009-2011 Mark Olesen
 
+License
     This file is part of xml-qstat.
 
     xml-qstat is free software: you can redistribute it and/or modify it under

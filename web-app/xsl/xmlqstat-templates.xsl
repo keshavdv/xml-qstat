@@ -4,9 +4,10 @@
     xmlns="http://www.w3.org/1999/xhtml"
 >
 <!--
-Copyright 2006-2007 Chris Dagdigian (chris@bioteam.net)
-Copyright 2009-2011 Mark Olesen
+Copyright (c) 2006-2007 Chris Dagdigian (chris@bioteam.net)
+Copyright (c) 2009-2011 Mark Olesen
 
+License
     This file is part of xml-qstat.
 
     xml-qstat is free software: you can redistribute it and/or modify it under

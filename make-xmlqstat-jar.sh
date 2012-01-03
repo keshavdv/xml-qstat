@@ -1,7 +1,8 @@
 #!/bin/sh
 # -----------------------------------------------------------------------------
-# Copyright 2006-2007 Chris Dagdigian (dag@sonsorol.org)
+# Copyright (c) 2006-2007 Chris Dagdigian (dag@sonsorol.org)
 #
+# License
 #     This file is part of xml-qstat.
 #
 #     xml-qstat is free software: you can redistribute it and/or modify it under
@@ -16,7 +17,7 @@
 #
 #     You should have received a copy of the GNU Affero General Public License
 #     along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
-# ------------------------------------------------------------------------------
+#
 # Script
 #     make-xmlqstat-jar.sh
 #
@@ -34,7 +35,7 @@
 ## YOU MUST EDIT THIS BLOCK TO MATCH YOUR LOCAL INSTALL:
 ## Include full path to the build/ subfolder in your cocoon install
 
-cocoonBase="/data/app/cocoon-2.1.11/build"
+cocoonBase="/data/caeapp/local/www/cocoon-2.1.11/build"
 
 case "$cocoonBase" in
 

@@ -9,8 +9,9 @@
     xmlns:dir="http://apache.org/cocoon/directory/2.0"
 >
 <!--
-Copyright 2009-2011 Mark Olesen
+Copyright (c) 2009-2012 Mark Olesen
 
+License
     This file is part of xml-qstat.
 
     xml-qstat is free software: you can redistribute it and/or modify it under
@@ -27,13 +28,17 @@ Copyright 2009-2011 Mark Olesen
     along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
 
 Description
-    process config/config.xml to produce an index of available clusters
+    process config/config-{SITE}.xml or config/config.xml to produce an index
+    of available clusters
 
     expected input:
      - directory listing of xml files in cache and cache-* directories
 
     uses external files:
+     - config/config-{SITE}.xml
      - config/config.xml
+
+    The {SITE} corresponds to the unqualified server name
 -->
 
 <!-- ======================= Imports / Includes =========================== -->

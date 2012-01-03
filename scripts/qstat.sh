@@ -1,7 +1,8 @@
 #!/bin/sh
 # -----------------------------------------------------------------------------
-# Copyright 2009-2011 Mark Olesen
+# Copyright (c) 2009-2011 Mark Olesen
 #
+# License
 #     This file is part of xml-qstat.
 #
 #     xml-qstat is free software: you can redistribute it and/or modify it under
@@ -16,7 +17,7 @@
 #
 #     You should have received a copy of the GNU Affero General Public License
 #     along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
-# ------------------------------------------------------------------------------
+#
 # Script
 #     qstat.sh
 #

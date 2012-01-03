@@ -5,6 +5,7 @@ my ( $Path, $Script ) = map { m{^(.+)/([^/]+)$} } $0;    # instead of fileparse
 # -----------------------------------------------------------------------------
 # Copyright 2009-2011 Mark Olesen
 #
+# License
 #     This file is part of xml-qstat.
 #
 #     xml-qstat is free software: you can redistribute it and/or modify it under
@@ -19,7 +20,7 @@ my ( $Path, $Script ) = map { m{^(.+)/([^/]+)$} } $0;    # instead of fileparse
 #
 #     You should have received a copy of the GNU Affero General Public License
 #     along with xml-qstat. If not, see <http://www.gnu.org/licenses/>.
-# ------------------------------------------------------------------------------
+#
 # Script
 #     list-icons-used.pl
 #

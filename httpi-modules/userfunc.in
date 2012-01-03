@@ -10,7 +10,7 @@ should not be changed as other subroutines call it for their error handling.
 
 # ------------------------------------------------------------------------------
 # Copyright (c) 2009-2012 Mark Olesen
-# ------------------------------------------------------------------------------
+#
 # License
 #     This file is part of xml-qstat.
 #

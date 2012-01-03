@@ -472,21 +472,22 @@ ERROR
         $path = "/";
     }
 
-    my $serverName   = $self->{cgi}->server_name();
-    my $serverPort   = $self->{cgi}->server_port();
-    my $ipaddr       = gethostbyname $host;
-    my $serverIPaddr = gethostbyname $serverName;
+    my $ipaddr = gethostbyname $host;
 
-    # avoid internal loops
-    if ( $port == $serverPort and $ipaddr eq $serverIPaddr ) {
-        return $self->setError(<<"ERROR");
-Potential circular reference in request to
-<blockquote><pre>
-From: $serverName:$port
-To:   $host:$port
-</pre></blockquote>
-ERROR
-    }
+# If we are paranoid, we can add this check:
+## avoid internal loops
+#    my $serverName   = $self->{cgi}->server_name();
+#    my $serverPort   = $self->{cgi}->server_port();
+#    my $serverIPaddr = gethostbyname $serverName;
+#     if ( $port == $serverPort and $ipaddr eq $serverIPaddr ) {
+#         return $self->setError(<<"ERROR");
+# Potential circular reference in request to
+# <blockquote><pre>
+# From: $serverName:$port
+# To:   $host:$port
+# </pre></blockquote>
+# ERROR
+#     }
 
     local *SOCK;
     my $packaddr = pack 'S n a4 x8', Socket::AF_INET, $port, $ipaddr;

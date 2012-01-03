@@ -473,19 +473,20 @@ CONTENT
             $path = "/";
         }
 
-        my $ipaddr       = gethostbyname $host;
-        my $serverIPaddr = gethostbyname $::server_host;
+        my $ipaddr = gethostbyname $host;
 
-        # avoid internal loops
-        if ( $port == $::server_port and $ipaddr eq $serverIPaddr ) {
-            &hterror404(<<"ERROR");
-Potential circular reference in request
-<blockquote><pre>
-From: $::server_host:$::server_port
-To:   $host:$port
-</pre></blockquote>
-ERROR
-        }
+# If we are paranoid, we can add this check:
+## avoid internal loops
+#         my $serverIPaddr = gethostbyname $::server_host;
+#         if ( $port == $::server_port and $ipaddr eq $serverIPaddr ) {
+#             &hterror404(<<"ERROR");
+# Potential circular reference in request
+# <blockquote><pre>
+# From: $::server_host:$::server_port
+# To:   $host:$port
+# </pre></blockquote>
+# ERROR
+#         }
 
         local *SOCK;
 

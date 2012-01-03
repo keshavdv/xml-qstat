@@ -30,7 +30,7 @@ my %timeout = (
 # END OF CUSTOMIZE SETTINGS
 ################################################################################
 # Copyright (c) 2009-2012 Mark Olesen
-# ------------------------------------------------------------------------------
+#
 # License
 #     This file is part of xml-qstat.
 #
@@ -115,8 +115,8 @@ my %gridEngineQuery = (
 
 # -----------------------------------------------------------------------------
 package GridResource;
-use POSIX qw();
-use Socket qw();
+use POSIX qw( );
+use Socket qw( AF_INET PF_INET SOCK_STREAM ); # weird, perl5.8.8 on RH5 seems to need this
 
 # GridResource - handle xml-qstat requests
 

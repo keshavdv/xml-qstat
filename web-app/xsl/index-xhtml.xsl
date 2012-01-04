@@ -365,11 +365,18 @@ Description
   </xsl:variable>
 
   <xsl:variable name="qhost_exists">
-    <xsl:call-template name="hasCacheFile">
-      <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
-      <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
-      <xsl:with-param name="fileBase"      select="'qhost'"/>
-    </xsl:call-template>
+    <xsl:choose>
+    <xsl:when test="string-length($base)">
+      <xsl:text>true</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="hasCacheFile">
+        <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
+        <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
+        <xsl:with-param name="fileBase"      select="'qhost'"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
 
   <!-- enable qlicserver button depending on local/global settings -->

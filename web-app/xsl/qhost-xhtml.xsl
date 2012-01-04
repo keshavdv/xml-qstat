@@ -527,7 +527,14 @@ Description
 
   <!-- host -->
   <td align="left">
-    <xsl:value-of select="substring-before(@name,'.')"/>
+    <xsl:choose>
+    <xsl:when test="contains(@name, '.')">
+      <xsl:value-of select="substring-before(@name,'.')"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="@name"/>
+    </xsl:otherwise>
+    </xsl:choose>
   </td>
 
   <!-- load (w/o dash for missing values) -->

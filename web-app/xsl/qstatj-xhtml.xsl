@@ -11,7 +11,7 @@
 >
 <!--
 Copyright (c) 2006-2007 Chris Dagdigian (chris@bioteam.net)
-Copyright (c) 2009-2011 Mark Olesen
+Copyright (c) 2009-2012 Mark Olesen
 
 License
     This file is part of xml-qstat.
@@ -451,8 +451,14 @@ Description
     <!-- jobId with link to details listing -->
     <td>
       <xsl:element name="a">
-        <xsl:attribute name="title">details <xsl:value-of select="JB_job_number"/></xsl:attribute>
-        <xsl:attribute name="href">#<xsl:value-of select="JB_job_number"/></xsl:attribute>
+        <xsl:attribute name="title">
+          <xsl:text>details </xsl:text>
+          <xsl:value-of select="JB_job_number"/>
+        </xsl:attribute>
+        <xsl:attribute name="href">
+          <xsl:text>#</xsl:text>
+          <xsl:value-of select="JB_job_number"/>
+        </xsl:attribute>
         <xsl:value-of select="JB_job_number" />
       </xsl:element>
     </td>
@@ -460,8 +466,13 @@ Description
     <!-- owner/uid : link owner names to "jobs?user={owner}" -->
     <td>
      <xsl:element name="a">
-       <xsl:attribute name="title">uid <xsl:value-of select="JB_uid"/></xsl:attribute>
-       <xsl:attribute name="href"><xsl:value-of select="$jobs-href"/></xsl:attribute>
+        <xsl:attribute name="title">
+          <xsl:text>uid </xsl:text>
+          <xsl:value-of select="JB_uid"/>
+        </xsl:attribute>
+       <xsl:attribute name="href">
+         <xsl:value-of select="$jobs-href"/>
+       </xsl:attribute>
        <xsl:value-of select="JB_owner" />
      </xsl:element>
     </td>
@@ -477,7 +488,10 @@ Description
     <!-- Exec file / script -->
     <td>
       <xsl:element name="abbr">
-        <xsl:attribute name="title">script=<xsl:value-of select="JB_script_file" /></xsl:attribute>
+        <xsl:attribute name="title">
+          <xsl:text>script=</xsl:text>
+          <xsl:value-of select="JB_script_file" />
+        </xsl:attribute>
         <xsl:value-of select="JB_exec_file" />
       </xsl:element>
     </td>
@@ -485,7 +499,10 @@ Description
     <!-- POSIX: group / gid -->
     <td>
       <xsl:element name="abbr">
-        <xsl:attribute name="title">gid <xsl:value-of select="JB_gid"/></xsl:attribute>
+        <xsl:attribute name="title">
+          <xsl:text>gid </xsl:text>
+          <xsl:value-of select="JB_gid" />
+        </xsl:attribute>
         <xsl:value-of select="JB_group" />
       </xsl:element>
     </td>
@@ -524,8 +541,14 @@ Description
 <tr>
   <td>
     <xsl:element name="a">
-      <xsl:attribute name="title">details <xsl:value-of select="JB_job_number"/></xsl:attribute>
-      <xsl:attribute name="href">#<xsl:value-of select="JB_job_number"/></xsl:attribute>
+      <xsl:attribute name="title">
+        <xsl:text>details </xsl:text>
+        <xsl:value-of select="JB_job_number"/>
+      </xsl:attribute>
+      <xsl:attribute name="href">
+        <xsl:text>#</xsl:text>
+        <xsl:value-of select="JB_job_number"/>
+      </xsl:attribute>
       <xsl:value-of select="JB_job_number" />
     </xsl:element>
   </td>
@@ -580,7 +603,9 @@ Description
     <td><xsl:value-of select="JB_cwd"/></td>
   </tr>
 
-  <!-- url viewfile?dir={};file={};jobid={} -->
+  <!-- url viewfile?dir={};file={};jobid={}
+     | use lsfjobid= instead for LSF
+     -->
   <tr>
     <th>stdout</th>
     <td>
@@ -589,26 +614,32 @@ Description
       <xsl:when test="string-length($viewfile)">
         <xsl:element name="a">
         <xsl:attribute name="title">view stdout</xsl:attribute>
-        <xsl:attribute name="href"><xsl:value-of
-            select="$viewfile"/>?dir=<xsl:value-of select="JB_cwd"/>
-            <xsl:text>;file=</xsl:text>
-            <xsl:choose>
-            <xsl:when test='starts-with($PN_path,"$HOME/")' >
-              <!-- $HOME/path -->
-              <xsl:value-of select="JB_env_list/job_sublist[VA_variable='__SGE_PREFIX__O_HOME']/VA_value" />
-              <xsl:value-of select='substring($PN_path, 6)' />
-            </xsl:when>
-            <xsl:otherwise>
-              <!-- absolute or relative path -->
-              <xsl:value-of select="$PN_path"/>
-            </xsl:otherwise>
-            </xsl:choose>
-            <!-- do not add jobid for LSF output
-                 (TODO: handle LSF/GridEngine in cgi)
-                 -->
-            <xsl:if test="$isLSF != 'true'">
-              <xsl:text>;jobid=</xsl:text><xsl:value-of select="JB_job_number"/>
-            </xsl:if>
+        <xsl:attribute name="href">
+          <xsl:value-of
+              select="$viewfile"/>?dir=<xsl:value-of
+              select="JB_cwd"/>
+          <xsl:text>;file=</xsl:text>
+          <xsl:choose>
+          <xsl:when test='starts-with($PN_path,"$HOME/")' >
+            <!-- $HOME/path -->
+            <xsl:value-of select="JB_env_list/job_sublist[VA_variable='__SGE_PREFIX__O_HOME']/VA_value" />
+            <xsl:value-of select='substring($PN_path, 6)' />
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- absolute or relative path -->
+            <xsl:value-of select="$PN_path"/>
+          </xsl:otherwise>
+          </xsl:choose>
+          <!-- distinguish between LSF and GridEngine job ids -->
+          <xsl:choose>
+          <xsl:when test="$isLSF = 'true'">
+            <xsl:text>;lsfjobid=</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>;jobid=</xsl:text>
+          </xsl:otherwise>
+          </xsl:choose>
+          <xsl:value-of select="JB_job_number"/>
         </xsl:attribute>
         <xsl:value-of select="$PN_path"/>
         </xsl:element>
@@ -935,11 +966,22 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
   </xsl:variable>
   <xsl:variable name="request">
     <xsl:text>dir=</xsl:text><xsl:value-of select="../JB_cwd"/>
-    <xsl:text>;jobid=</xsl:text><xsl:value-of select="../JB_job_number"/>
+    <!-- distinguish between LSF and GridEngine job ids -->
+    <xsl:choose>
+    <xsl:when test="$isLSF = 'true'">
+      <xsl:text>;lsfjobid=</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>;jobid=</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+    <xsl:value-of select="../JB_job_number"/>
     <xsl:text>;resources=</xsl:text><xsl:value-of select="$resources"/>
   </xsl:variable>
 
-  <!-- url viewlog?dir={};jobid={};resources={} -->
+  <!-- url viewlog?dir={};jobid={};resources={}
+      | use lsfjobid= instead for LSF
+      -->
   <xsl:element name="a">
     <xsl:attribute name="title">viewlog</xsl:attribute>
     <xsl:attribute name="href"><xsl:value-of
@@ -949,7 +991,9 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
     <img alt="[v]" src="css/screen/icons/page_find.png" border="0" />
   </xsl:element>
 
-  <!-- url viewlog?action=plot;jobid={};resources={} -->
+  <!-- url viewlog?action=plot;jobid={};resources={}
+     | use lsfjobid= instead for LSF
+     -->
   <xsl:element name="a">
     <xsl:attribute name="title">plotlog</xsl:attribute>
     <xsl:attribute name="href"><xsl:value-of
@@ -960,7 +1004,7 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
   </xsl:element>
 
   <!-- url viewlog?action=plot;owner={};resources={} -->
-  <!-- disable for LSF output -->
+  <!-- disabled for LSF since we cannot yet easily gather based on owner -->
   <xsl:if test="$isLSF != 'true'">
     <xsl:element name="a">
       <xsl:attribute name="title">plotlogs</xsl:attribute>

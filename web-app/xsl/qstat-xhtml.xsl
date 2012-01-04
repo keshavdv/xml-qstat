@@ -8,7 +8,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >
 <!--
-Copyright (c) 2009-2011 Mark Olesen
+Copyright (c) 2009-2012 Mark Olesen
 
 License
     This file is part of xml-qstat.
@@ -439,7 +439,9 @@ Description
       </xsl:attribute>
       <xsl:attribute name="href">
         <xsl:text>jobinfo</xsl:text>
-        <xsl:value-of select="$urlExt"/>?jobid=<xsl:value-of select="JB_job_number"/>
+        <xsl:value-of select="$urlExt"/>
+        <xsl:text>?jobid=</xsl:text>
+        <xsl:value-of select="JB_job_number"/>
       </xsl:attribute>
       <xsl:value-of select="JB_job_number" />
     </xsl:element>
@@ -448,7 +450,10 @@ Description
   <td>
     <!-- link owner names to "jobs?user={owner}" -->
     <xsl:element name="a">
-      <xsl:attribute name="title">view jobs owned by <xsl:value-of select="JB_owner"/></xsl:attribute>
+      <xsl:attribute name="title">
+        <xsl:text>view jobs owned by </xsl:text>
+        <xsl:value-of select="JB_owner"/>
+      </xsl:attribute>
       <xsl:attribute name="href">
         <xsl:text>jobs</xsl:text>
         <xsl:value-of select="$urlExt"/>?user=<xsl:value-of select="JB_owner"/>
@@ -479,7 +484,9 @@ Description
   <!-- startTime with priority-->
   <td>
     <xsl:element name="abbr">
-      <xsl:attribute name="title"><xsl:value-of select="JAT_prio"/></xsl:attribute>
+      <xsl:attribute name="title">
+        <xsl:value-of select="JAT_prio"/>
+      </xsl:attribute>
       <xsl:value-of select="JAT_start_time" />
     </xsl:element>
   </td>
@@ -544,7 +551,9 @@ Description
       </xsl:attribute>
       <xsl:attribute name="href">
         <xsl:text>jobinfo</xsl:text>
-        <xsl:value-of select="$urlExt"/>?jobid=<xsl:value-of select="JB_job_number"/>
+        <xsl:value-of select="$urlExt"/>
+        <xsl:text>?jobid=</xsl:text>
+        <xsl:value-of select="JB_job_number"/>
       </xsl:attribute>
       <xsl:value-of select="JB_job_number" />
     </xsl:element>
@@ -553,10 +562,15 @@ Description
   <td>
     <!-- link owner names to "jobs?user={owner}" -->
     <xsl:element name="a">
-      <xsl:attribute name="title">view jobs owned by <xsl:value-of select="JB_owner"/></xsl:attribute>
+      <xsl:attribute name="title">
+        <xsl:text>view jobs owned by </xsl:text>
+        <xsl:value-of select="JB_owner"/>
+      </xsl:attribute>
       <xsl:attribute name="href">
         <xsl:text>jobs</xsl:text>
-        <xsl:value-of select="$urlExt"/>?user=<xsl:value-of select="JB_owner"/>
+        <xsl:value-of select="$urlExt"/>
+        <xsl:text>?user=</xsl:text>
+        <xsl:value-of select="JB_owner"/>
       </xsl:attribute>
       <xsl:value-of select="JB_owner" />
     </xsl:element>
@@ -609,6 +623,7 @@ Description
 <xsl:template match="job_list" mode="viewlog">
 <xsl:if test="count(hard_request)">
   &newline;
+
   <!-- comma-separated list of resources -->
   <xsl:variable name="resources">
     <xsl:for-each
@@ -617,47 +632,65 @@ Description
         <xsl:if test="not(position() = last())">,</xsl:if>
     </xsl:for-each>
   </xsl:variable>
+
   <xsl:variable name="request">
-     <xsl:text>resources=</xsl:text><xsl:value-of select="$resources"/>
-     <!-- add cwd where possible (likely only LSF output) -->
-     <xsl:if test="JB_cwd">;dir=<xsl:value-of select="JB_cwd"/></xsl:if>
-     <!-- do not add jobid for LSF output
-          (TODO: handle LSF/GridEngine in cgi)
-          -->
-     <xsl:if test="$isLSF != 'true'">
-       <xsl:text>;jobid=</xsl:text><xsl:value-of select="JB_job_number"/>
-       <xsl:if test="tasks">.<xsl:value-of select="tasks"/></xsl:if>
-     </xsl:if>
+    <xsl:text>resources=</xsl:text><xsl:value-of select="$resources"/>
+    <!-- add cwd where possible (likely only LSF output) -->
+    <xsl:if test="JB_cwd">;dir=<xsl:value-of select="JB_cwd"/></xsl:if>
+    <!-- distinguish between LSF and GridEngine job ids -->
+    <xsl:choose>
+    <xsl:when test="$isLSF = 'true'">
+      <xsl:text>;lsfjobid=</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>;jobid=</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+    <xsl:value-of select="JB_job_number"/>
+    <!-- append task id as required -->
+    <xsl:if test="tasks">.<xsl:value-of select="tasks"/></xsl:if>
   </xsl:variable>
 
-  <!-- url viewlog?resources={};jobid={} -->
+  <!-- url viewlog?resources={};jobid={}
+     | use lsfjobid= instead for LSF
+     -->
   <xsl:element name="a">
     <xsl:attribute name="title">viewlog</xsl:attribute>
-    <xsl:attribute name="href"><xsl:value-of
-        select="$viewlog"/>?<xsl:value-of
-        select="$request"/>;<xsl:value-of select="$cgi-params"/></xsl:attribute>
-    <img src="css/screen/icons/page_find.png" alt="[v]" border="0" />
+    <xsl:attribute name="href">
+      <xsl:value-of
+          select="$viewlog"/>?<xsl:value-of
+          select="$request"/>;<xsl:value-of
+          select="$cgi-params"/>
+    </xsl:attribute>
+    <img alt="[v]" src="css/screen/icons/page_find.png" border="0" />
   </xsl:element>
 
-  <!-- url viewlog?action=plot;resources={};jobid={} -->
+  <!-- url viewlog?action=plot;resources={};jobid={}
+     | use lsfjobid= instead for LSF
+     -->
   <xsl:element name="a">
     <xsl:attribute name="title">plotlog</xsl:attribute>
-    <xsl:attribute name="href"><xsl:value-of
-        select="$viewlog"/>?action=plot;<xsl:value-of
-        select="$request"/>;<xsl:value-of select="$cgi-params"/></xsl:attribute>
-    <img src="css/screen/icons/chart_curve.png" alt="[p]" border="0" />
+    <xsl:attribute name="href">
+      <xsl:value-of
+          select="$viewlog"/>?action=plot;<xsl:value-of
+          select="$request"/>;<xsl:value-of
+          select="$cgi-params"/>
+    </xsl:attribute>
+    <img alt="[p]" src="css/screen/icons/chart_curve.png" border="0" />
   </xsl:element>
 
   <!-- url viewlog?action=plot;owner={};resources={resources} -->
-  <!-- disable for LSF output -->
+  <!-- disabled for LSF since we cannot yet easily gather based on owner -->
   <xsl:if test="$isLSF != 'true'">
     <xsl:element name="a">
       <xsl:attribute name="title">plotlogs</xsl:attribute>
       <xsl:attribute name="href"><xsl:value-of
           select="$viewlog"/>?action=plot;owner=<xsl:value-of
           select="JB_owner"/>;resources=<xsl:value-of
-          select="$resources"/>;<xsl:value-of select="$cgi-params"/></xsl:attribute>
-      <img src="css/screen/icons/chart_curve_add.png" alt="[P]" border="0" />
+          select="$resources"/>;<xsl:value-of
+          select="$cgi-params"/>
+      </xsl:attribute>
+      <img alt="[P]" src="css/screen/icons/chart_curve_add.png" border="0" />
     </xsl:element>
   </xsl:if>
 </xsl:if>

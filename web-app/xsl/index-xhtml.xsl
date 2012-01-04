@@ -156,7 +156,7 @@ Description
   /></a>
 
   <img alt=" | " src="css/screen/icon_divider.png" />
-  <a href="info/rss-feeds.html" title="RSS feeds (under development)"><img border="0"
+  <a href="info/rss-feeds.html" title="RSS feeds (under development)"><img
       src="css/screen/icons/feed.png" alt="[rss feeds]"
   /></a>
 

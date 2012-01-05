@@ -382,20 +382,40 @@ Description
    | and displaying a progressBar (slider)
    -->
 <xsl:template name="memoryUsed">
+  <xsl:param name="free" />
   <xsl:param name="used" />
   <xsl:param name="total" />
 
+  <xsl:variable name="memoryFree">
+    <xsl:choose>
+    <xsl:when test="string-length($free) and not(contains($free, '-')) ">
+       <xsl:value-of select="$free" />
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>0</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:variable name="memoryUsed">
     <xsl:choose>
-    <xsl:when test="contains($used, '-')">0</xsl:when>
-    <xsl:otherwise><xsl:value-of select="$used" /></xsl:otherwise>
+    <xsl:when test="string-length($used) and not(contains($used, '-')) ">
+       <xsl:value-of select="$used" />
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>0</xsl:text>
+    </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
   <xsl:variable name="memoryTotal">
     <xsl:choose>
-    <xsl:when test="contains($total, '-')">0</xsl:when>
-    <xsl:otherwise><xsl:value-of select="$total" /></xsl:otherwise>
+    <xsl:when test="string-length($total) and not(contains($total, '-')) ">
+       <xsl:value-of select="$total" />
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>0</xsl:text>
+    </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
@@ -428,11 +448,18 @@ Description
   <!-- output progress bar -->
   <xsl:choose>
   <xsl:when test="$memoryTotal = 0">
-    <xsl:call-template name="progressBar">
-      <xsl:with-param name="title" select="'not available'" />
-      <xsl:with-param name="label" select="'NA'" />
-      <xsl:with-param name="percent" select="0"/>
-    </xsl:call-template>
+    <xsl:choose>
+    <xsl:when test="$memoryFree != 0">
+      <xsl:value-of select="$memoryFree"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="progressBar">
+        <xsl:with-param name="title" select="'not available'" />
+        <xsl:with-param name="label" select="'NA'" />
+        <xsl:with-param name="percent" select="0"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+    </xsl:choose>
   </xsl:when>
   <xsl:when test="$suffixUsed = $suffixTotal">
     <xsl:call-template name="progressBar">

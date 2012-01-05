@@ -346,11 +346,11 @@ Description
   <!-- can disable full query (qstatf output) depending on local settings -->
   <xsl:variable name="fullqueryEnabled">
     <xsl:choose>
-    <xsl:when test="$clusterNode/qstatf_xml">
+    <xsl:when test="$clusterNode/qstatf">
       <xsl:choose>
       <xsl:when test="
-          not(string-length($clusterNode/qstatf_xml/@enabled))
-          or $clusterNode/qstatf_xml/@enabled = 'true'">
+          not(string-length($clusterNode/qstatf/@enabled))
+          or $clusterNode/qstatf/@enabled = 'true'">
         <xsl:text>true</xsl:text>
       </xsl:when>
       <xsl:otherwise>

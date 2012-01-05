@@ -167,8 +167,17 @@ Description
 
 <!-- PRE-CALCULATE values -->
 
-<!-- count active number of slots -->
-<xsl:variable name="AJ_slots" select="sum(//queuevalue[@name='slots_used'])"/>
+<!--
+    | count active number of slots
+    | GridEngine: use the queuevalue
+    | LSF:        use the hostvalue
+    -->
+<xsl:variable
+  name="AJ_slots"
+  select="
+      sum(//hostvalue[@name='slots_used']) +
+      sum(//queuevalue[@name='slots_used']) "
+/>
 
 <!-- done PRE-CALCULATE -->
 
@@ -543,20 +552,15 @@ Description
   </td>
 
   <!-- queue instance information -->
-  <xsl:choose>
-  <xsl:when test="count(queue)">
-    <td>
+  <td>
+    <xsl:if test="count(queue)">
       <table class="embedded">
       <xsl:for-each select="queue">
         <xsl:apply-templates select="." />
       </xsl:for-each>
       </table>
-    </td>
-  </xsl:when>
-  <xsl:otherwise>
-    <td/>
-  </xsl:otherwise>
-  </xsl:choose>
+    </xsl:if>
+  </td>
 
   <!-- ncpu (w/o dash for missing values) with arch -->
   <td>
@@ -592,6 +596,7 @@ Description
   <!-- mem -->
   <td width="100px" align="left">
     <xsl:call-template name="memoryUsed">
+      <xsl:with-param name="free"  select="hostvalue[@name='mem_free']" />
       <xsl:with-param name="used"  select="hostvalue[@name='mem_used']" />
       <xsl:with-param name="total" select="hostvalue[@name='mem_total']" />
     </xsl:call-template>
@@ -600,6 +605,7 @@ Description
   <!-- swap -->
   <td width="100px" align="left">
     <xsl:call-template name="memoryUsed">
+      <xsl:with-param name="free"  select="hostvalue[@name='swap_free']"/>
       <xsl:with-param name="used"  select="hostvalue[@name='swap_used']"/>
       <xsl:with-param name="total" select="hostvalue[@name='swap_total']"/>
     </xsl:call-template>

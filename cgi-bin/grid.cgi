@@ -1162,7 +1162,7 @@ ERROR
         # job : with optional user=... filter
         #
         if ( $function eq "jobs" ) {
-            if ( $cgi->param("user") and $self->param("user") =~ m{^\w+$} ) {
+            if ( $cgi->param("user") and $cgi->param("user") =~ m{^\w+$} ) {
                 $self->{xslt}{filterByUser} = $cgi->param("user");
             }
 
@@ -1324,7 +1324,7 @@ ERROR
         # job : with optional user=... filter
         #
         if ( $function eq "jobs" ) {
-            if ( $cgi->param("user") and $self->param("user") =~ m{^\w+$} ) {
+            if ( $cgi->param("user") and $cgi->param("user") =~ m{^\w+$} ) {
                 $self->{xslt}{filterByUser} = $cgi->param("user");
             }
 
@@ -1367,7 +1367,7 @@ ERROR
         #
         if ( $function eq "queues" ) {
             ( $self->{xslt}{renderMode} ) =
-              grep { $_ and m{^(summary|free|warn)$} } $self->param("view");
+              grep { $_ and m{^(summary|free|warn)$} } $cgi->param("view");
 
             # default is "queues", but state it explicitly anyhow
             $self->{xslt}{renderMode} ||= "queues";

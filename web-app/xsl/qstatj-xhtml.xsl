@@ -1003,13 +1003,13 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
     <img alt="[p]" src="css/screen/icons/chart_curve.png" border="0" />
   </xsl:element>
 
-  <!-- url viewlog?action=plot;owner={};resources={} -->
+  <!-- url viewlog?action=plot;user={};resources={} -->
   <!-- disabled for LSF since we cannot yet easily gather based on owner -->
   <xsl:if test="$isLSF != 'true'">
     <xsl:element name="a">
       <xsl:attribute name="title">plotlogs</xsl:attribute>
       <xsl:attribute name="href"><xsl:value-of
-          select="$viewlog"/>?action=plot;owner=<xsl:value-of select="../JB_owner"/>
+          select="$viewlog"/>?action=plot;user=<xsl:value-of select="../JB_owner"/>
           <xsl:text>;resources=</xsl:text><xsl:value-of select="$resources"/>
           <xsl:text>;</xsl:text><xsl:value-of select="$cgi-params"/>
       </xsl:attribute>

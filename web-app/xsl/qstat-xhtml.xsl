@@ -456,7 +456,9 @@ Description
       </xsl:attribute>
       <xsl:attribute name="href">
         <xsl:text>jobs</xsl:text>
-        <xsl:value-of select="$urlExt"/>?user=<xsl:value-of select="JB_owner"/>
+        <xsl:value-of select="$urlExt"/>
+        <xsl:text>?user=</xsl:text>
+        <xsl:value-of select="JB_owner"/>
       </xsl:attribute>
       <xsl:value-of select="JB_owner" />
     </xsl:element>
@@ -626,10 +628,9 @@ Description
 
   <!-- comma-separated list of resources -->
   <xsl:variable name="resources">
-    <xsl:for-each
-        select="hard_request"><xsl:value-of
-        select="@name"/>
-        <xsl:if test="not(position() = last())">,</xsl:if>
+    <xsl:for-each select="hard_request">
+      <xsl:value-of select="@name"/>
+      <xsl:if test="not(position() = last())">,</xsl:if>
     </xsl:for-each>
   </xsl:variable>
 
@@ -679,13 +680,13 @@ Description
     <img alt="[p]" src="css/screen/icons/chart_curve.png" border="0" />
   </xsl:element>
 
-  <!-- url viewlog?action=plot;owner={};resources={resources} -->
+  <!-- url viewlog?action=plot;user={};resources={resources} -->
   <!-- disabled for LSF since we cannot yet easily gather based on owner -->
   <xsl:if test="$isLSF != 'true'">
     <xsl:element name="a">
       <xsl:attribute name="title">plotlogs</xsl:attribute>
       <xsl:attribute name="href"><xsl:value-of
-          select="$viewlog"/>?action=plot;owner=<xsl:value-of
+          select="$viewlog"/>?action=plot;user=<xsl:value-of
           select="JB_owner"/>;resources=<xsl:value-of
           select="$resources"/>;<xsl:value-of
           select="$cgi-params"/>

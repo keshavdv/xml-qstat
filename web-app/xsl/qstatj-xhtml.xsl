@@ -353,11 +353,13 @@ Description
     "
 />
 
+
 &newline;<xsl:comment> Scheduling info </xsl:comment>&newline;
 
 <!--
   scheduling info
 -->
+<xsl:if test="$isLSF != 'true'">
 <blockquote>
 <table class="listing">
   <tr>
@@ -416,6 +418,7 @@ Description
 -->
 </blockquote>
 &newline;
+</xsl:if>
 
 <!-- bottom status bar with rendered time -->
 <xsl:call-template name="bottomStatusBar">
@@ -735,9 +738,7 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
     <tr>
       <th>predecessor</th>
       <td>
-        <xsl:for-each
-            select="JB_jid_predecessor_list/job_predecessors/JRE_job_number"
-        >
+        <xsl:for-each select="JB_jid_predecessor_list/job_predecessors/JRE_job_number">
           <xsl:value-of select="." />
 &newline;
         </xsl:for-each>
@@ -958,10 +959,9 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
 
   <!-- comma-separated list of resources -->
   <xsl:variable name="resources">
-    <xsl:for-each
-        select="qstat_l_requests/CE_name"><xsl:value-of
-        select="."/>
-        <xsl:if test="not(position() = last())">,</xsl:if>
+    <xsl:for-each select="qstat_l_requests/CE_name">
+      <xsl:value-of select="."/>
+      <xsl:if test="not(position() = last())">,</xsl:if>
     </xsl:for-each>
   </xsl:variable>
   <xsl:variable name="request">

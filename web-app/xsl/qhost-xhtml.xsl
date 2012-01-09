@@ -8,7 +8,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >
 <!--
-Copyright (c) 2009-2011 Mark Olesen
+Copyright (c) 2009-2012 Mark Olesen
 
 License
     This file is part of xml-qstat.
@@ -103,6 +103,13 @@ Description
   </xsl:call-template>
 </xsl:variable>
 
+<!-- enable/disable some things for LSF output -->
+<xsl:variable name="isLSF">
+  <xsl:if test="/qhost[@type = 'lsf']">
+    <xsl:text>true</xsl:text>
+  </xsl:if>
+</xsl:variable>
+
 
 <!-- ========================== Sorting Keys ============================== -->
 <xsl:key
@@ -172,12 +179,16 @@ Description
     | GridEngine: use the queuevalue
     | LSF:        use the hostvalue
     -->
-<xsl:variable
-  name="AJ_slots"
-  select="
-      sum(//hostvalue[@name='slots_used']) +
-      sum(//queuevalue[@name='slots_used']) "
-/>
+<xsl:variable name="AJ_slots">
+  <xsl:choose>
+  <xsl:when test="$isLSF = 'true'">
+    <xsl:value-of select="sum(//hostvalue[@name='slots_used'])" />
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="sum(//queuevalue[@name='slots_used'])" />
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
 
 <!-- done PRE-CALCULATE -->
 
@@ -319,9 +330,9 @@ Description
   <xsl:for-each select="host/queue">
     <xsl:sort select="@name"/>
 
-    <xsl:variable name="qname" select="@name"/>
-    <xsl:variable name="thisNode" select="generate-id(.)"/>
-    <xsl:variable name="allNodes" select="key('queue-summary', $qname)"/>
+    <xsl:variable name="qname"     select="@name"/>
+    <xsl:variable name="thisNode"  select="generate-id(.)"/>
+    <xsl:variable name="allNodes"  select="key('queue-summary', $qname)"/>
     <xsl:variable name="firstNode" select="generate-id($allNodes[1])"/>
 
     <xsl:if test="$thisNode = $firstNode">
@@ -585,7 +596,9 @@ Description
         <xsl:attribute name="title">details for job <xsl:value-of select="@name"/></xsl:attribute>
         <xsl:attribute name="href">
           <xsl:text>jobinfo</xsl:text>
-          <xsl:value-of select="$urlExt"/>?<xsl:value-of select="@name"/>
+          <xsl:value-of select="$urlExt"/>
+          <xsl:text>?jobid=</xsl:text>
+          <xsl:value-of select="@name"/>
         </xsl:attribute>
         <xsl:value-of select="@name"/>
       </xsl:element>
@@ -595,20 +608,32 @@ Description
 
   <!-- mem -->
   <td width="100px" align="left">
-    <xsl:call-template name="memoryUsed">
-      <xsl:with-param name="free"  select="hostvalue[@name='mem_free']" />
-      <xsl:with-param name="used"  select="hostvalue[@name='mem_used']" />
-      <xsl:with-param name="total" select="hostvalue[@name='mem_total']" />
-    </xsl:call-template>
+    <xsl:choose>
+    <xsl:when test="$isLSF = 'true'">
+      <xsl:value-of select="hostvalue[@name='mem_free']" />
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="memoryUsed">
+        <xsl:with-param name="used"  select="hostvalue[@name='mem_used']" />
+        <xsl:with-param name="total" select="hostvalue[@name='mem_total']" />
+      </xsl:call-template>
+    </xsl:otherwise>
+    </xsl:choose>
   </td>
 
   <!-- swap -->
   <td width="100px" align="left">
-    <xsl:call-template name="memoryUsed">
-      <xsl:with-param name="free"  select="hostvalue[@name='swap_free']"/>
-      <xsl:with-param name="used"  select="hostvalue[@name='swap_used']"/>
-      <xsl:with-param name="total" select="hostvalue[@name='swap_total']"/>
-    </xsl:call-template>
+    <xsl:choose>
+    <xsl:when test="$isLSF = 'true'">
+      <xsl:value-of select="hostvalue[@name='swap_free']" />
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="memoryUsed">
+        <xsl:with-param name="used"  select="hostvalue[@name='swap_used']"/>
+        <xsl:with-param name="total" select="hostvalue[@name='swap_total']"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+    </xsl:choose>
   </td>
 
   </tr>

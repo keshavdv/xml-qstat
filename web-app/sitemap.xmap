@@ -177,7 +177,7 @@
        -->
   <map:match pattern="qlicserver~default.xml">
     <map:select type="resource-exists">
-    <map:when test="cache/qlicserver.xml">
+    <map:when test="cache/qlicserver.xml">    <!-- flat cache -->
       <map:generate src="cocoon:/cache/qlicserver.xml"/>
       <map:serialize/>
     </map:when>
@@ -202,10 +202,10 @@
        -->
   <map:match pattern="qlicserver~*.xml">
     <map:select type="resource-exists">
-    <map:when test="cache-{1}/qlicserver.xml">
+    <map:when test="cache-{1}/qlicserver.xml">    <!-- cluster-specific cache -->
       <map:generate  src="cache-{1}/qlicserver.xml"/>
     </map:when>
-    <map:when test="cache/qlicserver~{1}.xml">
+    <map:when test="cache/qlicserver~{1}.xml">    <!-- flat cache -->
       <map:generate  src="cocoon:/cache/qlicserver~{1}.xml"/>
     </map:when>
     <map:otherwise>
@@ -219,7 +219,7 @@
 
   <!--
      | Notes for understanding the command-generator mappings.
-     | Replace '{Function}' with qstatf, qstatj calls.
+     | Replace '{Function}' with qhost, qstat, qstatf, qstatj calls.
      |
      | "/{Function}~default.xml"
      | '{Function}' w/o cluster name
@@ -241,13 +241,159 @@
      |  be used that interpretes these values correctly.
      -->
 
+  <!-- url: "/<webapp>/qstat~default.xml"
+       qhost w/o cluster name
+       See notes above
+       -->
+  <map:match pattern="qhost~default.xml">
+    <map:select type="resource-exists">
+    <map:when test="cache/qhost.xml">    <!-- flat cache -->
+      <map:generate src="cocoon:/cache/qhost.xml"/>
+    </map:when>
+    <map:otherwise>
+      <!--
+         | fetch from "/<webapp>/qhost.xml/~{sge_cell}/{sge_root}" via xinclude
+         | (Note: the input xml is irrelevant)
+         -->
+      <map:generate  type="request" />
+      <map:transform src="xsl/cocoon-redirect-query.xsl">
+        <map:parameter name="clusterName" value="default" />
+        <map:parameter name="serverName"  value="{request:serverName}" />
+        <map:parameter name="resource"    value="qhost.xml" />
+        <map:parameter name="baseURL"
+            value="http://{request:serverName}:{request:serverPort}/{request:sitemapURIPrefix}"
+            />
+      </map:transform>
+      <map:transform type="xinclude"/>
+    </map:otherwise>
+    </map:select>
+    <map:serialize/>
+  </map:match>
+
+
+  <!-- url: "/<webapp>/qhost~{clusterName}.xml"
+       qhost for a particular cluster name
+       See notes above
+       -->
+  <map:match pattern="qhost~*.xml">
+    <map:select type="resource-exists">
+    <map:when test="cache-{1}/qhost.xml">    <!-- cluster-specific cache -->
+      <map:generate  src="cache-{1}/qhost.xml"/>
+    </map:when>
+    <map:when test="cache/qhost~{1}.xml">    <!-- flat cache -->
+      <map:generate  src="cocoon:/cache/qhost~{1}.xml"/>
+    </map:when>
+    <map:otherwise>
+      <!--
+         | fetch from "/<webapp>/qhost.xml/~{sge_cell}/{sge_root}" via xinclude
+         | (Note: the input xml is irrelevant)
+         -->
+      <map:generate  type="request" />
+      <map:transform src="xsl/cocoon-redirect-query.xsl">
+        <map:parameter name="clusterName" value="{1}" />
+        <map:parameter name="serverName"  value="{request:serverName}" />
+        <map:parameter name="resource"    value="qhost.xml" />
+        <map:parameter name="baseURL"
+            value="http://{request:serverName}:{request:serverPort}/{request:sitemapURIPrefix}"
+            />
+      </map:transform>
+      <map:transform type="xinclude"/>
+    </map:otherwise>
+    </map:select>
+    <map:serialize/>
+  </map:match>
+
+  <!-- url: "/<webapp>/qhost.xml/~{sge_cell}/{sge_root}"
+       qhost for a particular SGE_CELL, SGE_ROOT combination
+       -->
+  <map:match pattern="qhost.xml/~*/**">
+    <map:generate type="commandGenerator"
+        src="{contextpath:../scripts/}qhost.sh CELL={1} ROOT=/{2} -q -j -xml"
+        />
+    <map:serialize/>
+  </map:match>
+
+
+  <!-- url: "/<webapp>/qstat~default.xml"
+       qstatf w/o cluster name
+       See notes above
+       -->
+  <map:match pattern="qstat~default.xml">
+    <map:select type="resource-exists">
+    <map:when test="cache/qstat.xml">    <!-- flat cache -->
+      <map:generate src="cocoon:/cache/qstat.xml"/>
+    </map:when>
+    <map:otherwise>
+      <!--
+         | fetch from "/<webapp>/qstat.xml/~{sge_cell}/{sge_root}" via xinclude
+         | (Note: the input xml is irrelevant)
+         -->
+      <map:generate  type="request" />
+      <map:transform src="xsl/cocoon-redirect-query.xsl">
+        <map:parameter name="clusterName" value="default" />
+        <map:parameter name="serverName"  value="{request:serverName}" />
+        <map:parameter name="resource"    value="qstat.xml" />
+        <map:parameter name="baseURL"
+            value="http://{request:serverName}:{request:serverPort}/{request:sitemapURIPrefix}"
+            />
+      </map:transform>
+      <map:transform type="xinclude"/>
+    </map:otherwise>
+    </map:select>
+    <map:serialize/>
+  </map:match>
+
+
+  <!-- url: "/<webapp>/qstat~{clusterName}.xml"
+       qstat for a particular cluster name
+       See notes above
+       -->
+  <map:match pattern="qstat~*.xml">
+    <map:select type="resource-exists">
+    <map:when test="cache-{1}/qstat.xml">    <!-- cluster-specific cache -->
+      <map:generate  src="cache-{1}/qstat.xml"/>
+    </map:when>
+    <map:when test="cache/qstat~{1}.xml">    <!-- flat cache -->
+      <map:generate  src="cocoon:/cache/qstat~{1}.xml"/>
+    </map:when>
+    <map:otherwise>
+      <!--
+         | fetch from "/<webapp>/qstat.xml/~{sge_cell}/{sge_root}" via xinclude
+         | (Note: the input xml is irrelevant)
+         -->
+      <map:generate  type="request" />
+      <map:transform src="xsl/cocoon-redirect-query.xsl">
+        <map:parameter name="clusterName" value="{1}" />
+        <map:parameter name="serverName"  value="{request:serverName}" />
+        <map:parameter name="resource"    value="qstat.xml" />
+        <map:parameter name="baseURL"
+            value="http://{request:serverName}:{request:serverPort}/{request:sitemapURIPrefix}"
+            />
+      </map:transform>
+      <map:transform type="xinclude"/>
+    </map:otherwise>
+    </map:select>
+    <map:serialize/>
+  </map:match>
+
+  <!-- url: "/<webapp>/qstat.xml/~{sge_cell}/{sge_root}"
+       qstat for a particular SGE_CELL, SGE_ROOT combination
+       -->
+  <map:match pattern="qstat.xml/~*/**">
+    <map:generate type="commandGenerator"
+        src="{contextpath:../scripts/}qstat.sh CELL={1} ROOT=/{2} -u * -xml -r -s prs"
+        />
+    <map:serialize/>
+  </map:match>
+
+
   <!-- url: "/<webapp>/qstatf~default.xml"
        qstatf w/o cluster name
        See notes above
        -->
   <map:match pattern="qstatf~default.xml">
     <map:select type="resource-exists">
-    <map:when test="cache/qstatf.xml">
+    <map:when test="cache/qstatf.xml">    <!-- flat cache -->
       <map:generate src="cocoon:/cache/qstatf.xml"/>
     </map:when>
     <map:otherwise>
@@ -277,10 +423,10 @@
        -->
   <map:match pattern="qstatf~*.xml">
     <map:select type="resource-exists">
-    <map:when test="cache-{1}/qstatf.xml">
+    <map:when test="cache-{1}/qstatf.xml">    <!-- cluster-specific cache -->
       <map:generate  src="cache-{1}/qstatf.xml"/>
     </map:when>
-    <map:when test="cache/qstatf~{1}.xml">
+    <map:when test="cache/qstatf~{1}.xml">    <!-- flat cache -->
       <map:generate  src="cocoon:/cache/qstatf~{1}.xml"/>
     </map:when>
     <map:otherwise>
@@ -502,7 +648,7 @@
 
   <map:match pattern="cluster/*/cache">
     <map:select type="resource-exists">
-    <map:when test="cache-{1}">
+    <map:when test="cache-{1}">    <!-- cluster-specific cache -->
       <map:generate type="directory"  src="cache-{1}">
         <map:parameter name="depth"   value="1"/>
         <map:parameter name="include" value="\.xml$"/>
@@ -605,7 +751,7 @@
        -->
   <map:match pattern="cluster/default/*.xml">
     <map:select type="resource-exists">
-    <map:when test="cache/{1}.xml">
+    <map:when test="cache/{1}.xml">    <!-- flat cache -->
       <map:generate src="cache/{1}.xml" />
     </map:when>
     <map:otherwise>
@@ -620,10 +766,10 @@
        -->
   <map:match pattern="cluster/*/*.xml">
     <map:select type="resource-exists">
-    <map:when test="cache-{1}/{2}.xml">
+    <map:when test="cache-{1}/{2}.xml">    <!-- cluster-specific cache -->
       <map:generate src="cache-{1}/{2}.xml" />
     </map:when>
-    <map:when test="cache/{2}~{1}.xml">
+    <map:when test="cache/{2}~{1}.xml">    <!-- flat cache -->
       <map:generate src="cache/{2}~{1}.xml" />
     </map:when>
     <map:otherwise>
@@ -918,6 +1064,16 @@
 
   <map:match pattern="resources">
     <map:redirect-to uri="resources~default" />
+  </map:match>
+
+  <map:match pattern="qhost.xml">
+    <map:generate  src="cocoon:/qhost~default.xml"/>
+    <map:serialize/>
+  </map:match>
+
+  <map:match pattern="qstat.xml">
+    <map:generate  src="cocoon:/qstat~default.xml"/>
+    <map:serialize/>
   </map:match>
 
   <map:match pattern="qstatf.xml">

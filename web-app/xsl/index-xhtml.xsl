@@ -79,13 +79,16 @@ Description
 
 <xsl:variable name="configNode" select="document($config-file)/config"/>
 
+<!-- default cluster enabled if @enabled does not exist or is 'true' -->
 <xsl:variable name="defaultClusterAllowed">
   <xsl:choose>
-  <xsl:when test="$configNode/clusters/default/@enabled = 'false'">
-    <xsl:text>false</xsl:text>
+  <xsl:when
+      test="not(string-length($configNode/clusters/default/@enabled))
+            or $configNode/clusters/default/@enabled = 'true'">
+    <xsl:text>true</xsl:text>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:text>true</xsl:text>
+    <xsl:text>false</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:variable>

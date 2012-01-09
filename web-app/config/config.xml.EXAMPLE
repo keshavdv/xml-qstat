@@ -77,9 +77,10 @@
    |         not supported on Cocoon
    | @baseURL - optional means of getting at resources via http://
    |
-   | If the 'default' entity exists in 'clusters' and has the attribute
-   | enabled="false", the default (unnamed) cluster will be disabled.
-   | Other values (or a missing entry) are interpreted as enabled="true".
+   | A "default" cluster is normally included in the list, but can be
+   | avoided by adding a 'default' entity in 'clusters' and setting the
+   | attribute 'enabled' to "false". A missing 'enabled' attribute
+   | is interpreted as "true". Other values are interpreted as enabled="false".
 -->
 <clusters arch="lx24-x86">
   <default

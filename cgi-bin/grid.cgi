@@ -644,7 +644,7 @@ ERROR
         $arch = $config{cluster}{$cluster}{arch};
     }
     elsif ( $cluster eq "default" ) {
-        $root = $sge_root;
+        $root = $config{cluster}{$cluster}{root} || $sge_root;
         $cell = $config{cluster}{$cluster}{cell};
         $arch = $config{cluster}{$cluster}{arch};
     }
@@ -653,6 +653,12 @@ ERROR
     $root ||= '';
     $cell ||= $config{"#cluster"}{cell} || "default";
     $arch ||= $config{"#cluster"}{arch} || $sge_arch;
+
+    # determine SGE_ARCH if needed
+    if ( not $arch or $arch =~ /false/ ) {
+        $arch = qx{$root/util/arch 2>/dev/null} || 'unknown';
+        chomp $arch;
+    }
 
     # need root + cell directory
     -d $root and $root =~ m{^/} and -d "$root/$cell"

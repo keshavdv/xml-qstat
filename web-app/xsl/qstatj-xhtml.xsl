@@ -978,6 +978,13 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
     </xsl:otherwise>
     </xsl:choose>
     <xsl:value-of select="../JB_job_number"/>
+    <!-- append task id as required -->
+    <xsl:if test="$isLSF = 'true'">
+      <xsl:if test="../JB_ja_tasks/ulong_sublist/JAT_task_number">
+        <xsl:text>.</xsl:text>
+        <xsl:value-of select="../JB_ja_tasks/ulong_sublist/JAT_task_number"/>
+      </xsl:if>
+    </xsl:if>
     <xsl:text>;resources=</xsl:text><xsl:value-of select="$resources"/>
   </xsl:variable>
 

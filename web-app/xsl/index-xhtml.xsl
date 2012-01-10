@@ -80,7 +80,7 @@ Description
 <xsl:variable name="configNode" select="document($config-file)/config"/>
 
 <!-- default cluster enabled if @enabled does not exist or is 'true' -->
-<xsl:variable name="defaultClusterAllowed">
+<xsl:variable name="useDefaultCluster">
   <xsl:choose>
   <xsl:when
       test="not(string-length($configNode/clusters/default/@enabled))
@@ -224,7 +224,7 @@ Description
 </xsl:for-each>
 
 <!-- add default cluster -->
-<xsl:if test="$defaultClusterAllowed = 'true'">
+<xsl:if test="$useDefaultCluster = 'true'">
   <xsl:choose>
   <xsl:when test="$configNode/clusters/default">
     <xsl:apply-templates select="$configNode/clusters/default"/>
@@ -287,22 +287,22 @@ Description
 </xsl:template>
 
 
+<!-- return true if specified file exists as a cache file or empty -->
 <xsl:template name="hasCacheFile">
   <xsl:param name="cacheDir" />
   <xsl:param name="fileBase" />
   <xsl:param name="fileQualifier" select="'.xml'"/>
 
   <xsl:variable name="plainName" select="concat($fileBase, '.xml')" />
-  <xsl:variable name="fqName" select="concat($fileBase, $fileQualifier)" />
+  <xsl:variable name="fqName"    select="concat($fileBase, $fileQualifier)" />
 
   <xsl:if test="
-     $dirNodes[@name='cache']/dir:file[@name = $fqName]
+     $dirNodes[@name = 'cache']/dir:file[@name = $fqName]
      or
-     $dirNodes[@name=$cacheDir]/dir:file[@name = $plainName]
+     $dirNodes[@name = $cacheDir]/dir:file[@name = $plainName]
      ">true</xsl:if>
 
 </xsl:template>
-
 
 
 <xsl:template name="addClusterLinks">
@@ -311,8 +311,6 @@ Description
   <xsl:param name="root" />
   <xsl:param name="cell" />
   <xsl:param name="base" />
-
-  <xsl:variable name="clusterNode" select="$configNode/clusters/cluster[@name=$name]" />
 
   <!-- cache dir qualified with cluster name -->
   <xsl:variable name="fqCacheDir">
@@ -346,110 +344,53 @@ Description
     </xsl:choose>
   </xsl:variable>
 
-  <!-- can disable full query (qstatf output) depending on local settings -->
-  <xsl:variable name="fullqueryEnabled">
-    <xsl:choose>
-    <xsl:when test="$clusterNode/qstatf">
-      <xsl:choose>
-      <xsl:when test="
-          not(string-length($clusterNode/qstatf/@enabled))
-          or $clusterNode/qstatf/@enabled = 'true'">
-        <xsl:text>true</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>false</xsl:text>
-      </xsl:otherwise>
-      </xsl:choose>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:text>true</xsl:text>
-    </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="qhost_exists">
-    <xsl:choose>
-    <xsl:when test="string-length($base)">
-      <xsl:text>true</xsl:text>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="hasCacheFile">
-        <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
-        <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
-        <xsl:with-param name="fileBase"      select="'qhost'"/>
-      </xsl:call-template>
-    </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <!-- enable qlicserver button depending on local/global settings -->
-  <xsl:variable name="qlicserverEnabled">
-    <xsl:choose>
-    <xsl:when test="$clusterNode/qlicserver">
-      <!-- local setting exists -->
-      <xsl:choose>
-      <xsl:when test="
-          not(string-length($clusterNode/qlicserver/@enabled))
-          or $clusterNode/qlicserver/@enabled = 'true'">
-        <xsl:text>true</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>false</xsl:text>
-      </xsl:otherwise>
-      </xsl:choose>
-    </xsl:when>
-    <xsl:when test="$configNode/qlicserver">
-      <!-- global setting exists -->
-      <xsl:choose>
-      <xsl:when test="
-          not(string-length($configNode/qlicserver/@enabled))
-          or $configNode/qlicserver/@enabled = 'true'">
-        <xsl:text>true</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>false</xsl:text>
-      </xsl:otherwise>
-      </xsl:choose>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:text>false</xsl:text>
-    </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="qlicserver_exists">
-    <xsl:if test="$qlicserverEnabled = 'true'">
-      <xsl:call-template name="hasCacheFile">
-        <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
-        <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
-        <xsl:with-param name="fileBase"      select="'qlicserver'"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:variable>
-
-  <xsl:variable name="qstat_exists">
-    <xsl:choose>
-    <xsl:when test="string-length($base)">
-      <xsl:text>true</xsl:text>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="hasCacheFile">
-        <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
-        <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
-        <xsl:with-param name="fileBase"      select="'qstat'"/>
-      </xsl:call-template>
-    </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="qstatf_exists">
-    <xsl:call-template name="hasCacheFile">
-      <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
-      <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
-      <xsl:with-param name="fileBase"      select="'qstatf'"/>
+  <!--
+     | enable/disable qhost.xml depending on local settings
+     | default (for a missing entry) is enabled
+     -->
+  <xsl:variable name="useQHOST">
+    <xsl:call-template name="use-qhost">
+      <xsl:with-param name="config-file"     select="$config-file" />
+      <xsl:with-param name="clusterName"     select="$name" />
+      <xsl:with-param name="feature-default" select="'true'" />
     </xsl:call-template>
   </xsl:variable>
 
+  <!--
+     | enable/disable qstat.xml depending on local settings
+     | default (for a missing entry) is enabled
+     -->
+  <xsl:variable name="useQSTAT">
+    <xsl:call-template name="use-qstat">
+      <xsl:with-param name="config-file"     select="$config-file" />
+      <xsl:with-param name="clusterName"     select="$name" />
+      <xsl:with-param name="feature-default" select="'true'" />
+    </xsl:call-template>
+  </xsl:variable>
+
+  <!--
+     | enable/disable qstatf.xml (full query) depending on local settings
+     | default (for a missing entry) is enabled
+     -->
+  <xsl:variable name="useQSTATF">
+    <xsl:call-template name="use-qstatf">
+      <xsl:with-param name="config-file"     select="$config-file" />
+      <xsl:with-param name="clusterName"     select="$name" />
+      <xsl:with-param name="feature-default" select="'true'" />
+    </xsl:call-template>
+  </xsl:variable>
+
+  <!--
+     | enable/disable qlicserver button depending on local settings
+     | default (for a missing entry) is disabled
+     -->
+  <xsl:variable name="useQLICSERVER">
+    <xsl:call-template name="use-qlicserver">
+      <xsl:with-param name="config-file"     select="$config-file" />
+      <xsl:with-param name="clusterName"     select="$name" />
+      <xsl:with-param name="feature-default" select="'false'" />
+    </xsl:call-template>
+  </xsl:variable>
 
   &newline;
   <xsl:comment> cluster: <xsl:value-of select="$name"/> </xsl:comment>
@@ -458,7 +399,7 @@ Description
   <!-- cluster name -->
   <td>
     <xsl:choose>
-    <xsl:when test="string-length($qstat_exists)">
+    <xsl:when test="$useQSTAT = 'true'">
       <!-- link to cluster/XXX/jobs -->
       <xsl:element name="a">
         <xsl:attribute name="href">
@@ -493,124 +434,123 @@ Description
     </xsl:choose>
   </td>
   <td>
-    <xsl:choose>
-    <xsl:when test="
-         string-length($qhost_exists)
-      or string-length($qlicserver_exists)
-      or string-length($qstat_exists)
-      ">
-
-      &space;
-      <xsl:if test="string-length($qstat_exists)">
-        <!-- jobs -->
-        <xsl:element name="a">
-          <xsl:attribute name="title">jobs</xsl:attribute>
-          <xsl:attribute name="href">
-            <xsl:value-of select="$clusterDir"/>
-            <xsl:text>/jobs</xsl:text>
-            <xsl:value-of select="$urlExt"/>
-          </xsl:attribute>
-          <img border="0"
-              src="css/screen/icons/lorry_flatbed.png"
-              alt="[jobs]"
-          />
-        </xsl:element>
-      </xsl:if>
-
-      <xsl:if test="string-length($qhost_exists)">
-        <!-- queues?view=summary -->
-        &space;
-        <xsl:element name="a">
-          <xsl:attribute name="title">queue summary</xsl:attribute>
-          <xsl:attribute name="href">
-            <xsl:value-of select="$clusterDir"/>
-            <xsl:text>/queues</xsl:text>
-            <xsl:value-of select="$urlExt"/>?view=summary</xsl:attribute>
-          <img border="0"
-              src="css/screen/icons/sum.png"
-              alt="[queue instances]"
-          />
-        </xsl:element>
-
-        <!-- queues?view=free -->
-        &space;
-        <xsl:element name="a">
-          <xsl:attribute name="title">queues free</xsl:attribute>
-          <xsl:attribute name="href">
-            <xsl:value-of select="$clusterDir"/>
-            <xsl:text>/queues</xsl:text>
-            <xsl:value-of select="$urlExt"/>?view=free</xsl:attribute>
-          <img border="0"
-              src="css/screen/icons/tick.png"
-              alt="[queues free]"
-          />
-        </xsl:element>
-
-        <!-- queues?view=warn -->
-        &space;
-        <xsl:element name="a">
-          <xsl:attribute name="title">queue warnings</xsl:attribute>
-          <xsl:attribute name="href">
-            <xsl:value-of select="$clusterDir"/>
-            <xsl:text>/queues</xsl:text>
-            <xsl:value-of select="$urlExt"/>?view=warn</xsl:attribute>
-          <img border="0"
-              src="css/screen/icons/error.png"
-              alt="[warn queue]"
-          />
-        </xsl:element>
-
-        <!-- queues -->
-        &space;
-        <xsl:element name="a">
-          <xsl:attribute name="title">queue listing</xsl:attribute>
-          <xsl:attribute name="href">
-            <xsl:value-of select="$clusterDir"/>
-            <xsl:text>/queues</xsl:text>
-            <xsl:value-of select="$urlExt"/>
-          </xsl:attribute>
-          <img border="0"
-              src="css/screen/icons/shape_align_left.png"
-              alt="[queue instances]"
-          />
-        </xsl:element>
-      </xsl:if>
-
-      <xsl:if test="string-length($qlicserver_exists)">
-        <!-- resources -->
-        &space;
-        <xsl:element name="a">
-          <xsl:attribute name="title">resources</xsl:attribute>
-          <xsl:attribute name="href">
-            <xsl:value-of select="$clusterDir"/>
-            <xsl:text>/resources</xsl:text>
-            <xsl:value-of select="$urlExt"/>
-          </xsl:attribute>
-          <img border="0"
-              src="css/screen/icons/database_key.png"
-              alt="[resources]"
-          />
-        </xsl:element>
-      </xsl:if>
-
-      <!-- job details -->
-      <!-- disabled for now: can be fairly resource-intensive
-      &space;
+    &space;
+    <xsl:if test="$useQSTAT = 'true'">
+      <!-- jobs -->
       <xsl:element name="a">
-        <xsl:attribute name="title">job details</xsl:attribute>
+        <xsl:attribute name="title">jobs</xsl:attribute>
         <xsl:attribute name="href">
           <xsl:value-of select="$clusterDir"/>
-          <xsl:text>/jobinfo</xsl:text>
+          <xsl:text>/jobs</xsl:text>
           <xsl:value-of select="$urlExt"/>
         </xsl:attribute>
         <img border="0"
-            src="css/screen/icons/magnifier_zoom_in.png"
-            alt="[job details]"
+            src="css/screen/icons/lorry_flatbed.png"
+            alt="[jobs]"
         />
       </xsl:element>
-      -->
+    </xsl:if>
 
-      <!-- list cache files -->
+    <xsl:if test="$useQHOST = 'true'">
+      <!-- queues?view=summary -->
+      &space;
+      <xsl:element name="a">
+        <xsl:attribute name="title">queue summary</xsl:attribute>
+        <xsl:attribute name="href">
+          <xsl:value-of select="$clusterDir"/>
+          <xsl:text>/queues</xsl:text>
+          <xsl:value-of select="$urlExt"/>?view=summary</xsl:attribute>
+        <img border="0"
+            src="css/screen/icons/sum.png"
+            alt="[queue instances]"
+        />
+      </xsl:element>
+
+      <!-- queues?view=free -->
+      &space;
+      <xsl:element name="a">
+        <xsl:attribute name="title">queues free</xsl:attribute>
+        <xsl:attribute name="href">
+          <xsl:value-of select="$clusterDir"/>
+          <xsl:text>/queues</xsl:text>
+          <xsl:value-of select="$urlExt"/>?view=free</xsl:attribute>
+        <img border="0"
+            src="css/screen/icons/tick.png"
+            alt="[queues free]"
+        />
+      </xsl:element>
+
+      <!-- queues?view=warn -->
+      &space;
+      <xsl:element name="a">
+        <xsl:attribute name="title">queue warnings</xsl:attribute>
+        <xsl:attribute name="href">
+          <xsl:value-of select="$clusterDir"/>
+          <xsl:text>/queues</xsl:text>
+          <xsl:value-of select="$urlExt"/>?view=warn</xsl:attribute>
+        <img border="0"
+            src="css/screen/icons/error.png"
+            alt="[warn queue]"
+        />
+      </xsl:element>
+
+      <!-- queues -->
+      &space;
+      <xsl:element name="a">
+        <xsl:attribute name="title">queue listing</xsl:attribute>
+        <xsl:attribute name="href">
+          <xsl:value-of select="$clusterDir"/>
+          <xsl:text>/queues</xsl:text>
+          <xsl:value-of select="$urlExt"/>
+        </xsl:attribute>
+        <img border="0"
+            src="css/screen/icons/shape_align_left.png"
+            alt="[queue instances]"
+        />
+      </xsl:element>
+    </xsl:if>
+
+    <xsl:if test="$useQLICSERVER = 'true'">
+      <!-- resources -->
+      &space;
+      <xsl:element name="a">
+        <xsl:attribute name="title">resources</xsl:attribute>
+        <xsl:attribute name="href">
+          <xsl:value-of select="$clusterDir"/>
+          <xsl:text>/resources</xsl:text>
+          <xsl:value-of select="$urlExt"/>
+        </xsl:attribute>
+        <img border="0"
+            src="css/screen/icons/database_key.png"
+            alt="[resources]"
+        />
+      </xsl:element>
+    </xsl:if>
+
+    <!-- job details -->
+    <!-- disabled at this level: can be fairly resource-intensive -->
+
+
+    <!-- check for any cache files -->
+    <xsl:variable name="hasCache">
+      <xsl:call-template name="hasCacheFile">
+        <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
+        <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
+        <xsl:with-param name="fileBase"      select="'qhost'"/>
+      </xsl:call-template>
+      <xsl:call-template name="hasCacheFile">
+        <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
+        <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
+        <xsl:with-param name="fileBase"      select="'qlicserver'"/>
+      </xsl:call-template>
+      <xsl:call-template name="hasCacheFile">
+        <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
+        <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
+        <xsl:with-param name="fileBase"      select="'qstat'"/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:if test="contains($hasCache, 'true')">
       &space;
       <xsl:element name="a">
         <xsl:attribute name="title">cached files</xsl:attribute>
@@ -623,17 +563,12 @@ Description
             alt="[cache]"
         />
       </xsl:element>
-
-    </xsl:when>
-    <xsl:otherwise>
-    no cache
-    </xsl:otherwise>
-    </xsl:choose>
+    </xsl:if>
   </td>
 
   <td>
     <!-- everything using qstat -f output (cached or direct) -->
-    <xsl:if test="$fullqueryEnabled = 'true'">
+    <xsl:if test="$useQSTATF = 'true'">
       <!-- jobs -->
       &space;
       <xsl:element name="a">
@@ -710,7 +645,7 @@ Description
       </xsl:element>
 
       <!-- resources -->
-      <xsl:if test="string-length($qlicserver_exists)">
+      <xsl:if test="$useQLICSERVER = 'true'">
         &space;
         <xsl:element name="a">
           <xsl:attribute name="title">resources</xsl:attribute>
@@ -726,8 +661,16 @@ Description
 
       <!-- view qstat -f xml : (cached or direct) -->
       &space;
+      <xsl:variable name="hasCacheQSTATF">
+        <xsl:call-template name="hasCacheFile">
+          <xsl:with-param name="cacheDir"      select="$fqCacheDir"/>
+          <xsl:with-param name="fileQualifier" select="$fileQualifier"/>
+          <xsl:with-param name="fileBase"      select="'qhostf'"/>
+        </xsl:call-template>
+      </xsl:variable>
+
       <xsl:choose>
-      <xsl:when test="string-length($qstatf_exists)">
+      <xsl:when test="$hasCacheQSTATF = 'true'">
         <xsl:element name="a">
           <xsl:attribute name="title">cached qstat -f query</xsl:attribute>
           <xsl:attribute name="href">qstatf~<xsl:value-of select="$name"/>.xml</xsl:attribute>

@@ -5,7 +5,7 @@
 >
 <!--
 Copyright (c) 2006-2007 Chris Dagdigian (chris@bioteam.net)
-Copyright (c) 2009-2011 Mark Olesen
+Copyright (c) 2009-2012 Mark Olesen
 
 License
     This file is part of xml-qstat.
@@ -647,6 +647,228 @@ Description
   </xsl:when>
   <xsl:otherwise>
     <xsl:value-of select="$name" />
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
+<!-- The following use-* templates could probably also be refactored -->
+
+<!--
+   | enable/disable qstat.xml depending on local settings
+   | default (for a missing entry) is disabled
+   -->
+<xsl:template name="use-qlicserver">
+  <xsl:param name="config-file" />
+  <xsl:param name="clusterName"     select="'default'" />
+  <xsl:param name="feature-name"    select="'qlicserver'" />
+  <xsl:param name="feature-default" select="'false'" />
+
+  <xsl:variable
+      name="configNode"
+      select="document($config-file)/config"/>
+  <xsl:variable
+      name="clusterNode"
+      select="$configNode/clusters/cluster[@name=$clusterName]" />
+
+  <xsl:choose>
+  <xsl:when test="not(string-length($config-file))">
+    <!-- no config-file specified -->
+    <xsl:value-of select="$feature-default" />
+  </xsl:when>
+  <xsl:when test="$clusterNode/qlicserver">
+    <!-- local setting exists -->
+    <xsl:choose>
+    <xsl:when test="
+        not(string-length($clusterNode/qlicserver/@enabled))
+        or $clusterNode/qlicserver/@enabled = 'true'">
+      <xsl:text>true</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>false</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:when test="$configNode/qlicserver">
+    <!-- global setting exists -->
+    <xsl:choose>
+    <xsl:when test="
+        not(string-length($configNode/qlicserver/@enabled))
+        or $configNode/qlicserver/@enabled = 'true'">
+      <xsl:text>true</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>false</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$feature-default" />
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
+<!--
+   | enable/disable qhost.xml depending on local settings
+   | default (for a missing entry) is enabled
+   -->
+<xsl:template name="use-qhost">
+  <xsl:param name="config-file" />
+  <xsl:param name="clusterName" />
+  <xsl:param name="feature-name"    select="'qhost'" />
+  <xsl:param name="feature-default" select="'true'" />
+
+  <xsl:variable
+      name="configNode"
+      select="document($config-file)/config"/>
+  <xsl:variable
+      name="clusterNode"
+      select="$configNode/clusters/cluster[@name=$clusterName]" />
+
+  <xsl:choose>
+  <xsl:when test="not(string-length($config-file))">
+    <xsl:text>true</xsl:text>
+    <!-- no config-file specified -->
+    <!-- <xsl:value-of select="$feature-default" /> -->
+  </xsl:when>
+  <xsl:when test="$clusterNode/qhost">
+    <!-- local setting exists -->
+    <xsl:choose>
+    <xsl:when test="
+        not(string-length($clusterNode/qhost/@enabled))
+        or $clusterNode/qhost/@enabled = 'true'">
+      <xsl:text>true</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>false</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:when test="$configNode/qhost">
+    <!-- global setting exists -->
+    <xsl:choose>
+    <xsl:when test="
+        not(string-length($configNode/qhost/@enabled))
+        or $configNode/qhost/@enabled = 'true'">
+      <xsl:text>true</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>false</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$feature-default" />
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!--
+   | enable/disable qstat.xml depending on local settings
+   | default (for a missing entry) is enabled
+   -->
+<xsl:template name="use-qstat">
+  <xsl:param name="config-file" />
+  <xsl:param name="clusterName"     select="'default'" />
+  <xsl:param name="feature-name"    select="'qstat'" />
+  <xsl:param name="feature-default" select="'true'" />
+
+  <xsl:variable
+      name="configNode"
+      select="document($config-file)/config"/>
+  <xsl:variable
+      name="clusterNode"
+      select="$configNode/clusters/cluster[@name=$clusterName]" />
+
+  <xsl:choose>
+  <xsl:when test="not(string-length($config-file))">
+    <!-- no config-file specified -->
+    <xsl:value-of select="$feature-default" />
+  </xsl:when>
+  <xsl:when test="$clusterNode/qstat">
+    <!-- local setting exists -->
+    <xsl:choose>
+    <xsl:when test="
+        not(string-length($clusterNode/qstat/@enabled))
+        or $clusterNode/qstat/@enabled = 'true'">
+      <xsl:text>true</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>false</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:when test="$configNode/qstat">
+    <!-- global setting exists -->
+    <xsl:choose>
+    <xsl:when test="
+        not(string-length($configNode/qstat/@enabled))
+        or $configNode/qstat/@enabled = 'true'">
+      <xsl:text>true</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>false</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$feature-default" />
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
+<!--
+   | enable/disable qstatf.xml depending on local settings
+   | default (for a missing entry) is enabled
+   -->
+<xsl:template name="use-qstatf">
+  <xsl:param name="config-file" />
+  <xsl:param name="clusterName"     select="'default'" />
+  <xsl:param name="feature-name"    select="'qstatf'" />
+  <xsl:param name="feature-default" select="'true'" />
+
+  <xsl:variable
+      name="configNode"
+      select="document($config-file)/config"/>
+  <xsl:variable
+      name="clusterNode"
+      select="$configNode/clusters/cluster[@name=$clusterName]" />
+
+  <xsl:choose>
+  <xsl:when test="not(string-length($config-file))">
+    <!-- no config-file specified -->
+    <xsl:value-of select="$feature-default" />
+  </xsl:when>
+  <xsl:when test="$clusterNode/qstatf">
+    <!-- local setting exists -->
+    <xsl:choose>
+    <xsl:when test="
+        not(string-length($clusterNode/qstatf/@enabled))
+        or $clusterNode/qstatf/@enabled = 'true'">
+      <xsl:text>true</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>false</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:when test="$configNode/qstatf">
+    <!-- global setting exists -->
+    <xsl:choose>
+    <xsl:when test="
+        not(string-length($configNode/qstatf/@enabled))
+        or $configNode/qstatf/@enabled = 'true'">
+      <xsl:text>true</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>false</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$feature-default" />
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

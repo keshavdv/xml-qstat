@@ -194,8 +194,9 @@ Description
 </xsl:call-template>
 <!-- Top Menu Bar -->
 <xsl:call-template name="topMenu">
+  <xsl:with-param name="config-file"   select="$config-file" />
   <xsl:with-param name="clusterName"   select="$clusterName"/>
-  <xsl:with-param name="urlExt" select="$urlExt"/>
+  <xsl:with-param name="urlExt"        select="$urlExt"/>
 </xsl:call-template>
 
 &newline;

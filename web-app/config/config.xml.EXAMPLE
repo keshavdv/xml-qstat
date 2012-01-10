@@ -11,6 +11,28 @@
 <qlicserver enabled="true"/>
 
 <!--
+   | The viewing of the qhost information (cached or created on demand)
+   | will be enabled unless the 'qhost' entity exists and has the
+   | attribute 'enabled' to "false". A missing 'enabled' attribute
+   | is interpreted as "true". Other values are interpreted as enabled="false".
+   -->
+<!-- <qhost enabled="false"/> -->
+<!--
+   | The viewing of the qstat information (cached or created on demand)
+   | will be enabled unless the 'qstat' entity exists and has the
+   | attribute 'enabled' to "false". A missing 'enabled' attribute
+   | is interpreted as "true". Other values are interpreted as enabled="false".
+   -->
+<!-- <qstat enabled="false"/> -->
+<!--
+   | The viewing of the full qstat information (cached or created on demand)
+   | will be enabled unless the 'qstatf' entity exists and has the
+   | attribute 'enabled' to "false". A missing 'enabled' attribute
+   | is interpreted as "true". Other values are interpreted as enabled="false".
+   -->
+<!-- <qstatf enabled="false"/> -->
+
+<!--
    | The queue instances in the 'qstat -f' rendering will be sorted by
    | the queue name if the 'sortByQueue' entity exists.
    | 'enabled' is not "false".
@@ -102,7 +124,7 @@
       root="/data/app/grid02"
       cell="default"
       >
-      <qstatf_xml enabled="false"/>
+      <qstatf     enabled="false" />
       <qlicserver enabled="false" />
       <viewlog    enabled="false" />
       <viewfile   enabled="false" />

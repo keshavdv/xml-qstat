@@ -30,6 +30,10 @@ Description
     Logo and uniform naviation buttons that can be customized as required
 -->
 
+<!-- ======================= Imports / Includes =========================== -->
+<!-- Include our templates -->
+<xsl:include href="xmlqstat-templates.xsl"/>
+
 <!-- ======================= Internal Parameters ========================== -->
 
 <!-- ========================= Named Templates ============================ -->
@@ -39,8 +43,8 @@ Description
    | - extract @src, @href and @height or @width attributes
 -->
 <xsl:template name="topLogo">
-  <xsl:param name="relPath" />
   <xsl:param name="config-file" select="'../config/config.xml'"/>
+  <xsl:param name="relPath" />
 
   <xsl:variable
       name="topLogo"
@@ -102,33 +106,36 @@ Description
      this version is optimized for use with qlicserver cache files
 -->
 <xsl:template name="topMenu">
+  <xsl:param name="config-file" select="document('../config/config.xml')" />
   <xsl:param name="clusterName" />
   <xsl:param name="jobinfo" />
   <xsl:param name="urlExt" />
 
-  <xsl:variable name="configNode"  select="document('../config/config.xml')/config" />
+  <xsl:variable name="configNode"  select="document($config-file)/config"/>
   <xsl:variable name="clusterNode" select="$configNode/clusters/cluster[@name=$clusterName]" />
 
-  <!-- enable qlicserver button depending on local/global settings -->
-  <xsl:variable name="qlicserverEnabled">
-    <xsl:choose>
-    <xsl:when test="$clusterNode/qlicserver">
-      <!-- local setting exists, check enabled -->
-      <xsl:if test="
-          not(string-length($clusterNode/qlicserver/@enabled))
-          or $clusterNode/qlicserver/@enabled = 'true'">
-        <xsl:text>true</xsl:text>
-      </xsl:if>
-    </xsl:when>
-    <xsl:when test="$configNode/qlicserver">
-      <!-- global setting exists, check enabled -->
-      <xsl:if test="
-          not(string-length($configNode/qlicserver/@enabled))
-          or $configNode/qlicserver/@enabled = 'true'">
-        <xsl:text>true</xsl:text>
-      </xsl:if>
-    </xsl:when>
-    </xsl:choose>
+  <!--
+     | enable/disable qhost buttons depending on local settings
+     | default (for a missing entry) is enabled
+     -->
+  <xsl:variable name="useQHOST">
+    <xsl:call-template name="use-qhost">
+      <xsl:with-param name="config-file"     select="$config-file" />
+      <xsl:with-param name="clusterName"     select="$clusterName" />
+      <xsl:with-param name="feature-default" select="'true'" />
+    </xsl:call-template>
+  </xsl:variable>
+
+  <!--
+     | enable/disable qlicserver button depending on local settings
+     | default (for a missing entry) is disabled
+     -->
+  <xsl:variable name="useQLICSERVER">
+    <xsl:call-template name="use-qlicserver">
+      <xsl:with-param name="config-file"     select="$config-file" />
+      <xsl:with-param name="clusterName"     select="$clusterName" />
+      <xsl:with-param name="feature-default" select="'false'" />
+    </xsl:call-template>
   </xsl:variable>
 
   <div id="menu">
@@ -157,6 +164,7 @@ Description
       />
     </xsl:element>
 
+  <xsl:if test="$useQHOST = 'true'">
     <!-- queues?view=summary -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
@@ -204,8 +212,9 @@ Description
         alt="[queues]"
       />
     </xsl:element>
+  </xsl:if>
 
-  <xsl:if test="$qlicserverEnabled = 'true'">
+  <xsl:if test="$useQLICSERVER = 'true'">
     <!-- resources -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">
@@ -267,33 +276,25 @@ Description
      (using qstat -f output)
 -->
 <xsl:template name="qstatfMenu">
+  <xsl:param name="config-file" select="document('../config/config.xml')" />
   <xsl:param name="clusterName" />
   <xsl:param name="clusterSuffix" />
   <xsl:param name="jobinfo" />
   <xsl:param name="urlExt" />
 
-  <xsl:variable name="configNode"  select="document('../config/config.xml')/config" />
+  <xsl:variable name="configNode"  select="document($config-file)/config"/>
   <xsl:variable name="clusterNode" select="$configNode/clusters/cluster[@name=$clusterName]" />
 
-  <xsl:variable name="qlicserverEnabled">
-    <xsl:choose>
-    <xsl:when test="$clusterNode/qlicserver">
-      <!-- local setting exists, check enabled -->
-      <xsl:if test="
-          not(string-length($clusterNode/qlicserver/@enabled))
-          or $clusterNode/qlicserver/@enabled = 'true'">
-        <xsl:text>true</xsl:text>
-      </xsl:if>
-    </xsl:when>
-    <xsl:when test="$configNode/qlicserver">
-      <!-- global setting exists, check enabled -->
-      <xsl:if test="
-          not(string-length($configNode/qlicserver/@enabled))
-          or $configNode/qlicserver/@enabled = 'true'">
-      <xsl:text>true</xsl:text>
-    </xsl:if>
-    </xsl:when>
-    </xsl:choose>
+  <!--
+     | enable/disable qlicserver button depending on local settings
+     | default (for a missing entry) is disabled
+     -->
+  <xsl:variable name="useQLICSERVER">
+    <xsl:call-template name="use-qlicserver">
+      <xsl:with-param name="config-file"     select="$config-file" />
+      <xsl:with-param name="clusterName"     select="$clusterName" />
+      <xsl:with-param name="feature-default" select="'false'" />
+    </xsl:call-template>
   </xsl:variable>
 
   <div id="menu">
@@ -382,7 +383,7 @@ Description
       />
     </xsl:element>
 
-  <xsl:if test="$qlicserverEnabled = 'true'">
+  <xsl:if test="$useQLICSERVER = 'true'">
     <!-- resources -->
     <img alt=" | " src="css/screen/icon_divider.png" />
     <xsl:element name="a">

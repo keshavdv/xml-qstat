@@ -415,15 +415,17 @@ Description
 <xsl:choose>
 <xsl:when test="$menuMode = 'qstatf'">
   <xsl:call-template name="qstatfMenu">
+    <xsl:with-param name="config-file"   select="$config-file" />
     <xsl:with-param name="clusterName"   select="$clusterName"/>
     <xsl:with-param name="clusterSuffix" select="$clusterSuffix"/>
-    <xsl:with-param name="urlExt" select="$urlExt"/>
+    <xsl:with-param name="urlExt"        select="$urlExt"/>
   </xsl:call-template>
 </xsl:when>
 <xsl:otherwise>
   <xsl:call-template name="topMenu">
-    <xsl:with-param name="clusterName"  select="$clusterName"/>
-    <xsl:with-param name="urlExt" select="$urlExt"/>
+    <xsl:with-param name="config-file"   select="$config-file" />
+    <xsl:with-param name="clusterName"   select="$clusterName"/>
+    <xsl:with-param name="urlExt"        select="$urlExt"/>
   </xsl:call-template>
 </xsl:otherwise>
 </xsl:choose>

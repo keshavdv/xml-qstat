@@ -153,8 +153,8 @@ sub new {
 sub reset {
     my ( $self, %param ) = @_;
     %{$self} = (
-        cgi   => 0,     # the cgi
-        xslt  => {},    # xslt parameters
+        cgi  => 0,     # the cgi
+        xslt => {},    # xslt parameters
         %param,
         error => [],    # error stack
     );
@@ -200,7 +200,32 @@ sub setError {
 }
 
 #
-# Resource not found error handler
+# Resource "Moved Permanently" error handler
+# - does not exit, since this would not work with FastCGI
+#
+# Return: SELF
+#
+sub httpError301 {
+    my $self = shift;
+    my $cgi  = $self->{cgi};
+    my ($location, $status) = @_;
+    $status ||= 301;
+
+    print $cgi->header(
+        -type     => 'text/xml',
+        -charset  => 'utf-8',
+        -location => $location,
+        -status   => $status,
+    );
+
+    print qq{<?xml version="1.0" encoding="utf-8"?>\n},
+      qq{<redirect status="$status">\n  $location\n</redirect>\n};
+
+    return $self;
+}
+
+#
+# Resource "Not Found" error handler
 # - does not exit, since this would not work with FastCGI
 #
 # Return: SELF
@@ -214,8 +239,10 @@ sub httpError404 {
         -charset => 'utf-8',
         -status  => 404
     );
-    print qq{<h1>Not Found</h1>\n},    #
-      qq{Resource <blockquote><pre>}, $cgi->request_uri(),
+
+    print qq{<h1>Not Found</h1>\n},      #
+      qq{Resource <blockquote><pre>},    #
+      $cgi->url( -absolute => 1, -path => 1 ),    #
       qq{</pre></blockquote>\n};
 
     print @{ $self->{error} || [] };
@@ -973,8 +1000,8 @@ sub process {
     # or /<webapp>/cluster/
     # -> /<webapp>/
     if ( not defined $pathInfo or $pathInfo =~ m{^(/cluster/*)?$} ) {
-        print $cgi->redirect("$prefix/");
-        return;
+        ## add trailing '/'
+        return $self->httpError301($cgi->url() . "/");
     }
 
     # the file paths must exist
@@ -1049,8 +1076,7 @@ ERROR
         $pathInfo =~ s{/+$}{};
 
         # redirect everything, let the target catch any errors
-        print $cgi->redirect("$prefix$pathInfo/jobs");
-        return;
+        return $self->httpError301($cgi->url() . "$pathInfo/jobs");
     }
 
     # path rewriting for static files - remap relative paths transparently

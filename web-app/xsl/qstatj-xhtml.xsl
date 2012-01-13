@@ -749,6 +749,7 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
   </xsl:otherwise>
   </xsl:choose>
 
+  <xsl:if test="$isLSF != 'true'">
   <tr>
     <th>posix</th>
     <td>
@@ -759,6 +760,7 @@ or JB_ja_tasks/ulong_sublist/JAT_task_list/element/JG_slots)"/>
       group = <xsl:value-of select="JB_group"/>
     </td>
   </tr>
+  </xsl:if>
 
   <!-- department: seems to be missing in 6.1u3 -->
   <xsl:if test="JB_department">

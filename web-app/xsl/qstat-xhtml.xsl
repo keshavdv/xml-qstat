@@ -520,7 +520,15 @@ Description
       <th>slots</th>
       <th>tasks</th>
       <th>queue</th>
-      <th><abbr title="submissionTime">priority</abbr></th>
+      <!-- distinguish between LSF and GridEngine -->
+      <xsl:choose>
+      <xsl:when test="$isLSF = 'true'">
+        <th>submissionTime</th>
+      </xsl:when>
+      <xsl:otherwise>
+        <th><abbr title="submissionTime">priority</abbr></th>
+      </xsl:otherwise>
+      </xsl:choose>
       <th>state</th>
     </tr>
     <xsl:for-each select="job_list[@state='pending']">
@@ -601,15 +609,28 @@ Description
       &space;
     </xsl:for-each>
   </td>
-  <!-- priority with submissionTime-->
-  <td>
-    <xsl:element name="abbr">
-      <xsl:attribute name="title">
-        <xsl:value-of select="JB_submission_time"/>
-      </xsl:attribute>
-    <xsl:value-of select="JAT_prio" />
-    </xsl:element>
-  </td>
+
+  <!-- distinguish between LSF and GridEngine -->
+  <xsl:choose>
+  <xsl:when test="$isLSF = 'true'">
+    <!-- submissionTime -->
+    <td>
+    <xsl:value-of select="JB_submission_time"/>
+    </td>
+  </xsl:when>
+  <xsl:otherwise>
+    <!-- priority with submissionTime -->
+    <td>
+      <xsl:element name="abbr">
+        <xsl:attribute name="title">
+          <xsl:value-of select="JB_submission_time"/>
+        </xsl:attribute>
+        <xsl:value-of select="JAT_prio" />
+      </xsl:element>
+    </td>
+  </xsl:otherwise>
+  </xsl:choose>
+
   <!-- state -->
   <td>
     <xsl:value-of select="state" />

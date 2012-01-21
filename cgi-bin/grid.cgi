@@ -26,6 +26,11 @@ my %timeout = (
     shell => 5,     # timeout for system commands like 'qstat -j', etc.
 );
 
+# blacklist and/or whitelist access
+# - as regular expressions for the remote IP address
+my @blacklist;
+my @whitelist;
+
 #
 # END OF CUSTOMIZE SETTINGS
 ################################################################################
@@ -261,6 +266,59 @@ sub httpError404 {
     print "<hr />", $cgi->end_html();
 
     return $self;
+}
+
+#
+# rudimentary hard-coded access control
+#
+# return true (allowed) or false (denied)
+#
+sub allowed {
+    my ( $class, $cgi ) = @_;
+
+    my $remoteAddr = $cgi->remote_addr();
+
+    # no form of access control: everything is allowed
+    @blacklist or @whitelist or return 1;
+    my $status;
+
+    if (@whitelist) {
+        for (@whitelist) {
+            if ( $remoteAddr =~ m{^$_$} ) {
+                return 1;    # explicitly whitelisted == OK
+            }
+        }
+
+        # whitelist without blacklist: everything else is suspicious
+        $status = 0 if not @blacklist;
+    }
+
+    # blacklisted items
+    for (@blacklist) {
+        if ( $remoteAddr =~ m{^$_$} ) {
+            $status = 0;
+            last;
+        }
+    }
+
+    if ( defined $status and not $status ) {
+        print $cgi->header(
+            -type    => 'text/html',
+            -charset => 'utf-8',
+            -status  => 403
+          ),
+          $cgi->start_html( -title => "Forbidden", -charset => 'utf-8' );
+
+        print qq{<h1>Forbidden</h1>\n},      #
+          qq{Resource <blockquote><pre>},    #
+          $cgi->url( -absolute => 1, -path => 1 ),    #
+          qq{</pre></blockquote>\n};
+
+        # finish off - maybe we don't want people to know why?
+        print "<hr />", "Access forbidden\n", $remoteAddr, $cgi->end_html();
+    }
+
+    return $status;
 }
 
 #
@@ -1485,7 +1543,9 @@ while ( my $cgiObj = $whichCGI->new() ) {
         $cgiObj->nph(1);
     }
 
-    GridResource->process($cgiObj);
+    if ( GridResource->allowed($cgiObj) ) {
+        GridResource->process($cgiObj);
+    }
 
     last if $whichCGI eq 'CGI';    # normal CGI - break out of while loop
 }

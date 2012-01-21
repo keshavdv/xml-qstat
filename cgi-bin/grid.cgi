@@ -238,16 +238,27 @@ sub httpError404 {
         -type    => 'text/html',
         -charset => 'utf-8',
         -status  => 404
-    );
+      ),
+      $cgi->start_html( -title => "Not Found", -charset => 'utf-8' );
 
     print qq{<h1>Not Found</h1>\n},      #
       qq{Resource <blockquote><pre>},    #
       $cgi->url( -absolute => 1, -path => 1 ),    #
       qq{</pre></blockquote>\n};
 
-    print @{ $self->{error} || [] };
-    print @_ if @_;
-    print "<hr />";
+    # has some error messages
+    if ( @{ $self->{error} || [] } || @_ ) {
+        print qq{Errors <blockquote><pre>\n};
+
+        for ( @{ $self->{error} || [] }, @_ ) {
+            print;
+        }
+
+        print qq{</pre></blockquote>\n};
+    }
+
+    # finish off
+    print "<hr />", $cgi->end_html();
 
     return $self;
 }

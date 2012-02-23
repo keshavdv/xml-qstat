@@ -72,3 +72,36 @@ And finally restart or reload Apache. For example,
 
         $ rcapache2 reload
 
+### Advanced Installation: Alternative locations for cgi-bin
+
+If Apache is already running on the system, you may just opt to use
+the newer cgi implementation instead. This avoids adding extra
+services and may be easier to administer. For convenient updating,
+we'll allow the cgi-scripts to reside on portion of the filesystem
+with non-privileged access.
+
+For the aliasing to work, we need `alias`, which we can load if
+necessary:
+
+        $ a2enmod alias
+
+The Apache configuration directives for the cgi aliases:
+
+        #
+        # serve xmlqstat cgi-scripts from a different location
+        # provide direct alias for /grid itself
+        #
+        ScriptAlias /grid "/data/caeapp/local/www/htdocs/cgi-bin/grid"
+        ScriptAlias /cgi-grid "/data/caeapp/local/www/htdocs/cgi-bin"
+        <Directory "/data/caeapp/local/www/htdocs/cgi-bin">
+            Order allow,deny
+            Allow from all
+            Options +ExecCGI  +FollowSymLinks
+            SetHandler cgi-script
+        </Directory>
+
+You will need to adjust according to your installation directories.
+And finally restart or reload Apache. For example,
+
+        $ rcapache2 reload
+

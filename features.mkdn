@@ -26,7 +26,7 @@ Multi-cluster support
 flex-grid (qlicserver) integration
 : allow dynamic display of license/resource utilization
   in combination with the
-  [flex-grid/qlicserver](http://olesenm.github.com/flex-grid) package.
+  [flex-grid/qlicserver](http://olesenm.github.io/flex-grid) package.
 
 Live Display Mode
 : Grid Engine state and status data is refreshed before every page display

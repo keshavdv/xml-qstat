@@ -136,7 +136,7 @@
   /></a>
 
   <img alt=" | " src="css/screen/icon_divider.png" />
-  <a href="http://olesenm.github.com/xml-qstat/index.html"
+  <a href="http://olesenm.github.io/xml-qstat/index.html"
       title="about"><img
       src="css/screen/icons/information.png"
       alt="[about]"

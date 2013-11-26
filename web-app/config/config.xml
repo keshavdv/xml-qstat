@@ -4,7 +4,7 @@
 <qlicserver enabled="true"/>
 <topLogo
     src="config/xmlqstat-logo.png"
-    href="http://olesenm.github.com/xml-qstat/"
+    href="http://olesenm.github.io/xml-qstat/"
     height="29"
     />
 </config>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML-QSTAT site-specific configuration file -->
+<config>
+
+<!--
+   | The viewing of the resource allocation reported by the qlicserver program
+   | will be enabled if the 'qlicserver' entity exists.
+   | A missing 'enabled' attribute is interpreted as "true".
+   | Other values are interpreted as enabled="false".
+   -->
+<qlicserver enabled="true"/>
+
+<!--
+   | The queue instances in the 'qstat -f' rendering will be sorted by
+   | the queue name if the 'sortByQueue' entity exists.
+   | 'enabled' is not "false".
+   | A missing 'enabled' attribute is interpreted as "true".
+   | Other values are interpreted as enabled="false", which means the
+   | values are used as they come from the 'qstat -f' output,
+   | which should correspond to the seqno.
+   -->
+<sortByQueue enabled="true"/>
+
+<!--
+   | Timeout values in seconds when using external services (optional)
+   -->
+<timeout>
+  <http>20</http>     <!-- when retrieving from http -->
+  <shell>15</shell>   <!-- when calling a shell program (eg, qstat) -->
+</timeout>
+
+<!--
+   | Optional external programs
+   | Leave empty (or remove) if you don't have such programs
+   -->
+<programs>
+  <!--
+     | An external program for viewing the GridEngine stdout files.
+     | (jobId, root, cell, etc. are passed via the queryString)
+     | Leave empty if you don't have such a program.
+     -->
+  <viewfile>http://saxon:8080/cgi-bin/viewfile</viewfile>
+
+  <!--
+     | An external program for finding and viewing the log files.
+     | (jobId, root, cell, etc. are passed via the queryString)
+     | Leave empty if you don't have such a program.
+     -->
+  <viewlog>http://saxon:8080/cgi-bin/logview</viewlog>
+
+</programs>
+
+<!--
+   | Define a top logo for all of the pages and a link location.
+   | This can be useful to link back to the main site
+   -->
+<!--
+    <topLogo
+        src="config/xmlqstat-logo.png"
+        href="http://www.xml-qstat.org"
+        height="29"
+        />
+-->
+<topLogo
+    src="config/logo.png"
+    href="http://saxon/"
+    height="29"
+    />
+
+<!--
+   | Define cluster settings and if a default cluster is allowed.
+   |
+   | @name - SGE_CLUSTER_NAME required for 'cluster' but not for 'default'
+   | @root - SGE_ROOT required unless @baseURL is used
+   | @cell - SGE_CELL optional, provided the downstream uses 'default'
+   | @arch - SGE architecture optional, assuming correct value was given at compile-time
+   |         not supported on Cocoon
+   | @baseURL - optional means of getting at resources via http://
+   |
+   | A "default" cluster is normally included in the list, but can be
+   | avoided by adding a 'default' entity in 'clusters' and setting the
+   | attribute 'enabled' to "false". A missing 'enabled' attribute
+   | is interpreted as "true". Other values are interpreted as enabled="false".
+-->
+<clusters arch="lx26-x86">
+  <default
+      enabled="true"
+      root="/var/lib/gridengine"
+      cell="default"
+      arch="lx26-x86"
+      />
+
+
+</clusters>
+
+</config>
+<!-- end-of-file -->
